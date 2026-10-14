@@ -1,0 +1,3858 @@
+{
+  "schemaVersion": 2,
+  "language": "fa",
+  "phase": "final-local-validation",
+  "scope": "mozdbaranarshiya/rubika_bot؛ وضعیت نهایی پیاده‌سازی و آزمون محلی، همراه snapshot اولیه",
+  "snapshot": {
+    "selectedFiles": [
+      "README.md",
+      "index.html"
+    ],
+    "referenceCommits": {
+      "yamarg": "4733ee37363ed1c2c57e270bae53bd07900b0a23",
+      "AliRn76": "203da2e585f03d6b2cef96cbd7a68b471e010db7"
+    },
+    "officialDocsResult": "https://rubika.ir/botapi پاسخ HTTP 403؛ API واقعی بدون توکن آزمایش نشد"
+  },
+  "statusDefinitions": {
+    "موجود و آزمایش‌شده (محلی)": "پیاده‌سازی با آزمون محلی مشخص؛ دامنه دقیق تست در test آمده و به معنای آزمون Rubika/استقرار واقعی نیست.",
+    "آماده؛ نیازمند استقرار و آزمون واقعی": "مسیر کد/قرارداد/ذخیره آماده است؛ آزمون احتمالی واحد یا fixture جای استقرار و آزمون مجاز واقعی را نمی‌گیرد.",
+    "تنظیمات آماده؛ موتور اجرا نشده": "فرم و ذخیره تنظیمات/پیش‌نویس آماده است؛ اجرای خودکار این قابلیت وجود ندارد.",
+    "جزئی؛ نیازمند توسعه": "بخشی آماده است ولی اجزای لازم برای عنوان کامل قابلیت هنوز نیازمند توسعه است.",
+    "نیازمند توسعه": "منطق لازم برای این قابلیت ساخته نشده است؛ اجزای مشابه یا فیلدهای دستی به‌تنهایی آن را فراهم نمی‌کنند.",
+    "نیازمند پشتیبانی API": "متد/داده معتبر موردنیاز در مرجع API تأیید نشده؛ وجود تنظیمات این محدودیت را رفع نمی‌کند.",
+    "جزئی و آزمایش‌نشده": "فقط برای snapshot اولیه: فرم/تنظیم/بخشی وجود داشت و اجرای قابلیت تأیید نشده بود."
+  },
+  "features": [
+    {
+      "id": 1,
+      "title": "افزودن ربات روبیکا با توکن معتبر و اتصال امن",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فرم ورود تک‌ربات؛ اتصال به تابع خارجی موجود است ولی سورس سرور و تست در مخزن نیست.",
+      "evidence": "فرم اتصال، بررسی getMe در هر درخواست، HTTPS، جداسازی داده ربات و توکن در حافظه؛ استقرار و توکن واقعی آزمایش نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/api.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getMe؛ سرور امن و توکن معتبر",
+      "priority": 1,
+      "test": "آزمون واحد adapter/handler با getMe جعلی و UI با ورود موفق/ناموفق fixture؛ اتصال واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "بررسی خودکار اعتبار توکن و نمایش اطلاعات ربات",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "درخواست login و نمایش نام ربات وجود دارد؛ پاسخ واقعی getMe آزمایش نشده است.",
+      "evidence": "getMe نام و شناسه ربات را نرمال می‌کند؛ UI اطلاعات و آخرین بررسی را نمایش می‌دهد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getMe",
+      "priority": 1,
+      "test": "adapter با پاسخ getMe جعلی؛ ورود موفق و ناموفق مرورگر fixture؛ توکن واقعی استفاده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "امکان افزودن و مدیریت چند ربات در یک پنل",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "چند ربات و مقصدهای جدا در حافظه نشست؛ Scope بر اساس شناسه تأییدشده ربات در سرور جدا می‌شود. اتصال با refresh پاک می‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getMe برای هر ربات؛ جداسازی مالکیت در DB",
+      "priority": 1,
+      "test": "UI انتخاب دو ربات و حفظ مقصدهای جدا با fixture؛ تست واحد جداسازی Scope و PostgREST.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "فعال و غیرفعال کردن مستقل هر ربات",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "انتخاب و خروج مستقل ربات در نشست وجود دارد؛ فعال/غیرفعال‌کردن موتور دریافت رویداد برای هر ربات پیاده‌سازی نشده است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "وضعیت داخلی برنامه؛ کنترل چرخه دریافت رویداد",
+      "priority": 1,
+      "test": "خروج مستقل در UI fixture آزموده شد؛ کنترل چرخه موتور وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "نمایش لحظه‌ای وضعیت اتصال هر ربات",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "اتصال و آخرین بررسی پس از login/list یا تازه‌سازی دستی نمایش داده می‌شوند؛ پایش لحظه‌ای یا heartbeat خودکار وجود ندارد.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getMe/health؛ مشاهده سرور",
+      "priority": 1,
+      "test": "بارگذاری موفق و health در fixture؛ پایش پیوسته آزموده نشده و پیاده‌سازی نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "نمایش آخرین زمان فعالیت و دریافت رویداد",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "آخرین بررسی اتصال و زمان received_at یک Polling دستی نمایش داده می‌شود؛ آخرین فعالیت ماندگار موتور موجود نیست.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getUpdates یا ReceiveUpdate؛ timestamp سرور",
+      "priority": 1,
+      "test": "Polling دستی با received_at و offset جعلی در UI؛ موتور دائمی وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "راه‌اندازی خودکار ربات پس از اجرای سرور",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "Edge Function تنها در پاسخ به درخواست اجرا می‌شود؛ worker و راه‌اندازی خودکار ربات وجود ندارند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "سرور ماندگار/worker یا webhook مستقر؛ GitHub Pages سرور اجرا نمی‌کند",
+      "priority": 1,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "دریافت و پردازش رویدادهای پیام‌رسان",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "Polling درخواستی رویدادها را نمایش و فقط فراداده را ثبت می‌کند؛ پردازش فرمان، callback، قفل و اتوماسیون اجرا نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getUpdates و Update؛ ReceiveUpdate",
+      "priority": 1,
+      "test": "UI دریافت و پیشروی offset با fixture؛ handler ثبت hash بدون متن خصوصی با mock؛ SQL یکتایی رویداد در PostgreSQL محلی.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock",
+        "sql-local"
+      ]
+    },
+    {
+      "id": 9,
+      "title": "مدیریت امن Webhook و اعتبارسنجی درخواست‌ها",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "مسیر دریافت Webhook و اعتبارسنجی امضای رویداد ساخته نشده؛ capabilities.webhook=false است.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "updateBotEndpoints ReceiveUpdate؛ احراز اصالت و HTTPS",
+      "priority": 1,
+      "test": "health در تست واحد محدودیت webhook=false را تأیید می‌کند؛ Webhook واقعی وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "پشتیبانی از Polling در صورت سازگاری کتابخانه",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "getUpdates فقط به درخواست کاربر با limit و offset اجرا می‌شود؛ حلقه خودکار پس‌زمینه ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getUpdates(offset_id,limit)",
+      "priority": 1,
+      "test": "دو Polling UI fixture و offset بعدی؛ handler metadata با mock؛ رفتار Rubika واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "تلاش مجدد برای اتصال هنگام خطا",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "دکمه تلاش دوباره و تازه‌سازی دستی موجود است؛ اتصال خودکار مجدد یا حلقه بازیابی وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/api.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "خطاهای شبکه/getMe/getUpdates",
+      "priority": 1,
+      "test": "بازبینی مسیر خطا و دکمه retry؛ سناریوی reconnect خودکار وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "مدیریت خطاهای شبکه با تأخیر افزایشی",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "Timeout، Abort و خطای عمومی شبکه پیاده‌سازی شده‌اند؛ backoff افزایشی پیاده‌سازی نشده و عملیات پیام خودکار تکرار نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/api.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "HTTP timeouts، backoff و محدودیت نرخ",
+      "priority": 1,
+      "test": "واحد adapter خطای شبکه را بدون افشای توکن بررسی می‌کند؛ UI نتیجه مبهم ارسال را مسدود می‌کند؛ backoff وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "جلوگیری از پردازش چندباره رویدادهای تکراری",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "Hash یکتا از ثبت تکراری metadata و UUID اتمیک از تکرار mutation جلوگیری می‌کند؛ موتور پردازش رویداد مستقل هنوز وجود ندارد.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "شناسه پایدار رویداد و unique constraint پایگاه داده",
+      "priority": 1,
+      "test": "واحد ۲ درخواست همزمان فقط یک send جعلی؛ PostgreSQL محلی ۱۰ claim همزمان و unique event؛ UI نتایج مبهم.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "sql-local",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "موتور مدیریت دستورات ربات با قابلیت توسعه",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "موتور فرمان، registry دستورات و dispatch رویدادها پیاده‌سازی نشده است.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ ثبت فرمان داخلی؛ setCommands",
+      "priority": 1,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "معماری ماژولار برای افزودن افزونه‌های جدید",
+      "category": "اتصال و مدیریت ربات‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "ماژول‌های مستقل UI، مدل، API، adapter، handler، validation و database موجودند؛ قرارداد ثبت افزونه یا plugin loader وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "assets/js/api.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Adapter مستقل JavaScript؛ نیازی به API خاص نیست",
+      "priority": 1,
+      "test": "ماژول‌های سرور در تست‌های Node وارد و اجرا شدند؛ توسعه افزونه سناریوی آزمون‌شده ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "code-review"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "ارسال پیام متنی به گفتگوهای مجاز",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendMessage با مقصد ثبت‌شده، تأیید مجوز، UUID و مدیریت نتیجه مبهم از UI به adapter متصل است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ مجوز مقصد",
+      "priority": 1,
+      "test": "UI fixture ارسال متن و خطا، مقصد و توکن منتخب؛ واحد مجوز/Scope/idempotency؛ هیچ پیام واقعی ارسال نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 17,
+      "title": "پاسخ مستقیم به پیام کاربران",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "reply_to_message_id در فرم متن و whitelist adapter موجود است؛ پاسخ واقعی به کاربر آزموده نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage(reply_to_message_id)",
+      "priority": 1,
+      "test": "واحد buildMessage حفظ reply_to_message_id را بررسی می‌کند؛ سناریوی UI پاسخ اختصاصی اجرا نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 18,
+      "title": "ویرایش متن پیام‌های ارسال‌شده",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرم editMessageText و تأیید دوم در UI؛ اعتبارسنجی متن و شناسه پیام در سرور.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "editMessageText؛ مالکیت پیام",
+      "priority": 1,
+      "test": "بازبینی کد؛ آزمون اختصاصی ویرایش موفق در مرورگر یا Rubika اجرا نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 19,
+      "title": "حذف پیام در صورت داشتن مجوز لازم",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "deleteMessage با تأیید دوم، مقصد ثبت‌شده، UUID و کنترل پاسخ پیاده‌سازی شده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "deleteMessage؛ مجوز ربات",
+      "priority": 1,
+      "test": "UI fixture انصراف/تأیید حذف و شناسه پیام؛ adapter پاسخ OK بدون data برای حذف را با mock می‌پذیرد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 20,
+      "title": "فوروارد کردن پیام میان گفتگوهای مجاز",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرم فوروارد و whitelist دو مقصد؛ سرور ثبت هر دو مبدأ/مقصد و تأیید مجوز را الزامی می‌کند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "forwardMessage؛ مجوز هر دو مقصد",
+      "priority": 1,
+      "test": "واحد پارامتر فوروارد و رد مقصد ثبت‌نشده؛ ارسال موفق فوروارد در UI/روبیکا آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 21,
+      "title": "ارسال تصویر همراه توضیحات",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "sendFile در مرجع وجود دارد؛ کپشن مجزا مستند نیست.",
+      "evidence": "فقط sendFile با file_id موجود فراهم است؛ بارگذاری Image و کپشن مجزا پیاده‌سازی/تأیید API نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "requestSendFile(Image)، sendFile؛ کپشن نیازمند تأیید",
+      "priority": 1,
+      "test": "بازبینی adapter؛ آزمون ارسال تصویر یا کپشن واقعی انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 22,
+      "title": "ارسال ویدئو همراه عنوان و توضیحات",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "نوع Video در requestSendFile و کپشن در مرجع موجود نیست.",
+      "evidence": "ارسال ویدئوی نوع‌دار، upload و caption تأیید نشده‌اند؛ sendFile عمومی جای اثبات این قابلیت نیست.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "requestSendFile(Video)/sendFile/caption نیازمند مستندات معتبر",
+      "priority": 1,
+      "test": "بازبینی مرجع API و کد؛ ویدئو/کپشن آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 23,
+      "title": "ارسال فایل صوتی",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرم عمومی sendFile فقط شناسه فایل موجود را می‌فرستد؛ بارگذاری و تشخیص نوع رسانه و ارسال اختصاصی این نوع پیاده‌سازی نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "requestSendFile(Music)، sendFile",
+      "priority": 1,
+      "test": "بازبینی کد؛ آزمون اختصاصی ارسال این رسانه انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 24,
+      "title": "ارسال پیام صوتی یا ویس",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرم عمومی sendFile فقط شناسه فایل موجود را می‌فرستد؛ بارگذاری و تشخیص نوع رسانه و ارسال اختصاصی این نوع پیاده‌سازی نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "requestSendFile(Voice)، sendFile",
+      "priority": 1,
+      "test": "بازبینی کد؛ آزمون اختصاصی ارسال این رسانه انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 25,
+      "title": "ارسال فایل و سند",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendFile با شناسه فایلِ از قبل بارگذاری‌شده و مقصد مجاز موجود است؛ upload مستقیم فایل وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "requestSendFile(File)، sendFile",
+      "priority": 1,
+      "test": "بازبینی فرم و whitelist؛ آزمون اختصاصی ارسال فایل انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 26,
+      "title": "ارسال GIF و تصویر متحرک",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرم عمومی sendFile فقط شناسه فایل موجود را می‌فرستد؛ بارگذاری و تشخیص نوع رسانه و ارسال اختصاصی این نوع پیاده‌سازی نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "requestSendFile(Gif)، sendFile",
+      "priority": 1,
+      "test": "بازبینی کد؛ آزمون اختصاصی ارسال این رسانه انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 27,
+      "title": "ارسال استیکر",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendSticker با sticker_id موجود در فرم و whitelist سرور؛ ساخت یا upload استیکر وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendSticker(sticker_id)",
+      "priority": 1,
+      "test": "بازبینی کد؛ ارسال استیکر واقعی یا موفق fixture آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 28,
+      "title": "ارسال موقعیت جغرافیایی",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendLocation با فرم مختصات و اعتبارسنجی محدوده جغرافیایی در adapter.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendLocation(latitude,longitude)",
+      "priority": 1,
+      "test": "واحد رد مختصات خارج از محدوده و رشته خالی؛ ارسال موقعیت واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 29,
+      "title": "ارسال مخاطب با اطلاعات مجاز",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendContact با نام، شماره و تأیید مجوز مقصد؛ اعتبارسنجی شماره در سرور.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendContact؛ رضایت صاحب اطلاعات",
+      "priority": 1,
+      "test": "بازبینی کد؛ ارسال مخاطب واقعی یا موفق fixture آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 30,
+      "title": "ساخت و ارسال نظرسنجی",
+      "category": "ارسال و مدیریت پیام‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendPoll با سؤال و ۲ تا ۱۰ گزینه متمایز در فرم و adapter آماده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendPoll(question,options)",
+      "priority": 1,
+      "test": "واحد رد گزینه‌های تکراری؛ نظرسنجی واقعی یا سناریوی موفق UI اجرا نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 31,
+      "title": "ساخت کیبورد معمولی برای ربات",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "API سرور پارامتر keypad و دکمه Simple را می‌پذیرد؛ سازنده کیبورد در پنل و مدیریت رویداد دکمه ساخته نشده‌اند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage(chat_keypad)، editChatKeypad",
+      "priority": 2,
+      "test": "واحد نوع غیرمستند Link را رد می‌کند؛ ارسال کیبورد Simple موفق/واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 32,
+      "title": "ساخت کیبورد شیشه‌ای یا Inline",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "API سرور پارامتر keypad و دکمه Simple را می‌پذیرد؛ سازنده کیبورد در پنل و مدیریت رویداد دکمه ساخته نشده‌اند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage(inline_keypad)، editMessageKeypad",
+      "priority": 2,
+      "test": "واحد نوع غیرمستند Link را رد می‌کند؛ ارسال کیبورد Simple موفق/واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 33,
+      "title": "ساخت منوهای چندسطحی",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Keypad، aux_data.button_id؛ منطق برنامه",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 34,
+      "title": "مدیریت رویداد کلیک روی دکمه‌ها",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "ReceiveUpdate/ReceiveInlineMessage/ReceiveQuery؛ aux_data.button_id",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 35,
+      "title": "تعریف شناسه یکتا برای دکمه‌ها",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "Button.id در adapter اعتبارسنجی می‌شود؛ تولید/ثبت یکتای دکمه‌ها و registry کلیک‌ها ساخته نشده‌اند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Button.id؛ مدیریت شناسه داخلی",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 36,
+      "title": "نمایش دکمه‌ها متناسب با سطح دسترسی",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Keypad؛ بررسی نقش در سرور",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 37,
+      "title": "ساخت قالب آماده پیام‌های ربات",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "CRUD پایدار templates و فرم عنوان/متن موجود است؛ استفاده و ارسال قالب هنوز دستی است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ قالب‌های ذخیره‌شده",
+      "priority": 2,
+      "test": "بازبینی فرم templates؛ تست واحد Resource و Scope مشترک و SQL migration؛ گردش اختصاصی قالب UI اجرا نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review",
+        "unit-mock",
+        "sql-local"
+      ]
+    },
+    {
+      "id": 38,
+      "title": "استفاده از متغیرهای پویا در متن پیام",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ جایگزینی امن متغیرها",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 39,
+      "title": "ویرایشگر بصری دکمه‌ها و منوها",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Keypad؛ ویرایشگر محلی و اعتبارسنجی سرور",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 40,
+      "title": "ثبت تعداد کلیک هر دکمه",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "aux_data.button_id؛ ثبت callback معتبر",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 41,
+      "title": "ساخت فرم‌های تعاملی داخل ربات",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Button Textbox/Selection/Calendar؛ پیام مجاز",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 42,
+      "title": "طراحی مراحل متوالی دریافت اطلاعات کاربران",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "دریافت پیام/کلیک؛ state machine",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 43,
+      "title": "ذخیره وضعیت موقت گفتگو برای ادامه مراحل",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "دیتابیس با TTL؛ جداسازی bot/chat/user",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 44,
+      "title": "صفحه‌بندی منوهای دارای گزینه‌های زیاد",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Keypad/aux_data؛ منطق صفحه‌بندی",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 45,
+      "title": "تأیید دو مرحله‌ای عملیات حساس از طریق دکمه",
+      "category": "دکمه‌ها و تعاملات",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "پنل برای حذف مقصد، حذف/ویرایش/فوروارد پیام، بازیابی و پاک‌کردن هشدار تأیید دوم دارد؛ تأیید از طریق دکمه داخل ربات پیاده‌سازی نشده است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "دکمه تأیید، TTL و کنترل مجوز سمت سرور",
+      "priority": 2,
+      "test": "UI fixture انصراف/تأیید حذف مقصد و پیام و رفع هشدار نتیجه نامشخص؛ تأیید داخل ربات آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 46,
+      "title": "اتصال و ثبت گروه‌های قابل مدیریت",
+      "category": "مدیریت گروه‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "ثبت دستی chat_id با درخواست save؛ مجوز مقصد و اتصال به موتور بررسی نمی‌شود.",
+      "evidence": "ثبت دستی گروه با chat_id، رضایت مجوز، CRUD و جداسازی مالکیت؛ ثبت مقصد، مجوز واقعی مدیر در Rubika ایجاد نمی‌کند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getChat؛ ثبت و بررسی مجوز مقصد",
+      "priority": 2,
+      "test": "UI fixture ایجاد/حذف و تأیید مجوز؛ واحد CRUD و Scope؛ مجوز مقصد واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 47,
+      "title": "نمایش اطلاعات و شناسه هر گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "عنوان واردشده و chat_id نمایش داده می‌شوند؛ اطلاعات زنده گروه دریافت نمی‌شود.",
+      "evidence": "عنوان و شناسه ثبت‌شده مقصد نمایش می‌یابد؛ getChat فقط در قرارداد سرور موجود و در فرم گروه فراخوانی نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getChat(chat_id)؛ metadata گفتگو",
+      "priority": 2,
+      "test": "UI fixture نمایش عنوان با escape و شناسه؛ metadata زنده گروه آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 48,
+      "title": "شناسایی مدیران دارای دسترسی معتبر",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "getChat فهرست مدیران/مجوزهای آنان را ارائه نمی‌کند.",
+      "evidence": "getChat مرجع، فهرست مدیران و مجوزهای آنان را تأیید نمی‌کند؛ فیلد استثنا مدیران تنها تنظیم دستی است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "API فهرست مدیران/مجوزها مستند نیست",
+      "priority": 2,
+      "test": "بازبینی مرجع API و فرم؛ شناسایی مدیر واقعی آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 49,
+      "title": "تعیین نقش‌های مدیریتی داخل نرم‌افزار",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "دفتر مخاطبان نقش مدیریتی ایجاد نمی‌کند؛ RBAC سرور و مدیریت اعضای پنل ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "RBAC داخلی نرم‌افزار؛ Supabase Auth/DB",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 50,
+      "title": "ثبت و نمایش قوانین گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فیلد rules ذخیره می‌شود؛ دستور ارسال قوانین و موتور اجرا وجود ندارد.",
+      "evidence": "rules در تنظیمات گروه ذخیره و نمایش داده می‌شود؛ دستور ارسال خودکار قوانین وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ تنظیم داخلی قوانین",
+      "priority": 2,
+      "test": "UI fixture ویرایش rules و بازگشت آن پس از ذخیره؛ واحد CRUD؛ سرور واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 51,
+      "title": "ارسال پیام خوشامدگویی خودکار",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "رویداد پیوستن عضو در مدل Update مرجع مستند نیست.",
+      "evidence": "متن خوشامد/خداحافظ در تنظیمات ذخیره می‌شود؛ رویداد معتبر join/leave در مرجع تأیید نشده و موتور اجرا وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "رویداد join عضو مستند نیست",
+      "priority": 2,
+      "test": "بازبینی فرم و مرجع؛ ارسال خودکار یا عضویت واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 52,
+      "title": "ارسال پیام خداحافظی هنگام خروج اعضا",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "رویداد خروج عضو در مدل Update مرجع مستند نیست.",
+      "evidence": "متن خوشامد/خداحافظ در تنظیمات ذخیره می‌شود؛ رویداد معتبر join/leave در مرجع تأیید نشده و موتور اجرا وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "رویداد leave عضو مستند نیست",
+      "priority": 2,
+      "test": "بازبینی فرم و مرجع؛ ارسال خودکار یا عضویت واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 53,
+      "title": "اعمال قوانین اختصاصی برای هر گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "تنظیمات مجزای گروه به سرور خارجی ارسال می‌شوند؛ اعمال قوانین وجود ندارد.",
+      "evidence": "تنظیمات مستقل هر گروه و active ذخیره می‌شود؛ موتور اعمال قواعد و حذف خودکار وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "تنظیم داخلی؛ deleteMessage با مجوز برای اعمال قوانین",
+      "priority": 2,
+      "test": "UI fixture استقلال تنظیمات دو ربات و حفظ فیلدهای توسعه سرور؛ اجرای قوانین آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 54,
+      "title": "احراز هویت یا تأیید اعضای جدید با روش مجاز",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "تأیید نرم‌افزاری ممکن است؛ محدودسازی عضو تأییدنشده در Bot API مستند نیست.",
+      "evidence": "کلید unverified فقط تنظیم است؛ تأیید عضویت، محدودسازی عضو و رویداد عضویت تأیید و اجرا نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "تأیید داخلی از پیام؛ API محدودسازی عضو مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 55,
+      "title": "تنظیم ساعات سکوت گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "quiet_start/quiet_end ذخیره می‌شوند؛ هیچ حذف پیام در ساعت سکوت اجرا نمی‌شود.",
+      "evidence": "quiet_enabled و ساعت شروع/پایان به وقت تهران ذخیره می‌شوند؛ اجرای ساعت سکوت وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "deleteMessage؛ زمان سرور و منطقه زمانی گروه",
+      "priority": 2,
+      "test": "اعتبارسنجی زمان نامعتبر در backup آزموده شد؛ اعمال سکوت در روبیکا آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit",
+        "code-review"
+      ]
+    },
+    {
+      "id": 56,
+      "title": "مدیریت پیام خوشامد ثابت یا سنجاق‌شده",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "pinChatMessage یا روش سنجاق پیام در مرجع مستند نیست.",
+      "evidence": "ارسال متن ممکن است؛ سنجاق پیام در whitelist و مرجع تأییدشده موجود نیست.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "API سنجاق پیام مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 57,
+      "title": "مدیریت تنظیمات قابل‌دسترسی گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "متد تغییر تنظیمات واقعی گروه در مرجع مستند نیست.",
+      "evidence": "تنظیمات محلی پنل ذخیره می‌شوند؛ متد تغییر تنظیمات واقعی گروه در API تأییدشده موجود نیست.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "API تغییر تنظیمات واقعی گروه مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 58,
+      "title": "ارسال اطلاعیه مدیریتی به گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "ارسال دستی اطلاعیه از مرکز پیام‌ها به گروه ثبت‌شده با تأیید مجوز فراهم است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ مجوز گروه",
+      "priority": 2,
+      "test": "مسیر مشترک sendMessage در UI fixture و مجوز مقصد در واحد؛ اطلاعیه واقعی ارسال نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 59,
+      "title": "نمایش وضعیت فعلی قفل‌ها و تنظیمات گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "وضعیت پیش‌نویس قفل‌ها در فرم دیده می‌شود؛ وضعیت واقعی گروه نیست.",
+      "evidence": "نمایش ۲۰ تنظیم قفل و وضعیت active ذخیره‌شده؛ این نمایش وضعیت اجرای واقعی گروه نیست.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "دیتابیس تنظیمات و وضعیت worker؛ API خاص ندارد",
+      "priority": 2,
+      "test": "UI fixture فرم تنظیمات، ذخیره تغییر و حفظ locks.future_lock؛ هر قفل جدا و اعمال واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 60,
+      "title": "نمایش راهنمای دستورات مدیریتی داخل گروه",
+      "category": "مدیریت گروه‌ها",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "دستور /help و موتور پاسخ داخل گروه ساخته نشده‌اند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendMessage؛ فرمان داخلی /help",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 61,
+      "title": "قفل ارسال لینک",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.link؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.link در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 62,
+      "title": "قفل هایپرلینک",
+      "category": "قفل‌های پیشرفته",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "entities/metadata برای تشخیص hyperlink مخفی در Message مستند نیست.",
+      "evidence": "کلید locks.hyperlink در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "metadata هایپرلینک مستند نیست؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 63,
+      "title": "قفل نام کاربری و آیدی",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "کلید locks.username در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ تشخیص @username و deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 64,
+      "title": "قفل هشتگ",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "کلید locks.hashtag در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ تشخیص # و deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 65,
+      "title": "قفل پیام متنی",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "کلید locks.text در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 66,
+      "title": "قفل کلمات توهین‌آمیز و نامناسب",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "کلید locks.profanity در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ فهرست کلمات و deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 67,
+      "title": "قفل پیام‌های فورواردشده",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.forward؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.forward در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.forwarded_from/forwarded_no_link؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 68,
+      "title": "قفل محتوای Inline",
+      "category": "قفل‌های پیشرفته",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "منشأ Inline همه پیام‌ها در Message مستند نیست.",
+      "evidence": "کلید locks.inline در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "تشخیص منشأ Inline در رویداد مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 69,
+      "title": "قفل فعالیت کاربران تأییدنشده",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "کلید locks.unverified در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "احراز داخلی؛ deleteMessage با مجوز؛ محدودسازی مستقیم عضو در API نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 70,
+      "title": "قفل ارسال فایل و سند",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.file؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.file در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.file؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 71,
+      "title": "قفل ارسال عکس",
+      "category": "قفل‌های پیشرفته",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "file فقط file_id/file_name/size دارد؛ نوع قطعی تصویر رویداد ندارد.",
+      "evidence": "کلید locks.photo در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "نوع قطعی فایل Image در رویداد مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 72,
+      "title": "قفل ارسال ویدئو",
+      "category": "قفل‌های پیشرفته",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "file فقط file_id/file_name/size دارد؛ نوع قطعی ویدئو رویداد ندارد.",
+      "evidence": "کلید locks.video در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "نوع قطعی فایل Video در رویداد مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 73,
+      "title": "قفل ارسال ویس و پیام صوتی",
+      "category": "قفل‌های پیشرفته",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "file فقط file_id/file_name/size دارد؛ نوع قطعی Voice/Music رویداد ندارد.",
+      "evidence": "کلید locks.voice در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "نوع قطعی فایل Voice/Music در رویداد مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 74,
+      "title": "قفل GIF",
+      "category": "قفل‌های پیشرفته",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "file فقط file_id/file_name/size دارد؛ نوع قطعی Gif رویداد ندارد.",
+      "evidence": "کلید locks.gif در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "نوع قطعی فایل Gif در رویداد مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 75,
+      "title": "قفل استیکر",
+      "category": "قفل‌های پیشرفته",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.sticker؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.sticker در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.sticker؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 76,
+      "title": "قفل ارسال موقعیت مکانی",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.location؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.location در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.location/live_location؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 77,
+      "title": "قفل ارسال مخاطب",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.contact؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.contact در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.contact_message؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 78,
+      "title": "قفل منشن کاربران",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.mention؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.mention در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text برای @mentions؛ metadata hidden mention مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 79,
+      "title": "قفل ارسال نظرسنجی",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط checkbox locks.poll؛ اعمال قفل وجود ندارد.",
+      "evidence": "کلید locks.poll در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.poll؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 80,
+      "title": "قفل اشتراک‌گذاری استوری",
+      "category": "امنیت و تخلفات",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "RubinoStory در Update رسمی مرجع وجود ندارد.",
+      "evidence": "کلید locks.story در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "رویداد استوری مستند نیست",
+      "priority": 2,
+      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 81,
+      "title": "شناسایی ارسال پشت‌سرهم پیام یا Flood",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط تنظیم flood_count/flood_seconds؛ شمارنده و تشخیص اجرا نمی‌شود.",
+      "evidence": "flood_count و flood_seconds ذخیره می‌شوند؛ شمارنده پنجره زمانی و تشخیص Flood اجرا نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.sender_id,time؛ پنجره سرور؛ deleteMessage",
+      "priority": 2,
+      "test": "UI fixture حد warn_limit و اعتبارسنجی اعداد مشترک؛ تشخیص flood آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 82,
+      "title": "شناسایی پیام‌های تکراری و اسپم",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "anti_spam ذخیره می‌شود؛ کش پیام، مقایسه تکرار و حذف خودکار spam ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ hash و پنجره زمانی؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 83,
+      "title": "فیلتر کلمات ممنوع و الگوهای Regex",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "blocked_words در تنظیمات و Regex در پیش‌نویس قواعد پاسخ ذخیره می‌شوند؛ فیلتر محتوای Regex/کلمات اجرا نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ regex محدود و deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 84,
+      "title": "فهرست دامنه‌ها و لینک‌های مجاز",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "allowed_domains قابل ذخیره است؛ موتور تطبیق URL و استثنا دامنه اجرا نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.text؛ URL parser، allowlist دامنه؛ deleteMessage",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 85,
+      "title": "محدودیت تعداد پیام برای هر کاربر در بازه زمانی",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "تنظیم آستانه فلود وجود دارد؛ شمارش پیام هر کاربر اجرا نمی‌شود.",
+      "evidence": "تعداد/بازه ضدفلود تنظیم‌پذیر است؛ شمارنده پیام کاربر و اعمال سقف پیام ساخته نشده‌اند. Rate limit سرور مربوط به درخواست API پنل است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "Message.sender_id,time؛ شمارنده اتمیک در DB",
+      "priority": 2,
+      "test": "محدودیت نرخ API پنل در واحد و PostgreSQL آزموده شد؛ این آزمون سقف پیام کاربران گروه نیست.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "sql-local",
+        "code-review"
+      ]
+    },
+    {
+      "id": 86,
+      "title": "سیستم اخطار با شمارنده اختصاصی کاربران",
+      "category": "امنیت و تخلفات",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "فقط warn_limit قابل ذخیره است؛ اخطار و شمارنده کاربران وجود ندارند.",
+      "evidence": "warn_limit ذخیره می‌شود؛ شمارنده اخطار اختصاصی کاربر و ارسال اخطار ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sender_id؛ ذخیره اخطار در DB و sendMessage",
+      "priority": 2,
+      "test": "UI fixture تغییر warn_limit و رد عدد صفر؛ صدور/شمارش اخطار وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 87,
+      "title": "محدودسازی موقت کاربر متخلف",
+      "category": "امنیت و تخلفات",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "restrictChatMember یا تغییر سطح دسترسی عضو مستند نیست؛ فقط حذف پیام ممکن است.",
+      "evidence": "متد محدودسازی، اخراج یا ban/unban عضو در whitelist و مرجع Bot API تأیید نشده است؛ این عملیات فعال نیست.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "محدودسازی مستقیم عضو مستند نیست؛ حذف پیام جایگزین متفاوت است",
+      "priority": 2,
+      "test": "واحد banChatMember را با UNSUPPORTED_METHOD رد می‌کند؛ اقدام واقعی روی عضو انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 88,
+      "title": "اخراج کاربر در صورت پشتیبانی API و داشتن مجوز",
+      "category": "امنیت و تخلفات",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "kick/ban عضو در Bot API مرجع مستند نیست.",
+      "evidence": "متد محدودسازی، اخراج یا ban/unban عضو در whitelist و مرجع Bot API تأیید نشده است؛ این عملیات فعال نیست.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "اخراج عضو مستند نیست",
+      "priority": 2,
+      "test": "واحد banChatMember را با UNSUPPORTED_METHOD رد می‌کند؛ اقدام واقعی روی عضو انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 89,
+      "title": "مسدودسازی و رفع مسدودسازی کاربر در صورت پشتیبانی API",
+      "category": "امنیت و تخلفات",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "ban/unban عضو در Bot API مرجع مستند نیست.",
+      "evidence": "متد محدودسازی، اخراج یا ban/unban عضو در whitelist و مرجع Bot API تأیید نشده است؛ این عملیات فعال نیست.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "yamarg/group-manager/main.py",
+        "yamarg/group-manager/database.py",
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "مسدود/رفع مسدود عضو مستند نیست",
+      "priority": 2,
+      "test": "واحد banChatMember را با UNSUPPORTED_METHOD رد می‌کند؛ اقدام واقعی روی عضو انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 90,
+      "title": "ثبت سوابق تخلفات، اقدامات مدیران و درخواست بازبینی",
+      "category": "امنیت و تخلفات",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "CRUD دستی violations، شرح، مسئولیت بررسی و وضعیت open/reviewed/closed؛ ثبت خودکار تخلف و تاریخچه نسخه‌های بازبینی وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "دیتابیس audit/violations/reviews؛ داده دریافتی مجاز",
+      "priority": 2,
+      "test": "بازبینی فرم؛ تست Resource/Scope مشترک؛ گردش اختصاصی ثبت تخلف UI و داده واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 91,
+      "title": "افزودن و مدیریت کانال‌های مجاز",
+      "category": "کانال و انتشار",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "ثبت مقصد type=channel و مدیریت مقصدهای مستقل در پنل و DB؛ مجوز کانال باید واقعی باشد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "getChat(chat_type=Channel)؛ مجوز انتشار",
+      "priority": 3,
+      "test": "واحد CRUD مشترک؛ UI fixture فقط گروه را ایجاد/حذف کرد، کانال اختصاصی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "code-review"
+      ]
+    },
+    {
+      "id": 92,
+      "title": "ساخت صف انتشار محتوا",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "پیش‌نویس و برنامه انتشار قابل ذخیره‌اند؛ صف اجرایی، ترتیب dequeue و worker انتشار وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "sendMessage/sendFile؛ صف پایدار",
+      "priority": 3,
+      "test": "UI fixture schedule را با status=draft ذخیره کرد؛ صف انتشار اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 93,
+      "title": "زمان‌بندی دقیق ارسال پست",
+      "category": "کانال و انتشار",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "scheduled_at با تبدیل ساعت تهران و status=draft ذخیره می‌شود؛ cron/worker ارسال دقیق وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "sendMessage؛ worker/cron مستقل مرورگر",
+      "priority": 3,
+      "test": "UI fixture زمان تهران روی مرورگر لس‌آنجلس و بازکردن مجدد فرم؛ واحد سرور executed=false؛ ارسال خودکار آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 94,
+      "title": "تقویم انتشار با پشتیبانی از تاریخ شمسی",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "برنامه‌ها با نمایش تاریخ شمسی و ساعت تهران هستند؛ ورودی datetime-local میلادی است و تقویم شمسی تعاملی/شبکه تقویم ساخته نشده.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [],
+      "api": "Intl Persian calendar؛ زمان UTC در DB",
+      "priority": 3,
+      "test": "تبدیل تهران در مدل و UI fixture مرورگر لس‌آنجلس آزموده شد؛ تقویم شمسی تعاملی وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 95,
+      "title": "ذخیره پیش‌نویس پست‌ها",
+      "category": "کانال و انتشار",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "مجموعه drafts با عنوان، دسته و متن و CRUD پایدار در سرور آماده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "DB draft؛ API لازم نیست",
+      "priority": 3,
+      "test": "بازبینی فرم drafts؛ آزمون Resource/Scope مشترک و migration؛ گردش اختصاصی draft UI آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review",
+        "unit-mock",
+        "sql-local"
+      ]
+    },
+    {
+      "id": 96,
+      "title": "پیش‌نمایش پست قبل از انتشار",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "مرکز پیام، پیش‌نمایش امن متن پیش از ارسال دارد؛ پیش‌نمایش اختصاصی پیش‌نویس/پست چندرسانه‌ای وجود ندارد.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "پیش‌نمایش UI؛ API لازم نیست",
+      "priority": 3,
+      "test": "UI fixture متن شامل HTML را به‌صورت متن نمایش می‌دهد؛ پیش‌نمایش پست چندرسانه‌ای آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 97,
+      "title": "مدیریت محتوای چندرسانه‌ای و کپشن",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "sendFile تنها file_id موجود را می‌فرستد؛ کتابخانه رسانه، upload و caption ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendFile(requestSendFile)؛ کپشن/API رسانه نیازمند تأیید",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 98,
+      "title": "تعریف انتشار دوره‌ای برای مطالب مجاز",
+      "category": "کانال و انتشار",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "تکرار دوره‌ای، فاصله اجرا و worker انتشار پیاده‌سازی نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "sendMessage؛ worker/cron و رضایت مقصد",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 99,
+      "title": "تأیید پست توسط مدیر پیش از انتشار",
+      "category": "کانال و انتشار",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرایند تأیید پست، نقش مدیر تأییدکننده و انتقال به صف اجرا پیاده‌سازی نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "RBAC داخلی؛ وضعیت approved قبل sendMessage",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 100,
+      "title": "دسته‌بندی پست‌ها بر اساس موضوع",
+      "category": "کانال و انتشار",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فیلد category در drafts ذخیره و در فهرست نمایش می‌یابد؛ دسته‌بندی به‌صورت متن آزاد است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "DB categories؛ API لازم نیست",
+      "priority": 3,
+      "test": "بازبینی فرم؛ تست Resource مشترک؛ ذخیره دسته اختصاصی UI آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 101,
+      "title": "نمایش وضعیت انتشار هر پست",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "پیش‌نویس‌ها status=draft دارند و نتیجه عملیات پیام جدا ثبت می‌شود؛ وضعیت انتشار متصل به هر پست ساخته نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "نتیجه واقعی sendMessage/sendFile و job status",
+      "priority": 3,
+      "test": "UI fixture draft و موفق/ناموفق پیام مستقل؛ چرخه انتشار هر پست آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 102,
+      "title": "تلاش مجدد برای ارسال پست ناموفق",
+      "category": "کانال و انتشار",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "retry job پست وجود ندارد؛ نتیجه مبهم پیام عمداً خودکار تکرار نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "خطاهای sendMessage؛ retry با idempotency",
+      "priority": 3,
+      "test": "UI و واحد عدم تکرار پیام مبهم آزموده‌اند؛ این نتیجه، retry پست نیست.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 103,
+      "title": "جلوگیری از انتشار تصادفی پست‌های تکراری",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "UUID mutation و مانع نشست ارسال دوباره را برای تلاش یکسان کنترل می‌کنند؛ dedup محتوایی پست‌ها و چرخه انتشار وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "کلید تکراری unique و محتوا hash؛ API idempotency مستند نیست",
+      "priority": 3,
+      "test": "واحد فقط یک send جعلی و PostgreSQL claim همزمان؛ UI نتیجه نامشخص؛ پیشگیری تکرار محتوای پست آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "sql-local",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 104,
+      "title": "انتشار هماهنگ در چند کانال دارای مجوز",
+      "category": "کانال و انتشار",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "مرکز پیام یک مقصد در هر عملیات می‌گیرد؛ fan-out هماهنگ چند کانال ساخته نشده است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "sendMessage به کانال‌های مجاز؛ نتیجه مستقل مقصدها",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 105,
+      "title": "آرشیو و جستجوی پست‌های قبلی",
+      "category": "کانال و انتشار",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "جستجوی متن در drafts موجود است؛ آرشیو پست منتشرشده با شناسه پیام و وضعیت انتشار ساخته نشده است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "آرشیو داده‌های خود برنامه؛ API تاریخچه کامل کانال مستند نیست",
+      "priority": 3,
+      "test": "بازبینی فهرست و جستجو؛ آرشیو پست واقعی آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 106,
+      "title": "پاسخ خودکار بر اساس کلمات کلیدی",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "قواعد keyword/regex با trigger و response به‌صورت draft ذخیره می‌شوند؛ موتور دریافت پیام و ارسال پاسخ اجرا نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "Message.text، sendMessage؛ rule engine",
+      "priority": 2,
+      "test": "واحد ذخیره Resource مشترک؛ بازبینی اعتبارسنجی Regex؛ هیچ پاسخ خودکار در UI یا روبیکا اجرا نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "code-review"
+      ]
+    },
+    {
+      "id": 107,
+      "title": "پاسخ خودکار بر اساس Regex",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "قواعد keyword/regex با trigger و response به‌صورت draft ذخیره می‌شوند؛ موتور دریافت پیام و ارسال پاسخ اجرا نمی‌شود.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "Message.text، sendMessage؛ regex محدود",
+      "priority": 2,
+      "test": "واحد ذخیره Resource مشترک؛ بازبینی اعتبارسنجی Regex؛ هیچ پاسخ خودکار در UI یا روبیکا اجرا نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "code-review"
+      ]
+    },
+    {
+      "id": 108,
+      "title": "سیستم مدیریت سؤالات پرتکرار",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "می‌توان قالب و پیش‌نویس سؤال/پاسخ در قواعد keyword ذخیره کرد؛ ماژول FAQ و پاسخگویی خودکار ساخته نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "DB FAQ و sendMessage",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 109,
+      "title": "طراحی سناریوهای گفتگوی چندمرحله‌ای",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "سناریوی چندمرحله‌ای، session گفتگو و ماشین حالت اجرا نشده‌اند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "رویداد پیام/کلیک؛ conversation state",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 110,
+      "title": "پاسخگویی متفاوت در ساعات کاری و غیرکاری",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "ساعات پاسخگویی کاری/غیرکاری و انتخاب پاسخ زمان‌مند وجود ندارند؛ ساعت سکوت تنظیم گروه کاربرد متفاوت دارد.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "زمان/منطقه زمانی سرور؛ sendMessage",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 111,
+      "title": "ساخت دستورات سفارشی بدون ویرایش مستقیم کد",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فرم قاعده trigger/response بدون ویرایش کد وجود دارد؛ registry دستور، setCommands و اجرای دستور ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "DB commands؛ sendMessage/setCommands",
+      "priority": 2,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 112,
+      "title": "ارسال یادآورهای زمان‌بندی‌شده",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "پیش‌نویس schedule با مقصد و زمان ذخیره می‌شود؛ یادآور واقعی یا worker مستقل مرورگر وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "worker/cron؛ sendMessage",
+      "priority": 3,
+      "test": "UI fixture ثبت schedule draft و واحد executed=false؛ اجرای یادآور آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 113,
+      "title": "اجرای کمپین‌های نظرسنجی برای کاربران داوطلب",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "ارسال دستی یک sendPoll آماده است؛ کمپین، مخاطبان داوطلب و گردش رضایت/ارسال گروهی ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [
+        "AliRn76/rubika_bot/requests.py",
+        "AliRn76/rubika_bot/models.py"
+      ],
+      "api": "sendPoll؛ رضایت داوطلب و لغو کمپین",
+      "priority": 3,
+      "test": "واحد رد نظرسنجی نامعتبر؛ کمپین واقعی یا UI کمپین وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit"
+      ]
+    },
+    {
+      "id": 114,
+      "title": "ثبت تیکت پشتیبانی",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "tickets با موضوع، شناسه درخواست‌کننده، وضعیت، assigned_to و متن به‌صورت CRUD دستی ذخیره می‌شود؛ دریافت خودکار از ربات وجود ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "DB tickets؛ دریافت پیام مجاز",
+      "priority": 3,
+      "test": "بازبینی فرم؛ تست Resource/Scope مشترک؛ گردش اختصاصی تیکت UI آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 115,
+      "title": "ارجاع تیکت به مدیر مشخص",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فیلد assigned_to به‌صورت متن در تیکت وجود دارد؛ اتصال به مدیر تأییدشده، مجوز و اعلان ارجاع ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "DB assignee و نقش مدیر",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 116,
+      "title": "پاسخ‌های آماده برای پشتیبان‌ها",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "قالب‌های متن قابل ذخیره‌اند؛ انتخاب/درج پاسخ آماده در تیکت و ارسال به درخواست‌کننده وجود ندارد.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "DB canned replies؛ sendMessage",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 117,
+      "title": "پیگیری وضعیت و تاریخچه تیکت‌ها",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "وضعیت جاری و زمان updated_at تیکت نمایش می‌یابد؛ تاریخچه تغییر وضعیت/پاسخ‌های مستقل ساخته نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "DB tickets/history؛ کنترل مالکیت",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 118,
+      "title": "اتصال به سرویس‌های خارجی از طریق Webhook امن",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "اتصال Webhook به سرویس خارجی، secret signature و dispatcher ساخته نشده‌اند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "HTTPS webhook؛ امضای درخواست و allowlist سرویس",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 119,
+      "title": "اتصال اختیاری دستیار هوش مصنوعی با API قابل تنظیم",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "دستیار AI، تنظیم API آن و کلید محرمانه آن پیاده‌سازی نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "API دستیار اختیاری؛ کلید محرمانه سمت سرور",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 120,
+      "title": "سیستم اشتراک و لغو اشتراک برای اعلان‌های مجاز کاربران",
+      "category": "اتوماسیون و پشتیبانی",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "سرور collection=consents را می‌پذیرد؛ UI رضایت، دستور عضویت/لغو و موتور اعلان وجود ندارند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "DB opt-in/opt-out؛ sendMessage به مشترک مجاز",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 121,
+      "title": "نمایش تعداد کل پیام‌های پردازش‌شده",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "UI شمارش عملیات بازگشتی logs دارد و سرور metadata رویداد می‌نویسد؛ مجموع کل پیام پردازش‌شده و موتور پردازش وجود ندارند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "event ledger؛ شمارنده واقعی سرور",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 122,
+      "title": "نمودار فعالیت روزانه، هفتگی و ماهانه",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "نمودار ۷ روز عملیات logs موجود است؛ نمودار فعالیت پیام‌ها در بازه روزانه/هفتگی/ماهانه ساخته نشده است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "event ledger؛ تجمیع زمانی",
+      "priority": 3,
+      "test": "بازبینی گزارش؛ fixture logs خالی است و صحت نمودار با داده واقعی آزموده نشده.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 123,
+      "title": "شمارش کاربران فعال",
+      "category": "گزارش و تحلیل",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "تشخیص و شمارش کاربر فعال از رویدادهای پیام پیاده‌سازی نشده است.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "sender_id دریافت‌شده مجاز؛ distinct در DB",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 124,
+      "title": "بررسی تغییرات تعداد اعضای گروه با داده‌های مجاز",
+      "category": "گزارش و تحلیل",
+      "status": "نیازمند پشتیبانی API",
+      "initialStatus": "نیازمند پشتیبانی API",
+      "initialCategory": "وابسته به پشتیبانی API روبیکا",
+      "initialEvidence": "فهرست اعضا، شمارش اعضا و رویداد عضویت در getChat/Update مرجع نیست.",
+      "evidence": "داده تعداد اعضای گروه در مرجع getChat تأیید نشده؛ نمودار تغییر اعضا پیاده‌سازی نشده است.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [],
+      "api": "API count/list members/join/leave مستند نیست",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 125,
+      "title": "نمایش پرکاربردترین دستورات ربات",
+      "category": "گزارش و تحلیل",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "موتور فرمان و شمارنده کاربرد دستورات وجود ندارند.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "command execution ledger؛ آمار DB",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 126,
+      "title": "گزارش انواع پیام‌های دریافتی",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "type رویداد در metadata سرور ثبت می‌شود؛ گزارش نوع پیام در UI و تشخیص معتبر نوع رسانه ساخته نشده است.",
+      "files": [
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "Update/Message fields؛ رسانه‌های فاقد نوع با عنوان نامشخص",
+      "priority": 3,
+      "test": "واحد ثبت نوع/hash بدون متن پیام با mock؛ UI گزارش انواع پیام آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 127,
+      "title": "گزارش تعداد و دسته‌بندی تخلفات",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فهرست دستی violations وجود دارد؛ جمع/دسته‌بندی خودکار تخلفات در گزارش ساخته نشده است.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "violation ledger؛ آمار DB",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 128,
+      "title": "آمار اخطارهای ثبت‌شده",
+      "category": "گزارش و تحلیل",
+      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "warn_limit فقط تنظیم است؛ شمارنده و آمار اخطار ثبت‌شده ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [],
+      "api": "warnings ledger؛ آمار DB",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 129,
+      "title": "نمودار روند پیام‌های اسپم",
+      "category": "گزارش و تحلیل",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "موتور تشخیص spam و نمودار روند آن وجود ندارند.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "spam event ledger؛ آمار DB",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 130,
+      "title": "آمار انتشار موفق و ناموفق پست‌ها",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "logs وضعیت موفق/خطا/مبهم عملیات پیام را ثبت می‌کند؛ آمار موفق/ناموفق انتشار پست به پست متصل نیست.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "job نتیجه sendMessage/sendFile؛ آمار DB",
+      "priority": 3,
+      "test": "واحد audit نتیجه نامشخص و UI پاسخ موفق/خطا با fixture؛ آمار انتشار واقعی آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 131,
+      "title": "گزارش خطاهای API و اتصال",
+      "category": "گزارش و تحلیل",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "خطاهای سرویس و نتیجه API بدون افشای توکن نمایش و در سوابق سرور ثبت می‌شوند؛ گزارش از حداکثر ۵۰۰ log بازگشتی است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/api.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js"
+      ],
+      "referenceFiles": [],
+      "api": "خطای sanitized adapter؛ ثبت بدون توکن/URL محرمانه",
+      "priority": 3,
+      "test": "واحد خطاهای Rubika/DB و audit با mock؛ UI خطای ارسال fixture؛ گزارش با logs واقعی آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 132,
+      "title": "میانگین زمان پاسخگویی ربات",
+      "category": "گزارش و تحلیل",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "اندازه‌گیری و گزارش اختصاصی این معیار پیاده‌سازی نشده؛ زمان اجرای موتور/وظیفه واقعی موجود نیست.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "timestamp دریافت تا پایان؛ داده واقعی سرور",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 133,
+      "title": "نرخ موفقیت وظایف زمان‌بندی‌شده",
+      "category": "گزارش و تحلیل",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "اندازه‌گیری و گزارش اختصاصی این معیار پیاده‌سازی نشده؛ زمان اجرای موتور/وظیفه واقعی موجود نیست.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "job ledger؛ نسبت تعداد پایان موفق",
+      "priority": 3,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 134,
+      "title": "فیلتر تاریخ و مقایسه بازه‌های زمانی",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "فیلتر تاریخ شروع/پایان logs به وقت تهران وجود دارد؛ مقایسه دو بازه و گزارش تجمیعی ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [],
+      "api": "DB date filters؛ منطقه زمانی مشخص",
+      "priority": 3,
+      "test": "بازبینی کد فیلتر؛ UI fixture این سناریو و مقایسه بازه را اجرا نکرده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 135,
+      "title": "خروجی گرفتن گزارش‌ها به CSV، JSON و Excel",
+      "category": "گزارش و تحلیل",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "خروجی logs به CSV و JSON موجود است؛ CSV در Excel باز می‌شود اما خروجی بومی XLSX پیاده‌سازی نشده است.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [],
+      "api": "خروجی داده‌های مجاز DB؛ CSV/JSON/Excel معتبر",
+      "priority": 3,
+      "test": "واحد model فرمول CSV را escape می‌کند؛ دانلود report CSV/JSON اختصاصی UI آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit",
+        "code-review"
+      ]
+    },
+    {
+      "id": 136,
+      "title": "داشبورد کاملاً واکنش‌گرا برای موبایل، تبلت و دسکتاپ",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "CSS media query برای زیر ۷۸۰ پیکسل وجود دارد؛ تست مرورگر/دستگاه انجام نشده است.",
+      "evidence": "چیدمان CSS واکنش‌گرا، sidebar موبایل و جدول‌های اسکرولی موجودند؛ محدودیت نتیجه آزمون به viewportهای اجراشده است.",
+      "files": [
+        "index.html",
+        "assets/style.css",
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "HTML/CSS media queries؛ API لازم نیست",
+      "priority": 1,
+      "test": "Chromium: دسکتاپ ۱۴۴۰×۱۰۰۰ و موبایل ۳۹۰×۸۴۴ بدون overflow صفحه؛ منوی موبایل باز/بسته شد. viewport تبلت و دستگاه واقعی جدا آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 137,
+      "title": "رابط کاربری فارسی و کاملاً راست‌به‌چپ (RTL)",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "صفحه دارای lang=fa و dir=rtl است؛ آزمون دسترس‌پذیری انجام نشده است.",
+      "evidence": "پوسته فارسی با lang=fa و dir=rtl و جهت مناسب شناسه‌ها و ورودی‌های عددی/لاتین.",
+      "files": [
+        "index.html",
+        "assets/style.css",
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "HTML lang=fa dir=rtl؛ API لازم نیست",
+      "priority": 1,
+      "test": "Chromium fixture، lang=fa و dir=rtl را تأیید کرد؛ داشبورد/گروه در screenshot دسکتاپ و موبایل بررسی شدند. ممیزی کامل دسترس‌پذیری انجام نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 138,
+      "title": "استفاده سراسری از فونت زیبای Vazirmatn",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "Vazirmatn WOFF2 محلی با مجوز OFL و @font-face برای کل پنل؛ وابستگی CDN ندارد.",
+      "files": [
+        "assets/style.css",
+        "assets/fonts/Vazirmatn.woff2",
+        "assets/fonts/OFL.txt"
+      ],
+      "referenceFiles": [],
+      "api": "فونت Vazirmatn محلی معتبر با وزن ۴۰۰ تا ۷۰۰",
+      "priority": 1,
+      "test": "فایل فونت محلی با HTTP موفق در ۱۱ asset عمومی PWA Cache شد و CSS آن را برای پنل تعریف می‌کند؛ snapshotهای مرورگر تهیه شدند.",
+      "productionVerified": false,
+      "testKinds": [
+        "static-local",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 139,
+      "title": "حالت روشن و تاریک با ذخیره تنظیم کاربر",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "حالت روشن/تاریک از CSS tokens و انتخاب rubika.theme در localStorage استفاده می‌کند.",
+      "files": [
+        "assets/style.css",
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "CSS tokens و localStorage فقط تنظیم رابط",
+      "priority": 4,
+      "test": "Chromium fixture تغییر data-theme به dark و برگشت روشن و screenshot را تأیید کرد؛ کد localStorage بازبینی شد، حفظ theme پس از reload assertion اختصاصی ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 140,
+      "title": "طراحی آیکون اختصاصی حرفه‌ای برای نرم‌افزار",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "لوگوی اختصاصی SVG، favicon و PNGهای ۱۹۲/۵۱۲ برای manifest و سربرگ آماده‌اند.",
+      "files": [
+        "assets/icons/logo.svg",
+        "assets/icons/logo-dark.svg",
+        "assets/icons/favicon.png",
+        "assets/icons/icon-192.png",
+        "assets/icons/icon-512.png"
+      ],
+      "referenceFiles": [],
+      "api": "SVG/PNG/favicon مستقل؛ API لازم نیست",
+      "priority": 1,
+      "test": "لوگو و icon-192/icon-512 با HTTP موفق در Cache PWA قرار گرفتند؛ اندازه آیکون‌های manifest و snapshot داشبورد محلی بررسی شدند. favicon/logo-dark جدا assertion ندارند.",
+      "productionVerified": false,
+      "testKinds": [
+        "static-local",
+        "browser-fixture"
+      ]
+    },
+    {
+      "id": 141,
+      "title": "نمایش کارت‌های آماری و نمودارهای مدیریتی مدرن",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "کارت‌های تعداد ربات/گروه/کانال از نشست و نمودار ۷ روز از logs ساخته می‌شوند؛ همه آمارهای پیام/اسپم/اعضا موجود نیستند.",
+      "files": [
+        "assets/js/app.js",
+        "assets/style.css"
+      ],
+      "referenceFiles": [],
+      "api": "آمار واقعی سرور؛ SVG/Canvas chart دسترس‌پذیر",
+      "priority": 1,
+      "test": "UI fixture کارت‌ها و screenshots؛ fixture logs خالی است و صحت نمودار پر داده آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 142,
+      "title": "پشتیبانی از نصب وب‌اپلیکیشن به‌صورت PWA",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "manifest با مسیر نسبی و service worker Cache فایل‌های عمومی؛ POST و داده خصوصی Cache نمی‌شوند. نصب به HTTPS/مرورگر سازگار نیاز دارد.",
+      "files": [
+        "manifest.webmanifest",
+        "sw.js",
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "HTTPS manifest/service worker؛ بدون cache پاسخ محرمانه",
+      "priority": 4,
+      "test": "scripts/pwa.mjs: worker activated در /rubika_bot/، ۱۱ GET عمومی، scope نسبی و iconهای ۱۹۲/۵۱۲، reload آفلاین فارسی و صفر خطای JS؛ نصب سیستم‌عامل/HTTPS production آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "pwa-local"
+      ]
+    },
+    {
+      "id": 143,
+      "title": "ورود امن و کنترل دسترسی مبتنی بر نقش (RBAC)",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "مالکیت توکن جای ورود استفاده می‌شود؛ نقش‌ها و RBAC وجود ندارد.",
+      "evidence": "ورود توکنی مالک ربات، بررسی getMe، Scope، RLS و CORS فراهم است؛ مدیران چندنفره، role و RBAC وجود ندارند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "Auth/session؛ RBAC و مالکیت در سرور/RLS",
+      "priority": 1,
+      "test": "واحد Scope/CORS و UI خروج/ورود fixture؛ PostgreSQL RLS و منع public grants؛ RBAC وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture",
+        "sql-local"
+      ]
+    },
+    {
+      "id": 144,
+      "title": "احراز هویت دومرحله‌ای برای مدیران پنل",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "MFA/TOTP، ثبت عامل دوم و مدیریت بازیابی حساب ساخته نشده‌اند.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js"
+      ],
+      "referenceFiles": [],
+      "api": "Supabase Auth MFA/TOTP؛ مدیریت عامل دوم",
+      "priority": 4,
+      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": 145,
+      "title": "ثبت تاریخچه تغییرات و فعالیت‌های حساس مدیران",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "سوابق خودکار سرور برای عملیات حساس و read-only logs موجود است؛ هویت مدیریتی چندنفره و diff قبل/بعد هنوز ندارد.",
+      "files": [
+        "assets/js/app.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/database.js",
+        "server/supabase/migrations/202610140001_control_pro.sql"
+      ],
+      "referenceFiles": [],
+      "api": "audit log اتمیک و محدود به مالک؛ DB",
+      "priority": 1,
+      "test": "واحد رد ویرایش/حذف logs، ثبت نتیجه مبهم و حذف توکن؛ گزارش با سرور واقعی آزموده نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 146,
+      "title": "نگهداری امن و رمزگذاری توکن‌ها و اطلاعات محرمانه",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "جزئی و آزمایش‌نشده",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "توکن در حافظه تب نگهداری و ورودی پس از ارسال پاک می‌شود؛ رمزگذاری پایدار و سورس سرور در مخزن نیست.",
+      "evidence": "توکن فقط حافظه تب است؛ HTTPS، حذف از خطا، جلوگیری از ذخیره در Resource/تنظیمات و جداسازی Scope فراهم است. رمزگذاری پایدار توکن یا vault ساخته نشده.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/api.js",
+        "server/supabase/functions/rubika-panel/lib/handler.js",
+        "server/supabase/functions/rubika-panel/lib/adapter.js",
+        "server/supabase/functions/rubika-panel/lib/validation.js"
+      ],
+      "referenceFiles": [],
+      "api": "رمزگذاری authenticated سمت سرور؛ مدیریت کلید؛ بدون توکن در frontend پایدار",
+      "priority": 1,
+      "test": "UI fixture نبود توکن در local/session storage و backup، خروج/reload؛ واحد جلوگیری از افشای توکن و فیلد credential؛ رمزگذاری پایدار آزموده نشده/وجود ندارد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit-mock"
+      ]
+    },
+    {
+      "id": 147,
+      "title": "پشتیبان‌گیری و بازیابی تنظیمات و پایگاه داده",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "JSON backup/restore فقط مقصدها و تنظیمات همین ربات است؛ DB کامل، مخاطبان، تیکت‌ها و توکن را شامل نمی‌شود؛ restore چند مقصد اتمیک نیست.",
+      "files": [
+        "assets/js/app.js",
+        "assets/js/model.js"
+      ],
+      "referenceFiles": [],
+      "api": "export/import settings و backup DB؛ کنترل مجوز",
+      "priority": 4,
+      "test": "UI fixture دانلود بدون توکن و رد backup تکراری بدون mutation؛ model اعداد/زمان نامعتبر را رد می‌کند؛ restore موفق کامل/DB آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "unit"
+      ]
+    },
+    {
+      "id": 148,
+      "title": "جستجو و فیلتر پیشرفته در قسمت‌های مدیریتی",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "جستجوی متن مقصدها، collections، سوابق و فهرست ۱۵۰ قابلیت و فیلتر وضعیت قابلیت وجود دارد؛ جستجوی ترکیبی پیشرفته/فیلتر سرور کامل نیست.",
+      "files": [
+        "assets/js/app.js"
+      ],
+      "referenceFiles": [],
+      "api": "فیلتر UI/سرور با کنترل مالکیت؛ DB",
+      "priority": 4,
+      "test": "UI fixture جستجوی ۱۵۰ قابلیت و بازگشت فهرست؛ گردش همه جستجوهای مدیریتی و فیلتر ترکیبی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "browser-fixture",
+        "code-review"
+      ]
+    },
+    {
+      "id": 149,
+      "title": "تست خودکار واحد، یکپارچه و رابط کاربری",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "موجود و آزمایش‌شده (محلی)",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "آزمون واحد Node، UI با API fixture، بررسی سرور static و integration PostgreSQL موقت وجود دارد؛ آزمون production و Rubika واقعی انجام نشده.",
+      "files": [
+        "scripts/smoke.mjs",
+        "server/tests/adapter.test.js",
+        "server/tests/database.test.js",
+        "server/tests/handler.test.js",
+        "server/tests/sql.integration.mjs",
+        "scripts/pwa.mjs"
+      ],
+      "referenceFiles": [],
+      "api": "Node tests، integration با adapter mock، تست browser",
+      "priority": 1,
+      "test": "۲۰ تست Node گذشت؛ ۲۲ گروه آزمون مرورگر/static با API fixture گذشت؛ integration PostgreSQL محلی (migration/RLS/rate/claim/dedup) و PWA عمومی/آفلاین گذشتند. Rubika و استقرار واقعی آزموده نشد.",
+      "productionVerified": false,
+      "testKinds": [
+        "unit-mock",
+        "browser-fixture",
+        "sql-local",
+        "pwa-local"
+      ]
+    },
+    {
+      "id": 150,
+      "title": "استقرار با Docker به همراه مستندات API و راهنمای نصب و نگهداری",
+      "category": "رابط کاربری و زیرساخت",
+      "status": "جزئی؛ نیازمند توسعه",
+      "initialStatus": "نیازمند توسعه",
+      "initialCategory": "نیازمند توسعه",
+      "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
+      "evidence": "مستندات API/نصب/نگهداری برای GitHub Pages و Supabase آماده است؛ Dockerfile/Compose استقرار برنامه ساخته نشده است. Docker تنها آزمون PostgreSQL است.",
+      "files": [
+        "README.md",
+        "server/README.md",
+        "server/API.md",
+        "server/.env.example",
+        "server/tests/sql.integration.mjs"
+      ],
+      "referenceFiles": [],
+      "api": "Docker برای سرور JS/local serve؛ GitHub Pages برای static؛ مستندات API",
+      "priority": 1,
+      "test": "بازبینی مستندات و اجرای محلی؛ استقرار Docker برنامه، Pages و Supabase واقعی انجام نشده است.",
+      "productionVerified": false,
+      "testKinds": [
+        "code-review"
+      ]
+    }
+  ],
+  "validation": {
+    "date": "2026-10-14",
+    "timezone": "Asia/Tehran",
+    "nodeTests": {
+      "command": "npm --prefix server test",
+      "passed": 20,
+      "scope": "Node unit tests with mocked Rubika and database; no live API"
+    },
+    "browserTests": {
+      "command": "node scripts/smoke.mjs",
+      "passed": 22,
+      "scope": "۲۲ گروه بررسی Chromium و static محلی، API با fixture رهگیری‌شده؛ صفر استثنای JavaScript؛ بدون اتصال Rubika واقعی"
+    },
+    "sqlIntegration": {
+      "command": "npm --prefix server run test:sql",
+      "passed": true,
+      "scope": "Temporary local PostgreSQL 17 Docker: repeatable migration, RLS/public grants, rate limits, concurrent claims, replay and event hash uniqueness; no production Supabase"
+    },
+    "pwa": {
+      "command": "node scripts/pwa.mjs",
+      "passed": true,
+      "scope": "Service worker activated in /rubika_bot/, 11 public GET assets, relative manifest icons/scope, offline Persian dashboard reload, no API/private cache, zero browser exceptions; OS installation not tested"
+    },
+    "liveRubikaTested": false,
+    "productionDeployed": false,
+    "notes": [
+      "آزمون SQL، PostgreSQL واقعی موقت را بررسی می‌کند؛ deployment Supabase یا integration زنده Rubika نیست.",
+      "هر قابلیت تنها سناریوهای ذکرشده در test را پوشش دارد؛ گذشتن تست مشترک Resource جای آزمون همه فرم‌های مدیریت نیست.",
+      "جدول نهایی شامل ۱۵۰ شناسه و گزارش صریح بخش‌های ساخته‌نشده است؛ تکمیل همه ۱۵۰ قابلیت ادعا نمی‌شود."
+    ]
+  },
+  "summary": {
+    "آماده؛ نیازمند استقرار و آزمون واقعی": 25,
+    "نیازمند توسعه": 30,
+    "جزئی؛ نیازمند توسعه": 42,
+    "نیازمند پشتیبانی API": 19,
+    "تنظیمات آماده؛ موتور اجرا نشده": 27,
+    "موجود و آزمایش‌شده (محلی)": 7
+  }
+}

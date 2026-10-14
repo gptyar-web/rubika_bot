@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.local
+supabase/.temp/
+server/supabase/.temp/
+server/supabase/.branches/
+test-results/
+playwright-report/

@@ -1,0 +1,16 @@
+{
+  "name": "rubika-control-pro",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "npm --prefix server test",
+    "test:browser": "node scripts/smoke.mjs",
+    "test:sql": "npm --prefix server run test:sql",
+    "test:pwa": "node scripts/pwa.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

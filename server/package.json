@@ -1,0 +1,7 @@
+{
+  "name": "rubika-control-pro-edge",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/*.test.js", "test:sql": "node tests/sql.integration.mjs" },
+  "engines": { "node": ">=20" }
+}

@@ -1,37 +1,41 @@
 <!doctype html>
-<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>مدیریت ربات روبیکا</title><style>
-:root{font-family:Tahoma,Arial,sans-serif;color-scheme:dark;background:#080e1b;color:#e7efff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#152d4b 0%,#080e1b 60%);min-height:100vh}header{padding:24px max(20px,calc((100vw - 1120px)/2));border-bottom:1px solid #243451;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800;font-size:20px}.brand span{color:#59d8e5}.shell{max-width:1100px;margin:auto;padding:35px 20px}h1{font-size:28px;margin:0 0 8px}h2{font-size:19px}p,.muted{color:#9daec8;line-height:1.9}label{display:block;font-size:14px;margin:13px 0 7px;color:#bbd1e9}input,textarea{width:100%;background:#101e34;border:1px solid #31435d;border-radius:12px;color:#f2f5ff;padding:12px 14px;font:inherit}textarea{min-height:94px;resize:vertical}input:focus,textarea:focus{outline:2px solid #42b9d7}button{font:inherit;border:none;border-radius:11px;cursor:pointer;padding:11px 18px;background:#2aa9ca;color:#07121b;font-weight:700}button.secondary{background:#21334c;color:#e7efff}button.danger{background:#572e3a;color:#ffccd3}button:disabled{opacity:.45;cursor:wait}.card{background:#101b2edc;border:1px solid #273a52;border-radius:18px;padding:23px;box-shadow:0 10px 32px #0003}.login{max-width:470px;margin:65px auto}.grid{display:grid;grid-template-columns:280px 1fr;gap:20px}.group{display:block;width:100%;text-align:right;background:#14253c;color:#dff3ff;margin:8px 0;border:1px solid #2a415b}.group.selected{border-color:#56d7e4;background:#1b3a4e}.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between}.pills{display:flex;flex-wrap:wrap;gap:9px}.pill{font-size:12px;background:#173348;color:#8beaf1;padding:7px 12px;border-radius:20px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.toggle{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid #2b435c;border-radius:11px;margin:7px 0}.toggle input{width:21px;height:21px;accent-color:#2ac6d7}.note{background:#163044;border-right:3px solid #48cade;padding:12px 14px;border-radius:7px;font-size:13px}.hidden{display:none!important}#toast{position:fixed;left:20px;bottom:20px;background:#153c4b;border:1px solid #3d8ca6;padding:12px 20px;border-radius:10px;max-width:380px;display:none}footer{text-align:center;color:#8195ae;padding:40px 10px;font-size:12px}@media(max-width:780px){.grid,.formgrid{grid-template-columns:1fr}header{padding:19px 15px}.shell{padding:22px 12px}}
-</style></head><body>
-<header><div class="brand">◈ <span>روبیکا</span> | پنل مدیریت</div><div id="identity" class="muted">نسخه آزمایشی ۲</div></header>
-<main class="shell">
-<section id="login" class="card login"><h1>ورود به پنل</h1><p>توکن ربات را وارد کنید. توکن در مرورگر ذخیره نمی‌شود و برای بررسی به تابع امن Supabase ارسال خواهد شد.</p><form id="loginForm"><label for="token">توکن ربات روبیکا</label><input id="token" type="password" autocomplete="off" spellcheck="false" required placeholder="توکن دریافت‌شده از BotFather"><div style="margin-top:20px"><button id="loginBtn" type="submit">بررسی توکن و ورود</button> <button type="button" id="testConnection" class="secondary">آزمایش اتصال به Supabase</button><p id="connectionStatus" class="muted" role="status"></p></div></form><p class="note">امنیت: توکن را در GitHub، فایل جاوااسکریپت، آدرس صفحه یا پیام عمومی قرار ندهید. با تازه‌سازی صفحه باید دوباره وارد شوید.</p></section>
-<section id="dash" class="hidden"><div class="bar"><div><h1 id="botname">داشبورد ربات</h1><p>تنظیمات گروه‌ها در Supabase ذخیره می‌شوند.</p></div><button class="secondary" id="logout">خروج و پاک‌کردن توکن</button></div><div class="note" style="margin-bottom:19px">این پنل نسخه آغازین است: تنظیمات فقط ذخیره می‌شوند و هنوز به موتور ربات نسخه ۱.۱ متصل نیستند. Webhook نسخه ۲ نیز هنوز فعال نشده است.</div>
-<div class="grid"><aside class="card"><h2>گروه‌ها</h2><div id="groups"></div><hr style="border:0;border-top:1px solid #30415c;margin:25px 0"><label for="newChat">شناسه گروه (Chat ID)</label><input id="newChat" placeholder="شناسه گروه"><label for="newTitle">عنوان گروه</label><input id="newTitle" placeholder="نام دلخواه"><button style="margin-top:14px;width:100%" id="addGroup">افزودن گروه</button><p class="muted" style="font-size:12px">شناسه را از دستور /group در ربات فعلی بگیرید.</p></aside>
-<section class="card" id="editor" aria-live="polite"><h2>مدیریت تنظیمات</h2><p>برای شروع، یک گروه ایجاد یا انتخاب کنید.</p></section></div>
-</section></main><div id="toast" role="status"></div><footer>Rubika Group Manager — Static GitHub Pages + Supabase Edge Functions</footer>
-<script>
-"use strict";
-const endpoint="https://efibfevyiepkwpnobaro.supabase.co/functions/v1/rubika-panel";
-const $=id=>document.getElementById(id);let secret="",bot=null,groups=[],selected=null;
-const defaults={active:false,anti_spam:true,warn_limit:3,flood_count:6,flood_seconds:8,quiet_enabled:false,quiet_start:"23:00",quiet_end:"07:00",rules:"",welcome:"",locks:{link:false,mention:false,forward:false,file:false,sticker:false,location:false,contact:false,poll:false,photo:false,video:false,voice:false}};
-const names={link:"لینک",mention:"منشن",forward:"فوروارد",file:"فایل",sticker:"استیکر",location:"موقعیت مکانی",contact:"مخاطب",poll:"نظرسنجی",photo:"عکس",video:"ویدئو",voice:"ویس"};
-function notify(msg){$("toast").textContent=msg;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",4500)}
-function clean(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-async function api(action,body={}){const ctl=new AbortController();const timeout=setTimeout(()=>ctl.abort(),20000);try{
-let res;try{res=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(action==="health"?{action}:{action,token:secret,...body}),signal:ctl.signal})}
-catch(err){if(err.name==="AbortError")throw Error("زمان ارتباط با سرور تمام شد. دوباره تلاش کنید.");throw Error("ارتباط با Supabase برقرار نشد (خطای شبکه یا CORS). از دکمه آزمایش اتصال استفاده کنید.")}
-let data;try{data=await res.json()}catch{throw Error("پاسخ سرور معتبر نبود (HTTP "+res.status+").")}
-if(!res.ok||!data.ok)throw Error(data.error||("خطای سرور: HTTP "+res.status));return data
-}finally{clearTimeout(timeout)}}
-$("testConnection").onclick=async()=>{const btn=$("testConnection"),out=$("connectionStatus");btn.disabled=true;out.textContent="در حال بررسی ارتباط با سرور...";try{const r=await api("health");out.textContent="اتصال با موفقیت برقرار شد. سرور "+r.service+" در دسترس است.";notify("سرور Supabase در دسترس است")}catch(err){out.textContent=err.message;notify(err.message)}finally{btn.disabled=false}};
-$("loginForm").onsubmit=async e=>{e.preventDefault();const b=$("loginBtn");b.disabled=true;secret=$("token").value.trim();$("token").value="";try{const r=await api("login");bot=r.bot;$("identity").textContent=bot.name;$("botname").textContent="مدیریت: "+bot.name;$("login").classList.add("hidden");$("dash").classList.remove("hidden");await reload();notify("توکن تأیید شد")}catch(err){secret="";notify(err.message)}finally{b.disabled=false}};
-$("logout").onclick=()=>{secret="";bot=null;groups=[];selected=null;$("dash").classList.add("hidden");$("login").classList.remove("hidden");$("identity").textContent="نسخه آزمایشی ۲"};
-async function reload(){const r=await api("list");groups=r.groups||[];renderList();renderEditor();}
-function renderList(){const el=$("groups");el.replaceChildren();if(!groups.length){el.textContent="گروهی ثبت نشده است.";return}for(const g of groups){const b=document.createElement("button");b.className="group"+(selected===g.chat_id?" selected":"");b.textContent=g.title+" · "+g.chat_id;b.onclick=()=>{selected=g.chat_id;renderList();renderEditor()};el.append(b)}}
-$("addGroup").onclick=async()=>{const chat_id=$("newChat").value.trim(),title=$("newTitle").value.trim()||"گروه روبیکا";if(!chat_id){notify("شناسه گروه را وارد کنید");return}try{await api("save",{chat_id,title,settings:defaults});selected=chat_id;$("newChat").value="";$("newTitle").value="";await reload();notify("گروه ثبت شد؛ تنظیمات هنوز به ربات متصل نیستند")}catch(err){notify(err.message)}};
-function renderEditor(){const e=$("editor"),g=groups.find(x=>x.chat_id===selected);if(!g){e.innerHTML="<h2>مدیریت تنظیمات</h2><p>یک گروه انتخاب کنید.</p>";return}const s={...defaults,...g.settings,locks:{...defaults.locks,...g.settings?.locks}};e.innerHTML='<div class="bar"><h2>'+clean(g.title)+'</h2><span class="pill">پیش‌نویس تنظیمات</span></div><p class="muted">'+clean(g.chat_id)+'</p><form id="configForm"><div class="pills"><label class="toggle">فعال بودن مدیریت <input type="checkbox" name="active" '+(s.active?"checked":"")+'></label><label class="toggle">ضداسپم <input type="checkbox" name="anti_spam" '+(s.anti_spam?"checked":"")+'></label><label class="toggle">ساعت سکوت <input type="checkbox" name="quiet_enabled" '+(s.quiet_enabled?"checked":"")+'></label></div><h2>قفل‌ها</h2><div class="formgrid">'+Object.entries(names).map(([k,v])=>'<label class="toggle">'+v+' <input type="checkbox" data-lock="'+k+'" '+(s.locks[k]?"checked":"")+'></label>').join("")+'</div><h2>تنظیمات امنیتی</h2><div class="formgrid"><div><label>حداکثر اخطار</label><input name="warn_limit" type="number" min="1" max="120" value="'+s.warn_limit+'"></div><div><label>تعداد پیام ضدفلود</label><input name="flood_count" type="number" min="1" max="120" value="'+s.flood_count+'"></div><div><label>بازه ضدفلود (ثانیه)</label><input name="flood_seconds" type="number" min="1" max="120" value="'+s.flood_seconds+'"></div><div><label>آغاز سکوت</label><input name="quiet_start" type="time" value="'+clean(s.quiet_start)+'"></div><div><label>پایان سکوت</label><input name="quiet_end" type="time" value="'+clean(s.quiet_end)+'"></div></div><label>قوانین گروه</label><textarea name="rules" maxlength="2000">'+clean(s.rules)+'</textarea><label>خوشامدگویی</label><textarea name="welcome" maxlength="2000">'+clean(s.welcome)+'</textarea><div class="bar" style="margin-top:20px"><button type="submit">ذخیره تنظیمات</button><button type="button" class="danger" id="remove">حذف گروه از پنل</button></div></form>';
-$("configForm").onsubmit=async ev=>{ev.preventDefault();const f=ev.currentTarget,settings={locks:{}};for(const k of ["active","anti_spam","quiet_enabled"])settings[k]=f.elements.namedItem(k).checked;for(const k of ["warn_limit","flood_count","flood_seconds"])settings[k]=Number(f.elements.namedItem(k).value);for(const k of ["quiet_start","quiet_end","rules","welcome"])settings[k]=f.elements.namedItem(k).value;for(const el of f.querySelectorAll("[data-lock]"))settings.locks[el.dataset.lock]=el.checked;try{await api("save",{chat_id:g.chat_id,title:g.title,settings});await reload();notify("تنظیمات در Supabase ذخیره شد")}catch(err){notify(err.message)}};
-$("remove").onclick=async()=>{if(!confirm("گروه فقط از پنل حذف شود؟"))return;try{await api("delete",{chat_id:g.chat_id});selected=null;await reload();notify("گروه از پنل حذف شد")}catch(err){notify(err.message)}};
-}
-</script></body></html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#5b5bf7">
+  <meta name="description" content="پنل فارسی مدیریت ربات‌های روبیکا، سازگار با GitHub Pages">
+  <title>Rubika Control Pro | مدیریت ربات روبیکا</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/logo.svg">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preload" href="./assets/fonts/Vazirmatn.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./assets/style.css">
+  <script type="module" src="./assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">رفتن به محتوای اصلی</a>
+  <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+  <aside class="sidebar" id="sidebar" aria-label="منوی اصلی">
+    <a class="brand" href="#dashboard"><img src="./assets/icons/logo.svg" alt="" width="43" height="43"><span><strong>روبیکا کنترل <b>پرو</b></strong><small>Rubika Control Pro</small></span></a>
+    <div class="workspace-label">فضای مدیریت شما <span class="version">نسخه ۳</span></div>
+    <nav id="navigation"></nav>
+    <div class="sidebar-bottom"><div class="secure-card"><span class="secure-dot"></span><strong>توکن فقط در حافظه</strong><small>با خروج یا تازه‌سازی صفحه پاک می‌شود</small></div><button type="button" id="featureLink" class="nav-item"><span>◈</span> وضعیت ۱۵۰ قابلیت</button><a class="doc-link" href="./README.md" target="_blank" rel="noopener">راهنمای راه‌اندازی ↗</a></div>
+  </aside>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-start"><button class="icon-button mobile-menu" id="menuButton" type="button" aria-label="بازکردن منو" aria-expanded="false" aria-controls="sidebar">☰</button><span class="breadcrumb">فضای مدیریت <span>/</span> <strong id="breadcrumb">داشبورد</strong></span></div>
+      <div class="topbar-end"><span class="today" id="today"></span><button type="button" class="icon-button" id="themeButton" aria-label="تغییر به حالت تاریک" title="تغییر ظاهر">☾</button><button type="button" id="accountButton" class="account"><span class="avatar" id="accountAvatar">ر</span><span id="accountName">اتصال ربات</span><span>⌄</span></button></div>
+    </header>
+    <main id="content" tabindex="-1">
+      <div class="page-heading"><div><div class="eyebrow" id="eyebrow">مدیریت ساده، کنترل دقیق</div><h1 id="pageTitle">داشبورد مدیریت</h1><p id="pageDescription">وضعیت ربات‌ها و مقصدهای مجازتان را در یک نگاه ببینید.</p></div><div id="pageActions" class="actions"></div></div>
+      <div id="connectionBanner"></div>
+      <div id="page"></div>
+    </main>
+    <footer>Rubika Control Pro <span>HTML · CSS · JavaScript</span><span>مناسب GitHub Pages</span></footer>
+  </div>
+  <dialog id="modal" aria-labelledby="modalTitle"><div class="modal-header"><h2 id="modalTitle"></h2><button class="icon-button" id="closeModal" type="button" aria-label="بستن">×</button></div><div id="modalBody"></div></dialog>
+  <div id="toasts" aria-live="polite" aria-atomic="false"></div>
+</body>
+</html>

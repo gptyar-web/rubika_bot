@@ -1,0 +1,7 @@
+project_id = "rubika-control-pro"
+
+[functions.rubika-panel]
+entrypoint = "./functions/rubika-panel/index.js"
+# This function validates the Rubika token itself on every authenticated call.
+# A Supabase anon JWT is not a bot authentication credential.
+verify_jwt = false

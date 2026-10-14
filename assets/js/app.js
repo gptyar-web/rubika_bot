@@ -1,0 +1,334 @@
+import { PanelAPI, DEFAULT_ENDPOINT, validateEndpoint, LEGACY_CAPABILITIES } from './api.js';
+import { LOCKS, defaults, settingsFor, escapeHTML as esc, faNumber as num, faDate, csv, exportFile, validateBackup, tehranDateTimeInput, tehranInputToISO } from './model.js';
+
+const $ = id => document.getElementById(id);
+const paths = {
+ dashboard:'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z',
+ bots:'M7 8h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3z M12 3v5 M9 13h.01 M15 13h.01 M9 17h6 M1 12v4 M23 12v4',
+ groups:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M17 4a4 4 0 0 1 0 7 M22 21v-2a4 4 0 0 0-3-3.87',
+ channels:'M3 10v4h4l9 5V5L7 10z M7 14l2 7h3 M20 8a7 7 0 0 1 0 8',
+ messages:'M21 11.5a8.5 8.5 0 0 1-8.5 8.5H5l-3 3V11.5A8.5 8.5 0 0 1 10.5 3H13a8 8 0 0 1 8 8.5z M7 9h10 M7 13h6',
+ locks:'M6 10h12a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2z M8 10V6a4 4 0 0 1 8 0v4 M12 14v3',
+ violations:'M12 3 3 7v6c0 5 9 9 9 9s9-4 9-9V7z M12 8v5 M12 17h.01',
+ automation:'M12 3v4 M12 17v4 M3 12h4 M17 12h4 M5.6 5.6l2.8 2.8 M15.6 15.6l2.8 2.8 M5.6 18.4l2.8-2.8 M15.6 8.4l2.8-2.8 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8',
+ schedules:'M5 5h14a2 2 0 0 1 2 2v14H3V7a2 2 0 0 1 2-2z M7 2v6 M17 2v6 M3 11h18 M8 15h2 M14 15h2 M8 18h2',
+ users:'M20 21v-2a7 7 0 0 0-14 0v2 M13 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8',
+ reports:'M4 3v18h17 M8 17v-5 M13 17V8 M18 17V5',
+ history:'M3 12a9 9 0 1 0 2.6-6.4 M3 3v6h6 M12 7v5l3 2',
+ settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8 M9 3h6l1 3 3 1 2 5-2 3-1 3-3 3H9l-1-3-3-1-2-5 2-3 1-3z',
+ plus:'M12 5v14 M5 12h14', refresh:'M20 7v5h-5 M4 17v-5h5 M5 7a8 8 0 0 1 14-1l1 6 M4 12l1 6a8 8 0 0 0 14-1',
+ arrow:'M19 12H5 M12 5l-7 7 7 7', check:'M5 12l4 4L19 6', close:'M6 6l12 12 M6 18 18 6', download:'M12 3v12 M7 10l5 5 5-5 M3 16v5h18v-5',
+ clock:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M12 7v5l3 2', help:'M9 8a3 3 0 0 1 6 0c0 2-3 2-3 4 M12 17h.01 M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18',
+};
+const icon = name => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${paths[name] || paths.dashboard}"/></svg>`;
+const routes = {
+ dashboard:['داشبورد','داشبورد مدیریت','وضعیت ربات‌ها و مقصدهای مجازتان را در یک نگاه ببینید.'],
+ bots:['ربات‌ها','ربات‌های شما','اتصال امن و مدیریت مستقل ربات‌ها در همین نشست.'],
+ groups:['گروه‌ها','مدیریت گروه‌ها','قوانین و تنظیمات اختصاصی هر گروه، در یک فضای مشخص.'],
+ channels:['کانال‌ها','مدیریت کانال‌ها','ثبت مقصدهای مجاز و آماده‌سازی محتوای کانال.'],
+ messages:['پیام‌ها','مرکز پیام‌ها','ارسال و مدیریت پیام فقط در مقصدهای مجاز و ثبت‌شده.'],
+ locks:['قفل‌ها','قفل‌های محتوا','تنظیم جداگانهٔ ۲۰ قفل برای هر گروه.'],
+ violations:['تخلفات','گزارش تخلفات','ثبت و پیگیری موارد؛ اقدام خودکار وابسته به موتور مدیریت است.'],
+ automation:['اتوماسیون','پاسخ‌ها و اتوماسیون','قالب پیام و پیش‌نویس قواعد پاسخگویی را مدیریت کنید.'],
+ schedules:['زمان‌بندی','تقویم انتشار','پیش‌نویس و برنامهٔ انتشار، با نمایش تاریخ شمسی.'],
+ users:['کاربران','مخاطبان و پشتیبانی','دفتر مخاطبان و تیکت‌ها؛ این فهرست سطح دسترسی پنل را تغییر نمی‌دهد.'],
+ reports:['گزارش‌ها','گزارش عملکرد','گزارش بر اساس داده‌های ثبت‌شدهٔ سرویس، بدون آمار ساختگی.'],
+ history:['سوابق فعالیت','تاریخچه فعالیت','عملیات ثبت‌شدهٔ سرور و فعالیت‌های همین نشست.'],
+ settings:['تنظیمات','تنظیمات فضای مدیریت','ظاهر، اتصال امن و پشتیبان‌گیری از تنظیمات.'],
+ features:['وضعیت قابلیت‌ها','نقشهٔ ۱۵۰ قابلیت','وضعیت واقعی، وابستگی به API و شواهد آزمایش هر قابلیت.'],
+};
+let endpoint = DEFAULT_ENDPOINT;
+try { endpoint = validateEndpoint(localStorage.getItem('rubika.endpoint') || DEFAULT_ENDPOINT); } catch { /* Use known endpoint if local preferences are invalid. */ }
+let api = new PanelAPI(endpoint);
+const state = { bots:[], selectedBot:null, route:'dashboard', selectedGroup:null, activity:[], health:null, features:null, epoch:0, requests:new Set(), collectionTab:'automations' };
+const currentBot = () => state.bots.find(bot => bot.key === state.selectedBot);
+const caps = () => currentBot()?.capabilities || (state.health?.configured !== false ? state.health?.capabilities : null) || LEGACY_CAPABILITIES;
+const button = (text, id='', style='', symbol='') => `<button type="button" class="btn ${style}" ${id ? `id="${id}"` : ''}>${symbol ? icon(symbol) : ''}${text}</button>`;
+const statusLabel = value => ({open:'باز',pending:'در انتظار',closed:'بسته',reviewed:'بررسی‌شده',draft:'پیش‌نویس',success:'موفق',succeeded:'موفق',completed:'انجام‌شده',error:'خطا',failed:'ناموفق',unknown:'نامشخص',rejected:'ردشده',keyword:'کلمهٔ کلیدی',regex:'الگوی Regex'})[value] || value;
+const tag = (text, style='') => `<span class="tag ${style}">${esc(text)}</span>`;
+function notify(message, error=false) {
+  const toast = document.createElement('div'); toast.className = 'toast' + (error ? ' error' : '');
+  toast.textContent = redact(message); $('toasts').append(toast); setTimeout(() => toast.remove(), error ? 9000 : 5000);
+}
+function redact(value) {
+  let output = String(value ?? ''); for (const bot of state.bots) if (bot.token) output = output.split(bot.token).join('[توکن حذف شد]'); return output;
+}
+function record(text, kind='success') { state.activity.unshift({ text, kind, at:new Date().toISOString(), bot:currentBot()?.name || 'پنل' }); state.activity = state.activity.slice(0,100); }
+async function request(action, body={}, target=currentBot()) {
+  if (!target && action !== 'health') throw new Error('ابتدا یک ربات را متصل کنید.');
+  if(['save','collection_save'].includes(action)){const payload=JSON.stringify(body);if(state.bots.some(bot=>bot.token&&payload.includes(bot.token)))throw new Error('توکن ربات نباید در اطلاعات یا تنظیمات ذخیره شود.');}
+  const ctl = new AbortController(); state.requests.add(ctl);
+  try { return await api.request(action, target?.token || '', body, ctl.signal); }
+  finally { state.requests.delete(ctl); }
+}
+function cancelRequests() { for (const ctl of state.requests) ctl.abort(); state.requests.clear(); }
+function empty(title, description, symbol='bots', action='') { return `<div class="empty"><div class="empty-icon">${icon(symbol)}</div><h3>${esc(title)}</h3><p>${esc(description)}</p>${action}</div>`; }
+function warning(text) { return `<div class="banner warning">${icon('help')}<span>${esc(text)}</span></div>`; }
+function requireBot() {
+  if (currentBot()) return true;
+  $('page').innerHTML = `<section class="panel">${empty('هنوز رباتی متصل نیست','با توکن معتبر وارد شوید. هیچ دادهٔ نمایشی به‌جای اطلاعات واقعی نشان داده نمی‌شود.','bots',button('اتصال اولین ربات','connectFirst','primary','plus'))}</section>`;
+  $('connectFirst').onclick = () => navigate('bots'); return false;
+}
+function requireCapability(name, label) {
+  if (caps()[name]) return true;
+  $('page').innerHTML = `<section class="panel">${empty('سرویس فعلی این قابلیت را ارائه نمی‌کند',label + ' در سرویس JavaScript نسخهٔ ۳ آماده شده است. ابتدا آن سرویس را با migration مربوط منتشر کنید؛ نشانی را در تنظیمات تغییر دهید.','help',button('تنظیم اتصال','openSettings','','settings'))}</section>`;
+  $('openSettings').onclick = () => navigate('settings'); return false;
+}
+function openModal(title, body, callback) {
+  $('modalTitle').textContent = title; $('modalBody').innerHTML = body;
+  if (!$('modal').open) $('modal').showModal(); callback?.();
+}
+function confirmAction(title, description, fn, word='تأیید') {
+  openModal(title, `<p class="modal-copy">${esc(description)}</p><div class="confirm-buttons">${button('انصراف','cancelConfirm')}${button(word,'confirmAction','danger')}</div>`, () => {
+    $('cancelConfirm').onclick = () => $('modal').close();
+    $('confirmAction').onclick = async () => { const b=$('confirmAction');b.disabled=true;try { await fn(); $('modal').close(); } catch(e) { notify(e.message,true); } finally { b.disabled=false; } };
+  });
+}
+function updateSidebarAccess() { $('sidebar').inert=matchMedia('(max-width:720px)').matches&&!$('sidebar').classList.contains('open'); }
+function closeSidebar() { const hadFocus=$('sidebar').contains(document.activeElement);$('sidebar').classList.remove('open'); $('sidebarOverlay').hidden=true; $('menuButton').setAttribute('aria-expanded','false');updateSidebarAccess();if(hadFocus&&matchMedia('(max-width:720px)').matches)$('menuButton').focus(); }
+function navigate(route) {
+  if (!routes[route]) route='dashboard';
+  if (location.hash !== '#'+route) location.hash=route; else render();
+  closeSidebar();
+}
+function bindRouteButtons() { document.querySelectorAll('[data-route]').forEach(el => el.onclick=()=>navigate(el.dataset.route)); }
+function pageHeader() {
+  const [label,title,description] = routes[state.route];
+  $('breadcrumb').textContent=label; $('pageTitle').textContent=title; $('pageDescription').textContent=description;
+  document.title=label+' | Rubika Control Pro';
+  $('pageActions').innerHTML = state.route === 'bots' ? button('افزودن ربات','addBotTop','primary','plus') : ['groups','channels'].includes(state.route) ? button('افزودن '+(state.route==='groups'?'گروه':'کانال'),'addDestination','primary','plus') : currentBot() ? button('تازه‌سازی','refreshPage','','refresh') : button('اتصال ربات','connectTop','primary','plus');
+  if ($('addBotTop')) $('addBotTop').onclick=()=>loginModal();
+  if ($('connectTop')) $('connectTop').onclick=()=>navigate('bots');
+  if ($('addDestination')) $('addDestination').onclick=()=>currentBot()?addGroupModal():navigate('bots');
+  if ($('refreshPage')) $('refreshPage').onclick=async()=>{const btn=$('refreshPage');btn.disabled=true;try{await reloadGroups();render();notify('اطلاعات مقصدها تازه شد');}catch(e){notify(e.message,true);}finally{btn.disabled=false;}};
+  document.querySelectorAll('#navigation [data-route]').forEach(el=>{el.classList.toggle('active',el.dataset.route===state.route);el.setAttribute('aria-current',el.dataset.route===state.route?'page':'false');});
+  const bot=currentBot(); $('accountName').textContent=bot?.name || 'اتصال ربات'; $('accountAvatar').textContent=(bot?.name || 'ربات').slice(0,1);
+  const banner=$('connectionBanner');
+  banner.innerHTML=bot ? `<div class="user-bots">${state.bots.map(b=>`<button class="bot-chip ${b.key===bot.key?'selected':''}" data-select-bot="${esc(b.key)}">${esc(b.name)}</button>`).join('')}${tag(bot.connected?'اتصال تأییدشده':'خطا در اتصال',bot.connected?'success':'danger')}${tag('آخرین بررسی: '+faDate(bot.checkedAt))}</div>` : '';
+  banner.querySelectorAll('[data-select-bot]').forEach(b=>b.onclick=()=>selectBot(b.dataset.selectBot));
+}
+async function render() {
+  const epoch=++state.epoch; state.route=location.hash.slice(1) || 'dashboard'; if (!routes[state.route]) state.route='dashboard';
+  pageHeader(); $('page').innerHTML='';
+  try {
+    const renderer={dashboard:renderDashboard,bots:renderBots,groups:renderGroups,channels:renderGroups,locks:renderGroups,messages:renderMessages,
+      violations:()=>renderCollection('violations'),automation:()=>renderCollection(state.collectionTab==='templates'?'templates':'automations'),
+      schedules:()=>renderCollection(state.collectionTab==='drafts'?'drafts':'schedules'),users:()=>renderCollection(state.collectionTab==='tickets'?'tickets':'users'),
+      history:renderHistory,reports:renderReports,settings:renderSettings,features:renderFeatures}[state.route];
+    await renderer(epoch); bindRouteButtons();
+  } catch(e) {
+    if (epoch !== state.epoch) return;
+    $('page').innerHTML=`<section class="panel">${empty('بارگذاری انجام نشد',redact(e.message),'help',button('تلاش دوباره','retryPage'))}</section>`; $('retryPage').onclick=()=>render();
+  }
+}
+async function reloadGroups(target=currentBot()) {
+  if (!target) return;
+  try { const response=await request('list',{},target); if (!Array.isArray(response.groups)) throw new Error('ساختار فهرست مقصدها معتبر نیست.'); target.groups=response.groups;target.connected=true;target.checkedAt=new Date().toISOString();target.groupError=''; }
+  catch(e){target.groupError=e.message;target.connected=false;throw e;}
+}
+function selectBot(key) { cancelRequests(); state.selectedBot=key;state.selectedGroup=null;render(); }
+function logoutBot(key) {
+  cancelRequests(); const bot=state.bots.find(b=>b.key===key); if (bot) bot.token='';
+  state.bots=state.bots.filter(b=>b.key!==key); if (state.selectedBot===key) state.selectedBot=state.bots[0]?.key || null;
+  state.selectedGroup=null;state.activity=state.activity.filter(a=>a.bot!==bot?.name);render();notify('توکن و داده‌های نشست این ربات پاک شد');
+}
+function renderDashboard() {
+  const bot=currentBot(); const groups=bot?.groups || []; const channels=groups.filter(g=>g.type==='channel');const regular=groups.filter(g=>g.type!=='channel');
+  const enabled=regular.filter(g=>g.settings?.active).length;
+  $('page').innerHTML=`<section class="panel welcome"><div class="welcome-copy"><h2>${bot?esc(bot.name)+'، به فضای مدیریت خوش آمدید':'کنترل ربات‌ها، با خیال آسوده'}</h2><p>${bot?'تنظیمات، پیام‌ها و فعالیت‌ها را از همین‌جا مدیریت کنید. وضعیت هر قابلیت بر اساس پاسخ واقعی سرویس نمایش داده می‌شود.':'ربات روبیکا را متصل کنید و تنظیمات مقصدهای مجازتان را مدیریت کنید. توکن شما فقط در حافظهٔ همین تب باقی می‌ماند.'}</p><button class="btn" data-route="${bot?'messages':'bots'}">${icon(bot?'messages':'plus')}${bot?'رفتن به مرکز پیام‌ها':'اتصال اولین ربات'}${icon('arrow')}</button></div><img class="welcome-logo" src="./assets/icons/logo.svg" alt=""/></section>
+  <div class="stats">${[['bots','ربات‌های متصل',state.bots.length,'در همین نشست'],['groups','گروه‌های ثبت‌شده',regular.length,'در سرویس انتخاب‌شده'],['channels','کانال‌های ثبت‌شده',channels.length,'مقصدهای دارای مجوز'],['locks','تنظیم مدیریت فعال',enabled,'اجرای قوانین وابسته به موتور']].map(([symbol,label,value,note])=>`<div class="stat"><div class="stat-icon">${icon(symbol)}</div><div><span class="stat-label">${label}</span><strong class="stat-value">${num(value)}</strong><small>${note}</small></div></div>`).join('')}</div>
+  ${bot?.groupError?warning('فهرست مقصدها دریافت نشد: '+redact(bot.groupError)):''}
+  <div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><h2>مقصدهای شما</h2><p class="panel-subtitle">گروه‌ها و کانال‌های ثبت‌شده برای این ربات</p></div><button class="text-button" data-route="groups">مشاهده همه ←</button></div>${groups.length?destinationTable(groups.slice(0,5)):empty('مقصدی ثبت نشده است',bot?'اولین گروه یا کانال مجاز را اضافه کنید.':'برای دریافت اطلاعات واقعی، ابتدا ربات را متصل کنید.','groups',`<button class="btn small" data-route="${bot?'groups':'bots'}">${icon('plus')} ${bot?'ثبت گروه':'اتصال ربات'}</button>`)}</section>
+  <section class="panel"><div class="panel-header"><h2>دسترسی سریع</h2>${tag('فضای مدیریت','primary')}</div><div class="quick-grid">${[['bots','افزودن ربات','اتصال با توکن'],['groups','مدیریت گروه','قوانین و تنظیمات'],['messages','ارسال پیام','فقط مقصدهای مجاز'],['reports','مشاهده گزارش','داده‌های واقعی سرویس']].map(([r,t,s])=>`<button class="quick" data-route="${r}">${icon(r)}<span><strong>${t}</strong><small>${s}</small></span></button>`).join('')}</div></section>
+  <section class="panel"><div class="panel-header"><h2>فعالیت‌های این نشست</h2>${tag('بدون ذخیرهٔ توکن')}</div>${activityHTML()}</section><section class="panel"><div class="panel-header"><h2>وضعیت امکانات سرویس</h2><button class="text-button" data-route="features">جزئیات ←</button></div><div class="capability-list">${[['groups','ذخیره تنظیمات',Boolean(bot)],['messages','ارسال پیام',caps().messaging],['locks','اجرای خودکار قفل‌ها',caps().moderation],['schedules','اجرای دائمی زمان‌بندی',caps().scheduling],['automation','Webhook',caps().webhook]].map(([i,t,yes])=>`<div class="capability-item">${icon(i)}<span>${t}</span>${tag(yes?'در دسترس':'فعال نشده',yes?'success':'warning')}</div>`).join('')}</div><p class="flow-note" style="margin:17px 0 0">GitHub Pages میزبان پنل است. اجرای دائمی ربات به یک سرویس سروری نیاز دارد.</p></section></div>`;
+  bindDestinationButtons();
+}
+function activityHTML() { return state.activity.length?state.activity.slice(0,6).map(a=>`<div class="activity"><span class="avatar">${icon(a.kind==='error'?'help':'check')}</span><div><p>${esc(a.text)}</p><small>${esc(a.bot)} · ${faDate(a.at)}</small></div></div>`).join(''):empty('فعالیتی در این نشست ثبت نشده','پس از انجام عملیات، نتیجهٔ آن اینجا نمایش داده می‌شود.','history'); }
+function loginHTML() {
+  return `<div class="connection-form"><div class="banner info">${icon('locks')}<span>توکن فقط برای اعتبارسنجی به سرویس زیر ارسال می‌شود؛ در مرورگر ذخیره نمی‌شود.</span></div><p class="field-hint ltr">${esc(api.endpoint)}</p><form id="loginForm"><div class="field"><label for="token">توکن ربات روبیکا</label><div class="password-wrap"><input id="token" type="password" autocomplete="off" spellcheck="false" dir="ltr" required maxlength="512" placeholder="توکن ربات را وارد کنید"><button id="showToken" type="button" aria-label="نمایش توکن">نمایش</button></div><span class="field-hint">با تازه‌سازی صفحه باید دوباره توکن را وارد کنید.</span></div><div class="actions"><button type="submit" class="btn primary" id="loginBtn">${icon('bots')} بررسی توکن و اتصال</button>${button('آزمایش اتصال','testConnection','','refresh')}</div><p id="connectionStatus" role="status" class="flow-note"></p><p id="loginError" role="alert" class="form-error"></p></form></div>`;
+}
+function bindLogin() {
+  $('showToken').onclick=()=>{const input=$('token');const show=input.type==='password';input.type=show?'text':'password';$('showToken').textContent=show?'پنهان':'نمایش';$('showToken').setAttribute('aria-label',show?'پنهان‌کردن توکن':'نمایش توکن');};
+  $('testConnection').onclick=async()=>{const b=$('testConnection'),out=$('connectionStatus');b.disabled=true;out.textContent='در حال آزمایش اتصال…';try{const r=await request('health');state.health=r;out.textContent='سرویس در دسترس است: '+(r.service || 'rubika-panel')+(r.version?' · نسخه '+r.version:'')+(r.configured===false?'؛ تنظیمات امن سرور کامل نیست.':'');notify('ارتباط با سرویس تأیید شد');}catch(e){out.textContent=e.message;notify(e.message,true);}finally{b.disabled=false;}};
+  $('loginForm').onsubmit=async event=>{
+    event.preventDefault();const b=$('loginBtn'),input=$('token'),error=$('loginError');const token=input.value.trim();input.value='';error.textContent='';b.disabled=true;
+    const ctl=new AbortController();state.requests.add(ctl);
+    try {
+      if (!token) throw new Error('توکن را وارد کنید.');
+      const response=await api.request('login',token,{},ctl.signal);
+      if (!response.bot || typeof response.bot.name !== 'string') throw new Error('اطلاعات ربات در پاسخ سرور معتبر نیست.');
+      if (ctl.signal.aborted) return;
+      const info=response.bot;const id=String(info.bot_id || info.id || info.username || info.name);
+      const existing=state.bots.find(bot=>bot.key===id);
+      const newBot={key:id,name:info.name,username:info.username || '',token,groups:[],connected:true,checkedAt:new Date().toISOString(),capabilities:{...LEGACY_CAPABILITIES,...response.capabilities},messageMethods:Array.isArray(response.message_methods)?response.message_methods:null,pendingOperations:new Map()};
+      if(existing){existing.token='';Object.assign(existing,newBot);}else state.bots.push(newBot);
+      state.selectedBot=id;state.selectedGroup=null;
+      try {await reloadGroups(existing || newBot);} catch(e) {notify('ورود تأیید شد، اما فهرست مقصدها دریافت نشد: '+e.message,true);}
+      if(ctl.signal.aborted || !state.bots.includes(existing || newBot)) return;
+      record('اتصال و اعتبارسنجی ربات');if($('modal').open)$('modal').close();navigate('dashboard');notify('توکن تأیید شد؛ ربات متصل است');
+    } catch(e) { error.textContent=String(e.message).split(token || '\u0000').join('[توکن حذف شد]'); }
+    finally {state.requests.delete(ctl);b.disabled=false;}
+  };
+}
+function loginModal() { openModal('اتصال ربات جدید',loginHTML(),bindLogin); }
+function renderBots() {
+  $('page').innerHTML=`${state.bots.length?`<section class="panel"><div class="panel-header"><h2>ربات‌های متصل در این نشست</h2>${tag(num(state.bots.length)+' ربات','primary')}</div><div class="table-wrap"><table><thead><tr><th>ربات</th><th>وضعیت</th><th>آخرین بررسی</th><th>عملیات</th></tr></thead><tbody>${state.bots.map(b=>`<tr><td><span class="row-title">${esc(b.name)}</span><p dir="ltr">${esc(b.username || b.key)}</p></td><td>${tag(b.connected?'اتصال تأییدشده':'خطای اتصال',b.connected?'success':'danger')}</td><td>${faDate(b.checkedAt)}</td><td><div class="row-actions"><button class="btn small" data-select-bot="${esc(b.key)}">${b.key===state.selectedBot?'انتخاب‌شده':'انتخاب'}</button><button class="btn small danger" data-logout-bot="${esc(b.key)}">خروج</button></div></td></tr>`).join('')}</tbody></table></div><p class="flow-note">فعال‌سازی مستقل موتور ربات و وضعیت دریافت رویداد، تا انتشار آن موتور در دسترس نیست.</p></section>`:''}<section class="panel"><div class="panel-header"><h2>اتصال امن به ربات</h2>${tag('توکن در حافظه','success')}</div>${loginHTML()}</section>`;
+  bindLogin();document.querySelectorAll('[data-select-bot]').forEach(b=>b.onclick=()=>selectBot(b.dataset.selectBot));document.querySelectorAll('[data-logout-bot]').forEach(b=>b.onclick=()=>logoutBot(b.dataset.logoutBot));
+}
+function destinationTable(groups) {
+  return `<div class="table-wrap"><table><thead><tr><th>نام مقصد</th><th>نوع</th><th>تنظیم مدیریت</th><th>عملیات</th></tr></thead><tbody>${groups.map(g=>`<tr><td><span class="row-title">${esc(g.title)}</span><p class="ltr">${esc(g.chat_id)}</p></td><td>${tag(g.type==='channel'?'کانال':'گروه')}</td><td>${tag(g.settings?.active?'فعال؛ اجرای موتور بررسی شود':'غیرفعال',g.settings?.active?'primary':'')}</td><td><button class="btn small" data-edit-group="${esc(g.chat_id)}">مدیریت</button></td></tr>`).join('')}</tbody></table></div>`;
+}
+function bindDestinationButtons() { document.querySelectorAll('[data-edit-group]').forEach(b=>b.onclick=()=>{state.selectedGroup=b.dataset.editGroup;navigate(currentBot()?.groups.find(g=>g.chat_id===state.selectedGroup)?.type==='channel'?'channels':'groups');}); }
+function addGroupModal() {
+  const channel=state.route==='channels';
+  openModal('ثبت '+(channel?'کانال':'گروه')+' مجاز',`<form id="addGroupForm"><div class="field"><label for="newChat">شناسه گفتگو (Chat ID)</label><input id="newChat" dir="ltr" required maxlength="200" placeholder="شناسه مقصد مجاز"></div><div class="field"><label for="newTitle">عنوان مقصد</label><input id="newTitle" required maxlength="200" placeholder="نام گروه یا کانال"></div><div class="field"><label for="newType">نوع مقصد</label><select id="newType"><option value="group" ${!channel?'selected':''}>گروه</option><option value="channel" ${channel?'selected':''}>کانال</option></select></div><label class="check-label"><input id="consent" type="checkbox" required>برای ثبت و ارسال پیام در این مقصد مجوز دارم.</label><p class="field-hint">ثبت مقصد، دسترسی مدیر در روبیکا ایجاد نمی‌کند.</p><p id="groupError" role="alert" class="form-error"></p><button type="submit" class="btn primary wide" id="addGroupBtn">ثبت مقصد</button></form>`,()=>{
+    $('addGroupForm').onsubmit=async e=>{e.preventDefault();const btn=$('addGroupBtn');btn.disabled=true;const target=currentBot();try{const chat_id=$('newChat').value.trim(),title=$('newTitle').value.trim(),type=$('newType').value;if(!chat_id||!title)throw new Error('شناسه و عنوان را کامل کنید.');if(target.groups.some(g=>g.chat_id===chat_id))throw new Error('این مقصد قبلاً ثبت شده است.');if(type==='channel'&&!target.capabilities.collections)throw new Error('ثبت کانال به سرویس نسخهٔ ۳ نیاز دارد.');await request('save',{chat_id,title,type,settings:defaults()},target);await reloadGroups(target);state.selectedGroup=chat_id;record('ثبت مقصد: '+title);$('modal').close();navigate(type==='channel'?'channels':'groups');render();notify('مقصد در سرویس ذخیره شد');}catch(err){$('groupError').textContent=redact(err.message);}finally{btn.disabled=false;}};
+  });
+}
+function renderGroups() {
+  if(!requireBot())return;const bot=currentBot(),channel=state.route==='channels';const groups=bot.groups.filter(g=>channel?g.type==='channel':g.type!=='channel');
+  if(!groups.some(g=>g.chat_id===state.selectedGroup))state.selectedGroup=groups[0]?.chat_id || null;
+  const group=groups.find(g=>g.chat_id===state.selectedGroup);
+  $('page').innerHTML=(bot.groupError?warning('داده‌ها تازه نشده‌اند: '+redact(bot.groupError)):'')+warning(caps().moderation?'پیش از اتکا به قوانین، مجوز ربات و وضعیت موتور را بررسی کنید.':'تنظیمات ذخیره می‌شوند؛ موتور اجرای قفل‌ها، ضداسپم و خوشامدگویی فعال نیست.')+`<div class="group-layout"><section class="panel"><div class="panel-header"><h2>${channel?'کانال‌ها':'گروه‌ها'}</h2>${tag(num(groups.length))}</div><div class="field"><label for="groupSearch">جستجوی مقصد</label><input id="groupSearch" placeholder="نام یا شناسه"></div><div class="group-list" id="groupList">${groups.map(g=>`<button class="group-button ${g.chat_id===state.selectedGroup?'selected':''}" data-group="${esc(g.chat_id)}"><strong>${esc(g.title)}</strong><small class="ltr">${esc(g.chat_id)}</small></button>`).join('') || '<p class="flow-note">مقصدی ثبت نشده است.</p>'}</div>${button('ثبت مقصد','newDestination','wide','plus')}</section><section class="panel" id="editor">${group?editorHTML(group):empty('اولین مقصدتان را ثبت کنید','تنظیمات هر مقصد جداگانه در سرویس ذخیره می‌شوند.','groups')}</section></div>`;
+  $('newDestination').onclick=addGroupModal;document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{state.selectedGroup=b.dataset.group;render();});
+  $('groupSearch').oninput=e=>{const term=e.target.value.toLowerCase();document.querySelectorAll('[data-group]').forEach(b=>b.hidden=!b.textContent.toLowerCase().includes(term));};if(group)bindEditor(group);
+}
+function editorHTML(group) {
+  const s=settingsFor(group);const numberField=(key,label)=>`<div class="field"><label for="${key}">${label}</label><input id="${key}" name="${key}" type="number" min="1" max="120" required value="${esc(s[key])}"></div>`;
+  const textField=(key,label,placeholder='')=>`<div class="field"><label for="${key}">${label}</label><textarea id="${key}" name="${key}" maxlength="2000" placeholder="${placeholder}">${esc(s[key])}</textarea></div>`;
+  return `<div class="panel-header"><div><h2>${esc(group.title)}</h2><p class="panel-subtitle ltr">${esc(group.chat_id)}</p></div>${tag('تنظیمات ذخیره‌شونده','primary')}</div><form id="configForm"><div class="form-grid"><div class="field"><label for="groupTitle">عنوان مقصد</label><input id="groupTitle" name="title" required maxlength="200" value="${esc(group.title)}"></div><div class="field"><label class="toggle">تنظیم مدیریت فعال<input name="active" type="checkbox" ${s.active?'checked':''}></label></div></div><div class="toggle-grid"><label class="toggle">ضداسپم<input name="anti_spam" type="checkbox" ${s.anti_spam?'checked':''}></label><label class="toggle">ساعت سکوت<input name="quiet_enabled" type="checkbox" ${s.quiet_enabled?'checked':''}></label></div><h3 class="section-title">قفل‌های محتوا</h3><p class="flow-note">فعال‌کردن کلید، تنظیم قفل را ذخیره می‌کند؛ اجرای آن به موتور متصل و مجوز API نیاز دارد.</p><div class="toggle-grid">${Object.entries(LOCKS).map(([key,label])=>`<label class="toggle">${label}<input type="checkbox" data-lock="${key}" aria-label="قفل ${label}" ${s.locks[key]?'checked':''}></label>`).join('')}</div><h3 class="section-title">محدودیت‌های امنیتی</h3><div class="form-grid">${numberField('warn_limit','حداکثر اخطار')}${numberField('flood_count','تعداد پیام ضدفلود')}${numberField('flood_seconds','بازهٔ ضدفلود (ثانیه)')}<div class="field"><label for="admin_exceptions">شناسه مدیران مستثنا (هر خط یک شناسه)</label><textarea id="admin_exceptions" name="admin_exceptions" maxlength="2000">${esc(s.admin_exceptions)}</textarea></div></div><div class="form-grid"><div class="field"><label for="quiet_start">شروع سکوت (به وقت تهران)</label><input id="quiet_start" name="quiet_start" type="time" required value="${esc(s.quiet_start)}"></div><div class="field"><label for="quiet_end">پایان سکوت (به وقت تهران)</label><input id="quiet_end" name="quiet_end" type="time" required value="${esc(s.quiet_end)}"></div>${textField('blocked_words','کلمات ممنوع (هر خط یک کلمه)')}${textField('allowed_domains','دامنه‌های مجاز (هر خط یک دامنه)')}</div><h3 class="section-title">متن‌ها و قوانین</h3>${textField('rules','قوانین گروه')}${textField('welcome','متن خوشامدگویی','سلام {name}، به گروه خوش آمدید!')}${textField('goodbye','متن خداحافظی')}<div class="form-footer"><button type="submit" class="btn primary" id="saveSettings">${icon('check')} ذخیره تنظیمات</button>${button('حذف از پنل','removeGroup','danger')}</div><p id="saveError" class="form-error" role="alert"></p></form>`;
+}
+function bindEditor(group) {
+  $('configForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,b=$('saveSettings'),target=currentBot();b.disabled=true;$('saveError').textContent='';try{const settings=settingsFor(group);for(const key of ['active','anti_spam','quiet_enabled'])settings[key]=f.elements.namedItem(key).checked;for(const key of ['warn_limit','flood_count','flood_seconds'])settings[key]=Number(f.elements.namedItem(key).value);for(const key of ['quiet_start','quiet_end','rules','welcome','goodbye','blocked_words','allowed_domains','admin_exceptions'])settings[key]=f.elements.namedItem(key).value;for(const el of f.querySelectorAll('[data-lock]'))settings.locks[el.dataset.lock]=el.checked;await request('save',{chat_id:group.chat_id,title:f.elements.namedItem('title').value.trim(),type:group.type || 'group',settings},target);await reloadGroups(target);record('ذخیره تنظیمات مقصد: '+group.title);render();notify('تنظیمات در سرویس ذخیره شد؛ وضعیت اجرای موتور را جدا بررسی کنید');}catch(err){if($('saveError'))$('saveError').textContent=redact(err.message);}finally{b.disabled=false;}};
+  $('removeGroup').onclick=()=>{const target=currentBot();confirmAction('حذف مقصد از پنل','این عملیات تنظیمات این مقصد را از سرویس حذف می‌کند و ربات را از گروه یا کانال خارج نمی‌کند.',async()=>{await request('delete',{chat_id:group.chat_id},target);await reloadGroups(target);state.selectedGroup=null;record('حذف مقصد از پنل: '+group.title);render();notify('مقصد از پنل حذف شد');},'حذف مقصد');};
+}
+const methods={sendMessage:['ارسال متن',['text','reply_to_message_id']],editMessageText:['ویرایش متن',['message_id','text']],deleteMessage:['حذف پیام',['message_id']],forwardMessage:['فوروارد پیام',['from_chat_id','message_id']],sendPoll:['ارسال نظرسنجی',['question','options']],sendLocation:['ارسال موقعیت',['latitude','longitude']],sendContact:['ارسال مخاطب',['first_name','last_name','phone_number']],sendSticker:['ارسال استیکر با شناسه',['sticker_id']],sendFile:['ارسال فایل با شناسه',['file_id']]};
+function destinationOptions() { return (currentBot()?.groups || []).map(g=>`<option value="${esc(g.chat_id)}">${esc(g.title)} — ${esc(g.chat_id)}</option>`).join(''); }
+function renderMessages() {
+  if(!requireBot()||!requireCapability('messaging','مدیریت پیام‌ها'))return;
+  const groups=currentBot().groups;
+  $('page').innerHTML=warning('ارسال پیام یک عملیات واقعی است. مقصد باید ثبت‌شده باشد و مجوز ارسال داشته باشید. پس از خطای مبهم شبکه، پیام را بدون بررسی دوباره ارسال نکنید.')+`<div class="dashboard-grid"><section class="panel"><div class="panel-header"><h2>عملیات پیام</h2>${tag('Bot API','primary')}</div>${!groups.length?empty('مقصدی برای ارسال ثبت نشده','ابتدا گروه یا کانال دارای مجوز را ثبت کنید.','groups','<button class="btn" data-route="groups">ثبت مقصد</button>'):`<form id="messageForm"><div class="field"><label for="messageMethod">نوع عملیات</label><select id="messageMethod" name="method">${Object.entries(methods).filter(([key])=>!currentBot().messageMethods||currentBot().messageMethods.includes(key)).map(([key,[name]])=>`<option value="${key}">${name}</option>`).join('')}</select></div><div class="field"><label for="messageChat">مقصد مجاز</label><select id="messageChat" name="chat_id" required>${destinationOptions()}</select></div><div id="messageFields"></div><label class="check-label"><input id="messageConsent" type="checkbox" required>برای انجام این عملیات در مقصد انتخاب‌شده مجوز دارم.</label><div class="form-footer"><button class="btn primary" type="submit" id="sendMessage">${icon('messages')} اجرای عملیات</button>${button('پیش‌نمایش','previewMessage')}</div><p id="messageError" role="alert" class="form-error"></p></form>`}</section><section class="panel"><div class="panel-header"><h2>پیش‌نمایش و نتیجه</h2>${tag('بدون انتشار خودکار')}</div><div id="messagePreview" class="preview">پیش‌نمایش محتوای واردشده اینجا نمایش داده می‌شود.</div><div id="messageResult" role="status" class="flow-note"></div><h3 class="section-title">دریافت رویدادها</h3><p class="flow-note">Polling فقط هنگام درخواست شما اجرا می‌شود؛ بستن صفحه اجرای دائمی ایجاد نمی‌کند.</p>${caps().polling?button('دریافت یک نوبت رویدادها','pollUpdates','','refresh'):tag('Polling در سرویس فعال نیست','warning')}<div id="pollResult"></div></section></div>`;
+  if($('messageForm'))bindMessageForm();showPendingOperations();
+  if($('pollUpdates'))$('pollUpdates').onclick=async()=>{const b=$('pollUpdates'),target=currentBot(),epoch=state.epoch;b.disabled=true;try{const r=await request('poll',{...(target.offset?{offset_id:target.offset}:{}),limit:20,authorized:true},target);target.offset=r.next_offset_id;if(epoch!==state.epoch||target!==currentBot()||!$('pollResult'))return;const rows=Array.isArray(r.updates)?r.updates:[];$('pollResult').innerHTML=`<p class="flow-note">${num(rows.length)} رویداد دریافت شد · ${faDate(r.received_at)}</p>`;const pre=document.createElement('pre');pre.className='code-output';pre.textContent=redact(JSON.stringify(rows,null,2));$('pollResult').append(pre);record('دریافت یک نوبت رویداد: '+rows.length);}catch(e){notify(e.message,true);}finally{b.disabled=false;}};
+}
+function messageFields(method) {
+  const labels={text:'متن پیام',reply_to_message_id:'شناسه پیام برای پاسخ (اختیاری)',message_id:'شناسه پیام',from_chat_id:'گفتگوی مبدأ ثبت‌شده',question:'سؤال نظرسنجی',options:'گزینه‌ها (هر خط یک گزینه)',latitude:'عرض جغرافیایی',longitude:'طول جغرافیایی',first_name:'نام',last_name:'نام خانوادگی (اختیاری)',phone_number:'شماره تماس با رضایت صاحب آن',sticker_id:'شناسه استیکر',file_id:'شناسه فایلِ بارگذاری‌شده در روبیکا'};
+  return methods[method][1].map(key=>`<div class="field"><label for="msg_${key}">${labels[key]}</label>${key==='from_chat_id'?`<select id="msg_${key}" name="${key}">${destinationOptions()}</select>`:['text','options'].includes(key)?`<textarea id="msg_${key}" name="${key}" maxlength="4000" ${key==='options'||method!=='sendFile'?'required':''}></textarea>`:`<input id="msg_${key}" name="${key}" ${['latitude','longitude'].includes(key)?`type="number" step="any" min="${key==='latitude'?'-90':'-180'}" max="${key==='latitude'?'90':'180'}"`:'type="text" maxlength="300"'} ${['reply_to_message_id','last_name'].includes(key)?'':'required'}>`}${key==='file_id'?'<span class="field-hint">بارگذاری مستقیم چندرسانه‌ای هنوز پیاده‌سازی نشده؛ این عملیات از شناسه فایل موجود استفاده می‌کند.</span>':''}</div>`).join('');
+}
+function bindMessageForm() {
+  const f=$('messageForm');const update=()=>$('messageFields').innerHTML=messageFields($('messageMethod').value);update();$('messageMethod').onchange=update;
+  $('previewMessage').onclick=()=>{const data=new FormData(f);$('messagePreview').textContent=data.get('text')||data.get('question')||methods[$('messageMethod').value][0];};
+  f.onsubmit=async e=>{e.preventDefault();const method=$('messageMethod').value,target=currentBot(),params={chat_id:$('messageChat').value};for(const key of methods[method][1]){const value=f.elements.namedItem(key).value.trim();if(value)params[key]=key==='options'?value.split('\n').map(v=>v.trim()).filter(Boolean):['latitude','longitude'].includes(key)?Number(value):value;}
+    if(method==='forwardMessage'){params.to_chat_id=params.chat_id;delete params.chat_id;}
+    if(method==='sendPoll'&&(params.options.length<2||params.options.length>10)){ $('messageError').textContent='نظرسنجی باید ۲ تا ۱۰ گزینه داشته باشد.';return; }
+    const fingerprint=JSON.stringify({method,params});
+    const execute=async()=>{const b=$('sendMessage');
+      if(target.pendingOperations.has(fingerprint)){showPendingOperations();throw new Error('نتیجهٔ تلاش قبلی نامشخص است؛ ابتدا مقصد را بررسی و نتیجه را در کادر هشدار تأیید کنید.');}
+      const operation={id:crypto.randomUUID(),method,chat:params.chat_id || params.to_chat_id,status:'pending'};target.pendingOperations.set(fingerprint,operation);
+      b.disabled=true;if($('messageError'))$('messageError').textContent='';if(currentBot()===target&&$('messageResult'))$('messageResult').replaceChildren();
+      try{const response=await request('message',{method,params,authorized:true,operation_id:operation.id},target);target.pendingOperations.delete(fingerprint);if(currentBot()===target&&$('messageResult'))$('messageResult').textContent='عملیات توسط API تأیید شد: '+redact(JSON.stringify(response.result));record('عملیات پیام تأییدشده: '+methods[method][0]);notify('API انجام عملیات را تأیید کرد');}
+      catch(err){if(['unknown','pending','confirmed_unrecorded'].includes(err.outcome)){operation.status=err.outcome;}else target.pendingOperations.delete(fingerprint);if(currentBot()===target&&$('messageError'))$('messageError').textContent=redact(err.message);record('خطای عملیات پیام: '+methods[method][0],'error');showPendingOperations();throw err;}finally{b.disabled=false;}};
+    if(['deleteMessage','editMessageText','forwardMessage'].includes(method))confirmAction('تأیید عملیات پیام',`عملیات «${methods[method][0]}» روی مقصد انتخاب‌شده اجرا شود؟`,execute,'اجرای عملیات');else try{await execute();}catch(err){notify(err.message,true);}
+  };
+}
+function showPendingOperations() {
+  const target=currentBot(),container=$('messageResult');if(!target||!container||!target.pendingOperations?.size)return;
+  container.replaceChildren();
+  for(const [fingerprint,operation] of target.pendingOperations){
+    const warning=document.createElement('div');warning.className='banner warning';warning.style.marginTop='16px';
+    const text=document.createElement('span');text.textContent=(operation.status==='confirmed_unrecorded'?'روبیکا انجام عملیات را تأیید کرده، اما ثبت نتیجه کامل نشده است. دوباره ارسال نکنید. شناسه: ':'نتیجهٔ عملیات نامشخص است. شناسه: ')+operation.id+' · مقصد: '+operation.chat+' . ابتدا گفتگو را بررسی کنید. این تلاش خودکار تکرار نمی‌شود.';
+    const reset=document.createElement('button');reset.type='button';reset.className='btn small';reset.textContent='مقصد را بررسی کردم';
+    reset.onclick=()=>confirmAction('تأیید بررسی مقصد','اگر عملیات قبلاً انجام شده است، دوباره آن را ارسال نکنید. پاک‌کردن این هشدار فقط امکان یک درخواست جدید را باز می‌کند؛ هیچ پیامی ارسال نمی‌شود.',async()=>{target.pendingOperations.delete(fingerprint);container.replaceChildren();showPendingOperations();},'بررسی کردم');
+    warning.append(text,reset);container.append(warning);
+  }
+}
+const collections={
+ templates:{title:'قالب‌های پیام',note:'قالب‌ها ذخیره می‌شوند و ارسال خودکار ندارند.',fields:[['title','عنوان'],['text','متن قالب','textarea']]},
+ automations:{title:'قواعد پاسخگویی',note:'این قواعد فقط به‌صورت پیش‌نویس ذخیره می‌شوند؛ موتور اجرای اتوماسیون فعال نیست.',fields:[['title','عنوان'],['trigger','کلمهٔ کلیدی یا الگو'],['match','نوع تطبیق','select',['keyword','regex']],['response','پاسخ','textarea']]},
+ schedules:{title:'برنامه‌های انتشار',note:'این زمان‌ها فقط پیش‌نویس برنامه هستند. سرویس زمان‌بندی دائمی فعال نیست و ارسال خودکار انجام نمی‌شود.',fields:[['title','عنوان'],['chat_id','مقصد مجاز','destination'],['text','متن پیام','textarea'],['scheduled_at','تاریخ میلادی و ساعت به وقت تهران','datetime-local']]},
+ drafts:{title:'پیش‌نویس‌های محتوا',note:'محتوا به‌صورت پایدار ذخیره می‌شود و بدون درخواست صریح منتشر نمی‌شود.',fields:[['title','عنوان'],['category','دسته‌بندی'],['text','متن محتوا','textarea']]},
+ users:{title:'دفتر مخاطبان',note:'این فهرست دفتر مخاطبان است؛ مدیر پنل یا نقش RBAC ایجاد نمی‌کند و مجوز ارسال را ثابت نمی‌کند.',fields:[['title','نام'],['user_id','شناسه مخاطب'],['note','یادداشت مجاز','textarea']]},
+ tickets:{title:'تیکت‌های پشتیبانی',note:'ثبت و پیگیری دستی تیکت؛ پاسخ خودکار در روبیکا فعال نیست.',fields:[['title','موضوع'],['user_id','شناسه درخواست‌کننده'],['status','وضعیت','select',['open','pending','closed']],['assigned_to','مسئول رسیدگی'],['text','شرح و پاسخ','textarea']]},
+ violations:{title:'موارد ثبت‌شده',note:'ثبت این موارد دستی است؛ اخطار، محدودسازی و اخراج خودکار اجرا نمی‌شود.',fields:[['title','عنوان تخلف'],['chat_id','مقصد مجاز','destination'],['user_id','شناسه کاربر'],['status','وضعیت','select',['open','reviewed','closed']],['text','شرح و نتیجهٔ بررسی','textarea']]},
+};
+function tabsFor(collection) {
+  const pairs=state.route==='automation'?[['automations','قواعد پاسخگویی'],['templates','قالب‌ها']]:state.route==='schedules'?[['schedules','برنامه‌ها'],['drafts','پیش‌نویس‌ها']]:state.route==='users'?[['users','مخاطبان'],['tickets','تیکت‌ها']]:[];
+  return pairs.length?`<div class="user-bots">${pairs.map(([key,label])=>`<button class="bot-chip ${key===collection?'selected':''}" data-tab="${key}">${label}</button>`).join('')}</div>`:'';
+}
+function bindTabs() {document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{state.collectionTab=b.dataset.tab;render();});}
+async function renderCollection(collection,epoch=state.epoch) {
+  if(!requireBot()||!requireCapability('collections','ذخیرهٔ اطلاعات این بخش'))return;
+  const config=collections[collection];$('page').innerHTML=tabsFor(collection)+warning(config.note)+`<section class="panel"><p class="loading-label" role="status">در حال دریافت داده‌ها…</p><div class="skeleton"></div><div class="skeleton block"></div></section>`;bindTabs();
+  const r=await request('collection_list',{collection});if(epoch!==state.epoch)return;const items=Array.isArray(r.items)?r.items:[];
+  $('page').innerHTML=tabsFor(collection)+warning(config.note)+`<section class="panel"><div class="panel-header"><h2>${config.title}</h2>${button('افزودن مورد','addCollectionItem','primary','plus')}</div><div class="toolbar"><label for="collectionSearch">جستجو</label><input id="collectionSearch" placeholder="عنوان، شناسه یا متن">${tag(num(items.length)+' مورد')}</div>${items.length?`<div class="table-wrap"><table><thead><tr><th>عنوان</th><th>وضعیت</th><th>زمان ثبت / برنامه</th><th>عملیات</th></tr></thead><tbody>${items.map(item=>`<tr data-item-row="${esc(item.id)}"><td><span class="row-title">${esc(item.data?.title || 'بدون عنوان')}</span><p>${esc(item.data?.category || item.data?.user_id || item.data?.trigger || '')}</p></td><td>${tag(statusLabel(item.data?.status) || (['schedules','automations'].includes(collection)?'پیش‌نویس؛ اجرا غیرفعال':'ذخیره‌شده'),['schedules','automations'].includes(collection)?'warning':'primary')}</td><td>${faDate(item.data?.scheduled_at || item.updated_at)}</td><td><div class="row-actions"><button class="btn small" data-edit-item="${esc(item.id)}">ویرایش</button><button class="btn small danger" data-delete-item="${esc(item.id)}">حذف</button></div></td></tr>`).join('')}</tbody></table></div>`:empty('هنوز موردی ثبت نشده','با افزودن مورد، اطلاعات در پایگاه دادهٔ سرویس ذخیره می‌شوند.',state.route)}</section>`;
+  bindTabs();$('addCollectionItem').onclick=()=>collectionModal(collection);$('collectionSearch').oninput=e=>{const search=e.target.value.toLowerCase();document.querySelectorAll('[data-item-row]').forEach(row=>{const item=items.find(i=>i.id===row.dataset.itemRow);row.hidden=!JSON.stringify(item.data).toLowerCase().includes(search);});};
+  document.querySelectorAll('[data-edit-item]').forEach(b=>b.onclick=()=>collectionModal(collection,items.find(i=>i.id===b.dataset.editItem)));
+  document.querySelectorAll('[data-delete-item]').forEach(b=>b.onclick=()=>{const target=currentBot();confirmAction('حذف اطلاعات','این مورد از پایگاه دادهٔ سرویس حذف شود؟',async()=>{await request('collection_delete',{collection,id:b.dataset.deleteItem},target);record('حذف مورد: '+config.title);render();notify('مورد حذف شد');},'حذف');});
+}
+function collectionModal(collection,item) {
+  const config=collections[collection],data=item?.data || {};const inputFor=([key,label,type='text',options])=>{let value=data[key]||'';if(type==='datetime-local'&&value)value=tehranDateTimeInput(value);
+    return `<div class="field"><label for="col_${key}">${label}</label>${type==='textarea'?`<textarea id="col_${key}" name="${key}" maxlength="4000" required>${esc(value)}</textarea>`:type==='destination'?`<select id="col_${key}" name="${key}" required><option value="">انتخاب مقصد</option>${destinationOptions()}</select>`:type==='select'?`<select id="col_${key}" name="${key}">${options.map(v=>`<option ${v===value?'selected':''} value="${v}">${esc(({open:'باز',pending:'در انتظار',closed:'بسته',reviewed:'بررسی‌شده',keyword:'کلمهٔ کلیدی',regex:'Regex'})[v] || v)}</option>`).join('')}</select>`:`<input id="col_${key}" name="${key}" type="${type}" maxlength="300" value="${esc(value)}" ${['title','trigger','user_id','scheduled_at'].includes(key)?'required':''}>`}</div>`;};
+  openModal((item?'ویرایش':'افزودن')+' — '+config.title,`<p class="flow-note">${config.note}</p><form id="collectionForm">${config.fields.map(inputFor).join('')}<p id="collectionError" class="form-error" role="alert"></p><button type="submit" class="btn primary wide" id="saveCollection">ذخیره در سرویس</button></form>`,()=>{
+    for(const [key,,type]of config.fields)if(type==='destination'&&data[key])$('col_'+key).value=data[key];
+    $('collectionForm').onsubmit=async e=>{e.preventDefault();const b=$('saveCollection'),target=currentBot();b.disabled=true;try{const values={...data};for(const [key,,type]of config.fields){const value=e.currentTarget.elements.namedItem(key).value.trim();values[key]=type==='datetime-local'&&value?tehranInputToISO(value):value;}if(values.match==='regex'){if(values.trigger.length>200)throw new Error('الگو بیش از حد بلند است.');try{new RegExp(values.trigger);}catch{throw new Error('الگوی Regex معتبر نیست.');}}if(['schedules','automations'].includes(collection))values.status='draft';await request('collection_save',{collection,...(item?{id:item.id}:{}),data:values},target);record('ذخیره مورد: '+config.title);$('modal').close();render();notify('اطلاعات در سرویس ذخیره شد');}catch(err){$('collectionError').textContent=redact(err.message);}finally{b.disabled=false;}};
+  });
+}
+async function renderHistory(epoch) {
+  if(!requireBot())return;
+  if(!caps().collections){$('page').innerHTML=warning('سرویس فعلی تاریخچهٔ پایدار ارائه نمی‌کند؛ موارد زیر فقط فعالیت‌های این نشست هستند.')+`<section class="panel"><h2>فعالیت همین نشست</h2>${activityHTML()}</section>`;return;}
+  $('page').innerHTML='<section class="panel"><div class="skeleton block"></div><p role="status">دریافت سوابق سرور…</p></section>';
+  const r=await request('collection_list',{collection:'logs'});if(epoch!==state.epoch)return;const items=r.items || [];
+  $('page').innerHTML=`<section class="panel"><div class="panel-header"><h2>سوابق ثبت‌شدهٔ سرور</h2>${tag('ثبت خودکار؛ فقط خواندنی','primary')}</div><div class="toolbar"><label for="historySearch">جستجو</label><input id="historySearch" placeholder="نام عملیات یا شناسه">${button('دریافت JSON','exportHistory','','download')}</div>${items.length?`<div class="table-wrap"><table><thead><tr><th>عملیات</th><th>نتیجه</th><th>مقصد</th><th>زمان</th></tr></thead><tbody>${items.map(item=>`<tr data-log="${esc(item.id)}"><td>${esc(item.data?.action)} ${esc(item.data?.method || '')}</td><td>${tag(item.data?.status || 'ثبت‌شده')}</td><td class="ltr">${esc(item.data?.chat_id || '')}</td><td>${faDate(item.created_at)}</td></tr>`).join('')}</tbody></table></div>`:empty('سابقه‌ای ثبت نشده','پس از انجام عملیات در سرویس نسخهٔ ۳، سوابق ثبت‌شده اینجا نمایش داده می‌شوند.','history')}</section><section class="panel"><h2>فعالیت همین نشست</h2>${activityHTML()}</section>`;
+  $('exportHistory').onclick=()=>exportFile('rubika-audit.json',JSON.stringify(items,null,2));$('historySearch').oninput=e=>document.querySelectorAll('[data-log]').forEach(row=>row.hidden=!row.textContent.toLowerCase().includes(e.target.value.toLowerCase()));
+}
+async function renderReports(epoch) {
+  if(!requireBot()||!requireCapability('collections','گزارش‌های سرور'))return;
+  $('page').innerHTML='<section class="panel"><div class="skeleton block"></div><p role="status">دریافت داده‌های گزارش…</p></section>';
+  const r=await request('collection_list',{collection:'logs'});if(epoch!==state.epoch)return;const all=r.items || [];
+  $('page').innerHTML=warning('گزارش فقط بر اساس سوابق بازگشتی سرویس است (حداکثر ۵۰۰ مورد). آمار کل پیام‌ها، اعضای فعال و نمودار اسپم بدون موتور رویداد در دسترس نیست.')+`<section class="panel"><div class="toolbar"><div><label for="reportStart">از تاریخ (روز میلادی به وقت تهران)</label><input id="reportStart" type="date"></div><div><label for="reportEnd">تا تاریخ</label><input id="reportEnd" type="date"></div>${button('خروجی CSV','exportCSV','','download')}${button('خروجی JSON','exportJSON','','download')}</div><div id="reportStats"></div><h3>روند عملیات ثبت‌شده در ۷ روز گذشته</h3><div id="reportChart"></div><p class="flow-note">تاریخ و ساعت نمایش گزارش به وقت تهران است. خروجی CSV در Excel نیز باز می‌شود؛ خروجی بومی XLSX هنوز پیاده‌سازی نشده است.</p></section>`;
+  let filtered=all;
+  const draw=()=>{
+    const start=$('reportStart').value?new Date($('reportStart').value+'T00:00:00+03:30'):null,end=$('reportEnd').value?new Date($('reportEnd').value+'T23:59:59.999+03:30'):null;
+    if(start&&end&&start>end){notify('تاریخ شروع باید پیش از پایان باشد',true);return;}
+    filtered=all.filter(i=>{const d=new Date(i.created_at);return(!start||d>=start)&&(!end||d<=end);});
+    const success=filtered.filter(i=>['success','succeeded','completed'].includes(i.data?.status)).length,failed=filtered.filter(i=>['error','failed','unknown'].includes(i.data?.status)).length;
+    $('reportStats').innerHTML=`<div class="stats">${[['history','عملیات ثبت‌شده',filtered.length],['check','موفق',success],['help','ناموفق یا مبهم',failed],['messages','عملیات پیام',filtered.filter(i=>i.data?.action==='message').length]].map(([i,t,v])=>`<div class="stat"><div class="stat-icon">${icon(i)}</div><div><span class="stat-label">${t}</span><strong class="stat-value">${num(v)}</strong></div></div>`).join('')}</div>`;
+    const fmt=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}),days=Array.from({length:7},(_,i)=>{const date=new Date(Date.now()-(6-i)*86400000);return{date,key:fmt.format(date),count:0};});
+    for(const item of filtered){const day=days.find(d=>d.key===fmt.format(new Date(item.created_at)));if(day)day.count++;}const max=Math.max(1,...days.map(d=>d.count));
+    $('reportChart').innerHTML=all.length?`<div class="chart" role="img" aria-label="تعداد عملیات در هفت روز اخیر: ${days.map(d=>num(d.count)).join('، ')}">${days.map(d=>`<div class="chart-col"><span>${num(d.count)}</span><div class="chart-bar" style="height:${Math.max(2,d.count/max*115)}px"></div>${new Intl.DateTimeFormat('fa-IR',{timeZone:'Asia/Tehran',weekday:'short'}).format(d.date)}</div>`).join('')}</div>`:empty('داده‌ای برای نمودار وجود ندارد','پس از ثبت عملیات واقعی در سرویس، نمودار ساخته می‌شود.','reports');
+  };draw();$('reportStart').onchange=draw;$('reportEnd').onchange=draw;
+  $('exportCSV').onclick=()=>exportFile('rubika-report.csv',csv([['شناسه','عملیات','نتیجه','زمان'],...filtered.map(i=>[i.id,i.data?.action,i.data?.status,i.created_at])]),'text/csv;charset=utf-8');$('exportJSON').onclick=()=>exportFile('rubika-report.json',JSON.stringify(filtered,null,2));
+}
+function renderSettings() {
+  $('page').innerHTML=`<div class="dashboard-grid"><section class="panel"><div class="panel-header"><h2>اتصال سرویس</h2>${tag('تنظیم عمومی؛ بدون توکن')}</div><p class="flow-note">توکن ربات به این نشانی ارسال می‌شود. فقط نشانی HTTPS سرویس قابل اعتماد خودتان را وارد کنید. برای تغییر سرویس، ابتدا از همه ربات‌ها خارج شوید.</p><form id="endpointForm"><div class="field"><label for="endpointInput">نشانی Supabase Edge Function</label><input id="endpointInput" type="url" dir="ltr" required value="${esc(api.endpoint)}" ${state.bots.length?'disabled':''}></div><div class="actions"><button class="btn primary" type="submit" ${state.bots.length?'disabled':''}>ذخیره نشانی</button>${button('آزمایش سرویس','settingsHealth','','refresh')}</div><p id="endpointStatus" role="status" class="form-error"></p></form><h3 class="section-title">ظاهر پنل</h3><p class="flow-note">تنها نشانی عمومی سرویس و انتخاب ظاهر در مرورگر ذخیره می‌شوند.</p>${button('تغییر حالت روشن / تاریک','settingsTheme','','settings')}${button('بررسی نصب PWA','installPWA')}</section><section class="panel"><div class="panel-header"><h2>پشتیبان‌گیری و بازیابی</h2>${tag('بدون توکن','success')}</div><p class="flow-note">پشتیبان شامل مقصدها و تنظیمات همین ربات است. توکن، پایگاه داده کامل، مخاطبان و تیکت‌ها در آن قرار نمی‌گیرند. فایل را خصوصی نگه دارید.</p>${button('دریافت پشتیبان تنظیمات','backupSettings','wide','download')}<div class="field" style="margin-top:18px"><label for="restoreFile">بازیابی فایل JSON</label><input id="restoreFile" type="file" accept=".json,application/json"></div>${button('بررسی و بازیابی','restoreSettings','wide')}<p id="backupStatus" role="status" class="form-error"></p><h3 class="section-title">وضعیت سرویس</h3><div class="capability-list">${Object.entries({collections:'ذخیره منابع',messaging:'پیام‌رسانی',polling:'Polling درخواستی',moderation:'موتور مدیریت',scheduling:'اجرای زمان‌بندی',webhook:'Webhook',rbac:'نقش‌های مدیریتی'}).map(([key,label])=>`<div class="capability-item"><span>${label}</span>${tag(caps()[key]?'در دسترس':'فعال نشده',caps()[key]?'success':'warning')}</div>`).join('')}</div></section></div>`;
+  $('endpointForm').onsubmit=e=>{e.preventDefault();try{if(state.bots.length)throw new Error('برای تغییر سرویس، ابتدا از ربات‌ها خارج شوید.');const value=validateEndpoint($('endpointInput').value.trim());localStorage.setItem('rubika.endpoint',value);api=new PanelAPI(value);state.health=null;notify('نشانی سرویس ذخیره شد');render();}catch(err){$('endpointStatus').textContent=err.message;}};
+  $('settingsHealth').onclick=async()=>{const b=$('settingsHealth');b.disabled=true;try{state.health=await request('health');$('endpointStatus').textContent='اتصال تأیید شد: '+(state.health.service || 'rubika-panel')+(state.health.configured===false?'؛ تنظیمات امن سرور کامل نیست.':'');notify('سرویس در دسترس است');}catch(err){$('endpointStatus').textContent=err.message;}finally{b.disabled=false;}};
+  $('settingsTheme').onclick=toggleTheme;$('installPWA').onclick=async()=>{if(installPrompt){await installPrompt.prompt();const choice=await installPrompt.userChoice;notify(choice.outcome==='accepted'?'درخواست نصب پذیرفته شد':'نصب انجام نشد');installPrompt=null;}else notify('اگر مرورگر امکان نصب دارد، از منوی آن «نصب برنامه» یا «افزودن به صفحه اصلی» را انتخاب کنید.');};
+  $('backupSettings').onclick=()=>{if(!currentBot()){notify('ابتدا ربات را متصل کنید',true);return;}exportFile('rubika-settings.json',JSON.stringify({version:1,exported_at:new Date().toISOString(),groups:currentBot().groups},null,2));notify('پشتیبان تنظیمات دریافت شد');};
+  $('restoreSettings').onclick=async()=>{try{if(!currentBot())throw new Error('ابتدا ربات را متصل کنید.');const file=$('restoreFile').files[0];if(!file)throw new Error('یک فایل JSON انتخاب کنید.');if(file.size>1048576)throw new Error('حجم فایل باید کمتر از یک مگابایت باشد.');const groups=validateBackup(JSON.parse(await file.text()));if(!groups.length)throw new Error('پشتیبان مقصدی ندارد.');const target=currentBot();if(groups.some(g=>g.type==='channel')&&!target.capabilities.collections)throw new Error('بازیابی کانال‌ها به سرویس نسخهٔ ۳ نیاز دارد.');confirmAction('تأیید بازیابی',`${num(groups.length)} مقصد ذخیره می‌شود؛ تنظیمات مقصدهای دارای شناسه یکسان جایگزین می‌شوند. بازیابی چند مقصد تراکنش اتمیک نیست.`,async()=>{let saved=0;try{for(const group of groups){await request('save',group,target);saved++;}}catch(e){throw new Error(`${num(saved)} مورد ذخیره شد؛ بازیابی متوقف شد: ${e.message}`);}finally{await reloadGroups(target);}record('بازیابی تنظیمات: '+saved+' مقصد');render();notify('بازیابی تنظیمات انجام شد');},'بازیابی تنظیمات');}catch(err){$('backupStatus').textContent=redact(err.message);}};
+}
+async function renderFeatures(epoch) {
+  if(!state.features){const res=await fetch('./docs/feature-status.json',{cache:'no-cache'});if(!res.ok)throw new Error('جدول وضعیت قابلیت‌ها دریافت نشد.');const data=await res.json();state.features=data.features || data;}
+  if(epoch!==state.epoch)return;const features=state.features;
+  $('page').innerHTML=warning('وجود رابط کاربری یا کد سرور به معنای موفقیت در روبیکا نیست. موارد بدون استقرار، اعتبارسنجی واقعی یا موتور اجرا با وضعیت صریح ثبت شده‌اند.')+`<section class="panel"><div class="panel-header"><h2>${num(features.length)} قابلیت تعریف‌شده</h2><a class="btn small" href="./docs/FEATURES.md" target="_blank" rel="noopener">گزارش کامل ↗</a></div><div class="toolbar"><label for="featureSearch">جستجوی قابلیت</label><input id="featureSearch" placeholder="نام، شناسه یا وضعیت"><label for="featureFilter">فیلتر وضعیت</label><select id="featureFilter" style="max-width:230px"><option value="">همه وضعیت‌ها</option>${[...new Set(features.map(f=>f.status))].map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div><div class="table-wrap"><table class="feature-table"><thead><tr><th>شناسه</th><th>قابلیت</th><th>وضعیت</th><th>اولویت</th><th>نتیجه آزمایش</th></tr></thead><tbody>${features.map(f=>`<tr data-feature-id="${f.id}"><td>${num(f.id)}</td><td class="feature-title">${esc(f.title)}</td><td>${tag(f.status,f.status.includes('آزمایش‌شده')&&!f.status.includes('نشده')?'success':'warning')}</td><td>${esc(f.priority)}</td><td>${esc(f.test || 'اجرا نشده')}</td></tr>`).join('')}</tbody></table></div></section>`;
+  const filter=()=>{const term=$('featureSearch').value.toLowerCase(),status=$('featureFilter').value;document.querySelectorAll('[data-feature-id]').forEach(row=>{const f=features.find(f=>String(f.id)===row.dataset.featureId);row.hidden=(status&&f.status!==status)||!`${f.id} ${f.title} ${f.status}`.toLowerCase().includes(term);});};$('featureSearch').oninput=filter;$('featureFilter').onchange=filter;
+}
+function toggleTheme() {
+  const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';
+  try {localStorage.setItem('rubika.theme',dark?'dark':'light');}catch{notify('ذخیرهٔ انتخاب ظاهر در این مرورگر ممکن نیست',true);}
+  $('themeButton').textContent=dark?'☀':'☾';$('themeButton').setAttribute('aria-label',dark?'تغییر به حالت روشن':'تغییر به حالت تاریک');
+}
+let installPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;});
+try {document.documentElement.dataset.theme=localStorage.getItem('rubika.theme')==='dark'?'dark':'light';}catch{document.documentElement.dataset.theme='light';}
+$('themeButton').textContent=document.documentElement.dataset.theme==='dark'?'☀':'☾';$('themeButton').onclick=toggleTheme;
+$('themeButton').setAttribute('aria-label',document.documentElement.dataset.theme==='dark'?'تغییر به حالت روشن':'تغییر به حالت تاریک');
+$('today').textContent=new Intl.DateTimeFormat('fa-IR',{dateStyle:'full',timeZone:'Asia/Tehran'}).format(new Date());
+$('navigation').innerHTML=Object.entries(routes).filter(([r])=>r!=='features').map(([route,[label]])=>`<button class="nav-item" data-route="${route}">${icon(route)}<span>${label}</span>${route==='bots'?'<span class="nav-badge">اتصال</span>':''}</button>`).join('');bindRouteButtons();
+$('accountButton').onclick=()=>navigate('bots');$('featureLink').onclick=()=>navigate('features');$('closeModal').onclick=()=>$('modal').close();
+$('menuButton').onclick=()=>{const open=!$('sidebar').classList.contains('open');$('sidebar').classList.toggle('open',open);$('sidebarOverlay').hidden=!open;$('menuButton').setAttribute('aria-expanded',String(open));updateSidebarAccess();if(open)$('sidebar').querySelector('button').focus();};$('sidebarOverlay').onclick=closeSidebar;
+updateSidebarAccess();window.addEventListener('resize',updateSidebarAccess);
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar();if(e.key==='Tab'&&matchMedia('(max-width:720px)').matches&&$('sidebar').classList.contains('open')){const focusable=[...$('sidebar').querySelectorAll('button,a')];const first=focusable[0],last=focusable.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});window.addEventListener('hashchange',render);
+window.addEventListener('pagehide',()=>{cancelRequests();for(const bot of state.bots)bot.token='';state.bots=[];state.selectedBot=null;state.activity=[];});
+window.addEventListener('pageshow',e=>{if(e.persisted)render();});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{ /* Hosting without service workers remains usable. */ });
+render();
