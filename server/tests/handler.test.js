@@ -46,7 +46,8 @@ test("health exposes actual runtime limitations and configuration readiness", as
   const handler = createHandler();
   const { status, body } = await json(handler, { action: "health" });
   assert.equal(status, 200); assert.equal(body.configured, false);
-  assert.equal(body.capabilities.webhook, false); assert.equal(body.capabilities.moderation, false); assert.equal(body.capabilities.scheduling, false);
+  assert.equal(body.capabilities.webhook, false); assert.equal(body.capabilities.moderation, true); assert.equal(body.capabilities.scheduling, true);
+  assert.equal(body.capabilities.engine,true); assert.equal(body.capabilities.background,false);
   assert.equal((await json(handler, { action: "login", token })).status, 503);
 });
 

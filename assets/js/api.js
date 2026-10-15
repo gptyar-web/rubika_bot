@@ -25,7 +25,7 @@ export class PanelAPI {
         });
       } catch (error) {
         const failure = new Error(error.name === 'AbortError' ? 'درخواست لغو شد یا زمان ارتباط با سرور پایان یافت.' : 'ارتباط با سرویس برقرار نشد. اینترنت، نشانی سرویس و تنظیم CORS را بررسی کنید.');
-        if (action === 'message') failure.outcome = 'unknown';
+        if (['message','engine_run','schedule_run'].includes(action)) failure.outcome = 'unknown';
         throw failure;
       }
       let data;
@@ -42,6 +42,11 @@ export class PanelAPI {
       if (!response.ok || data.ok !== true) {
         const messages = {
           CONFIGURATION_REQUIRED: 'متغیرهای امن سرویس سروری هنوز تنظیم نشده‌اند.',
+          ENGINE_BUSY: 'این ربات در حال پردازش توسط Worker یا درخواست دیگری است. کمی بعد تلاش کنید.',
+          ENGINE_PAUSED: 'موتور این ربات متوقف شده است. ابتدا آن را فعال کنید.',
+          ENGINE_LEASE_LOST: 'اجازهٔ اجرای این نوبت پایان یافته است. پیش از تلاش تازه، مقصدها و سوابق را بررسی کنید.',
+          RUNTIME_STORE_UNAVAILABLE: 'پایگاه دادهٔ موتور در دسترس نیست. migration جدید و تنظیمات سرویس را بررسی کنید.',
+          CONSENT_READ_ONLY: 'عضویت اعلان فقط با درخواست خود مخاطب قابل تغییر است.',
           RATE_LIMITED: 'به سقف درخواست‌ها رسیده‌اید. یک دقیقه بعد دوباره تلاش کنید.',
           DESTINATION_NOT_REGISTERED: 'ابتدا مقصد مجاز را در همین پنل ثبت کنید.',
           PERMISSION_REQUIRED: 'مجوز عملیات در مقصد را تأیید کنید.',
@@ -57,7 +62,7 @@ export class PanelAPI {
         };
         const failure = new Error(messages[data.code] || (typeof data.error === 'string' ? data.error : `خطای سرویس (HTTP ${response.status}).`));
         failure.code = data.code;
-        failure.outcome = data.outcome || ((action === 'message' && response.status >= 500) ? 'unknown' : undefined);
+        failure.outcome = data.outcome || ((['message','engine_run','schedule_run'].includes(action) && response.status >= 500) ? 'unknown' : undefined);
         failure.operationId = data.operation_id;
         throw failure;
       }
@@ -66,4 +71,4 @@ export class PanelAPI {
   }
 }
 
-export const LEGACY_CAPABILITIES = Object.freeze({ collections: false, messaging: false, polling: false, moderation: false, scheduling: false, webhook: false, background: false, rbac: false });
+export const LEGACY_CAPABILITIES = Object.freeze({ collections: false, messaging: false, polling: false, engine: false, reports: false, moderation: false, scheduling: false, webhook: false, background: false, rbac: false });

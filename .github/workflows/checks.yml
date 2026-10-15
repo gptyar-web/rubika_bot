@@ -1,0 +1,51 @@
+name: JavaScript validation
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      sql:
+        description: Run disposable PostgreSQL concurrency checks
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Unit and engine tests
+        run: npm test
+      - name: Prepare browser tools outside the checkout
+        run: |
+          npm install --prefix /tmp/rubika-tools --cache /tmp/rubika-npm-cache --save-exact --no-audit --no-fund playwright@1.58.2
+          chromium_path=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          test -n "$chromium_path"
+          echo "CHROMIUM_PATH=$chromium_path" >> "$GITHUB_ENV"
+      - name: Browser workflows and actual offline PWA
+        run: |
+          node scripts/serve.mjs > /tmp/rubika-static.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/rubika_bot/ -o /tmp/rubika-ready.html; then break; fi
+            sleep 1
+          done
+          npm run test:browser
+          npm run test:pwa
+  postgres:
+    if: github.event_name == 'workflow_dispatch' && inputs.sql
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm run test:sql

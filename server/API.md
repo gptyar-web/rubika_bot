@@ -10,7 +10,7 @@ Endpoint همان Supabase Edge Function به نام `rubika-panel` است. تم
 {"action":"health"}
 ```
 
-بدون توکن. خروجی `service`, `version:"3"`, `configured`, `capabilities`, `message_methods`, `live_verified:false`. مقدار `configured` فقط حضور Bindingهای لازم را بیان می‌کند. Capabilityهای اجرا در پس‌زمینه، Webhook، Moderation، زمان‌بندی، اجرای اتوماسیون، RBAC، 2FA و Upload برابر `false` هستند.
+بدون توکن. خروجی `service`, `version:"3.1"`, `configured`, `capabilities`, `message_methods`, `live_verified:false`. مقدار `configured` فقط حضور Bindingهای لازم را بیان می‌کند. Capabilityهای engine، manual_engine، moderation، scheduling، automation_execution و reports پشتیبانی کد را نشان می‌دهند. background فقط در پاسخ engine_status و پس از مشاهده lease/heartbeat واقعی فعال می‌شود. Webhook، RBAC، 2FA و Upload کامل همچنان false هستند.
 
 ```json
 {"action":"login","token":"PRIVATE_TOKEN_IN_MEMORY"}
@@ -26,7 +26,7 @@ Endpoint همان Supabase Edge Function به نام `rubika-panel` است. تم
 | `save` | `chat_id,title,settings,type?` | `group`, `applied:false` |
 | `delete` | `chat_id` | `deleted`, `affected` |
 
-`type` برابر `group` یا `channel` است و در صورت نبود، `group` می‌شود. `delete` فقط ثبت گفتگو در پنل را حذف می‌کند؛ گروه یا کانال روبیکا حذف نمی‌شود. `settings` یک Object است؛ قفل‌ها و خوشامدگویی در این API تنها تنظیمات ذخیره‌شده هستند. شناسه مجاز تنها از حروف لاتین، عدد و `_:−` تشکیل می‌شود؛ به‌جای نشانه Unicode منفی، `-` ASCII استفاده کنید.
+`type` برابر `group` یا `channel` است و در صورت نبود، `group` می‌شود. `delete` فقط ثبت گفتگو در پنل را حذف می‌کند؛ گروه یا کانال روبیکا حذف نمی‌شود. `settings` یک Object است؛ با save، قفل‌ها صرفاً ذخیره می‌شوند؛ موتور جداگانه فقط قواعد پشتیبانی‌شده و صریحاً فعال‌شده را اجرا می‌کند. خوشامدگویی عضویت به رویداد API مستند نیاز دارد. شناسه مجاز تنها از حروف لاتین، عدد و `_:−` تشکیل می‌شود؛ به‌جای نشانه Unicode منفی، `-` ASCII استفاده کنید.
 
 ```json
 {"action":"save","token":"PRIVATE_TOKEN_IN_MEMORY","chat_id":"b0example","title":"گروه نمونه","type":"group","settings":{"active":false,"locks":{"link":true},"warn_limit":3}}
@@ -84,3 +84,20 @@ Collections: `drafts`, `templates`, `automations`, `schedules`, `tickets`, `user
 ```
 
 `offset_id` را در درخواست اولیه حذف کنید. `limit` از ۱ تا ۱۰۰ است. پاسخ `updates`, `next_offset_id`, `received_at`, `new_events` دارد. Offset بعدی را فقط پس از پردازش پاسخ موفق به‌روز کنید. مرورگر مجاز است آن را تا پایان نشست در حافظه نگه دارد؛ این API Polling خودکار سرور یا Webhook نیست. رویدادهای تکراری در جدول فراداده با Hash یکتا حذف می‌شوند؛ بازگشت همان Update به مرورگر ممکن است و UI نیز باید بر اساس شناسه رویداد Deduplicate کند. رویداد خام/متن پیام در پایگاه داده جدول رویدادها ذخیره نمی‌شود.
+
+## موتور، نشست و گزارش نسخه ۳٫۱
+
+| Action | ورودی | نتیجه و محدودیت |
+|---|---|---|
+| `engine_status` | — | runtime، worker_running و capabilities؛ وجود کد، وجود Worker زنده را ثابت نمی‌کند |
+| `engine_toggle` | `enabled:boolean` | توقف مستقل همان Scope؛ درخواست درحال‌ارسال بازپس‌گرفته نمی‌شود |
+| `engine_run` | `authorized:true,limit?:1..10` | یک نوبت دریافت و پردازش، پیش‌فرض ۵؛ processed، duplicates، actions، errors و next_offset_id |
+| `schedule_run` | `authorized:true` | حداکثر ۵ تلاش از برنامه‌های تأییدشدهٔ رسیده، بدون ارسال مجدد نتیجه نامشخص |
+| `sessions_list` | — | حداکثر ۱۰۰ نشست دارای رضایت و مهلت معتبر، فقط در Scope مالک توکن |
+| `reports` | `from?,to?:ISO,compare?:boolean` | report.summary، daily، by_type، by_command و previous؛ حداکثر بازه ۳۶۶ روز |
+
+همه درخواست‌ها با توکن Bot دوباره احراز می‌شوند. اجرای هم‌زمان روی یک ربات ENGINE_BUSY می‌دهد؛ ربات متوقف ENGINE_PAUSED و شکست ذخیره runtime خطای RUNTIME_STORE_UNAVAILABLE دارد. عملیات موتور می‌تواند بیش از timeout مرورگر طول بکشد؛ ادعای رویداد/عملیات پیش از ارسال ثبت می‌شود و تلاش مبهم خودکار تکرار نمی‌شود.
+
+مجموعه‌های جدید: commands، faq، flows، menus، subscribers. مشترک‌های فعال باید enabled=true، authorized=true، status=approved و allowed_chat_ids ثبت‌شده داشته باشند. commands به match=command و faq به keyword تبدیل می‌شود. flow مراحل دارای id/key یکتا، prompt و validation از text/number/email/choice دارد؛ choice دو تا هشت گزینه یکتا دارد. منو حداکثر چهار سطح و صد گزینه یکتا دارد. subscribers از API عمومی فقط خواندنی است؛ /subscribe و /unsubscribe وضعیت رضایت همان فرستنده را تغییر می‌دهند. این رضایت، مجوز ارسال ناخواسته عمومی نمی‌سازد.
+
+گزارش بازه‌های نیمه‌باز و زمان تهران را استفاده می‌کند. اعداد بر اساس حداکثر ۵۰۰۰ رویداد و ۵۰۰ سابقهٔ بازگشتی‌اند؛ truncated و audit_limit حدود آن را نشان می‌دهند. member_count یا نوع رسانه نامستند ساخته نمی‌شود.

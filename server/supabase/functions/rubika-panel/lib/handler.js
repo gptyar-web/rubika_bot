@@ -1,13 +1,18 @@
 import { ApiError, assert, collectionName, groupInput, identifier, integer, record, safeData, tokenValue, uuid } from "./validation.js";
 import { buildMessage, createRubikaAdapter, destinations, MESSAGE_METHODS } from "./adapter.js";
 import { createDatabase } from "./database.js";
+import { createRuntimeStore } from './runtime-store.js';
+import { processBatch, dispatchOperation } from './engine.js';
+import { runDueSchedules } from './scheduler.js';
+import { buildReport, reportRange } from './reports.js';
+import { validateResource, validateResourceDestinations, validateEngineSettings } from './resource-validation.js';
 
 export const CAPABILITIES = Object.freeze({
   collections: true, messaging: true, polling: true, channels: true,
-  background: false, webhook: false, moderation: false, scheduling: false,
-  automation_execution: false, rbac: false, two_factor: false, upload: false,
+  engine: true, manual_engine: true, reports: true, background: false, webhook: false, moderation: true, scheduling: true,
+  automation_execution: true, rbac: false, two_factor: false, upload: false,
 });
-const ACTIONS = ["health", "login", "list", "save", "delete", "collection_list", "collection_save", "collection_delete", "message", "poll"];
+const ACTIONS = ["health", "login", "list", "save", "delete", "collection_list", "collection_save", "collection_delete", "message", "poll", "engine_status", "engine_run", "schedule_run", "reports", "engine_toggle", "sessions_list"];
 
 export function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
@@ -54,21 +59,12 @@ async function readJson(request) {
   return record(value, "request");
 }
 
-function resourceData(collection, input, token) {
-  const data = safeData(input, token);
-  if (collection === "schedules") {
-    const date = data.scheduled_at ?? data.scheduledAt;
-    if (date !== undefined) assert(typeof date === "string" && !Number.isNaN(Date.parse(date)), "scheduled_at must be an ISO timestamp.");
-  }
-  // The records are editable plans. They do not grant roles or start background jobs.
-  return data;
-}
-
-export function createHandler({ env = {}, database, adapter, fetcher = fetch } = {}) {
+export function createHandler({ env = {}, database, adapter, runtimeStore, clock = () => Date.now(), fetcher = fetch } = {}) {
   const allowedOrigins = new Set((env.ALLOWED_ORIGINS ?? "https://mozdbaranarshiya.github.io").split(",").map(origin => origin.trim()).filter(Boolean));
   const localEnabled = env.ALLOW_LOCALHOST === "true";
   let db = database;
   let rubika = adapter;
+  let store = runtimeStore;
   const ready = Boolean(env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY && env.SCOPE_SALT?.length >= 32);
   return async function handle(request) {
     const origin = request.headers.get("origin");
@@ -86,7 +82,7 @@ export function createHandler({ env = {}, database, adapter, fetcher = fetch } =
       if (request.method !== "POST") throw new ApiError(405, "METHOD_NOT_ALLOWED", "Use POST for this endpoint.");
       const body = await readJson(request);
       assert(ACTIONS.includes(body.action), "Unknown panel action.", "UNSUPPORTED_ACTION");
-      if (body.action === "health") return response({ ok: true, service: "rubika-panel", version: "3", configured: ready, capabilities: CAPABILITIES, message_methods: MESSAGE_METHODS, live_verified: false });
+      if (body.action === "health") return response({ ok: true, service: "rubika-panel", version: "3.1", configured: ready, capabilities: CAPABILITIES, message_methods: MESSAGE_METHODS, live_verified: false });
       if (!ready && !database) throw new ApiError(503, "CONFIGURATION_REQUIRED", "Configure Supabase server secrets and SCOPE_SALT before using authenticated actions.");
       db ??= createDatabase({ url: env.SUPABASE_URL, key: env.SUPABASE_SERVICE_ROLE_KEY, fetcher });
       rubika ??= createRubikaAdapter({ base: env.RUBIKA_API_BASE, fetcher });
@@ -109,6 +105,14 @@ export function createHandler({ env = {}, database, adapter, fetcher = fetch } =
         }
         case "save": {
           const input = groupInput(body, token);
+          validateEngineSettings(input.settings);
+          const previous=await db.getChat(scope,input.chat_id);
+          for(const mode of ['moderation','automation']){
+            const enabled=input.settings.active===true&&input.settings[mode+'_enabled']===true&&input.settings[mode+'_authorized']===true;
+            const previouslyEnabled=previous?.settings?.active===true&&previous.settings[mode+'_enabled']===true&&previous.settings[mode+'_authorized']===true;
+            const previousTime=previous?.settings?.[mode+'_started_at'];
+            input.settings[mode+'_started_at']=enabled?(previouslyEnabled&&Number.isFinite(Date.parse(previousTime))?previousTime:new Date(clock()).toISOString()):null;
+          }
           const { scope: ignored, ...group } = await db.saveChat(scope, input);
           await audit({ action: "save", status: "success", chat_id: input.chat_id, type: input.type });
           result = { group, applied: false }; break;
@@ -130,7 +134,9 @@ export function createHandler({ env = {}, database, adapter, fetcher = fetch } =
           const collection = collectionName(body.collection);
           if (collection === "logs") throw new ApiError(403, "AUDIT_READ_ONLY", "The server audit trail cannot be edited.");
           const id = uuid(body.id, "id", true) ?? crypto.randomUUID();
-          const data = resourceData(collection, body.data, token);
+          if(collection === "subscribers") throw new ApiError(403,"CONSENT_READ_ONLY","Subscription consent can only be changed by an explicit user command.");
+          const data = validateResource(collection, body.data, token, {now:clock()});
+          await validateResourceDestinations(collection,data,scope,db);
           safeData({ id, data }, token);
           const item = await db.saveResource(scope, collection, id, data);
           await audit({ action: "collection_save", status: "success", collection, resource_id: id });
@@ -139,6 +145,7 @@ export function createHandler({ env = {}, database, adapter, fetcher = fetch } =
         case "collection_delete": {
           const collection = collectionName(body.collection);
           if (collection === "logs") throw new ApiError(403, "AUDIT_READ_ONLY", "The server audit trail cannot be deleted.");
+          if(collection === "subscribers") throw new ApiError(403,"CONSENT_READ_ONLY","Subscription consent is changed only by the requesting user.");
           const id = uuid(body.id);
           safeData({ id }, token);
           const deleted = await db.deleteResource(scope, collection, id);
@@ -183,6 +190,60 @@ export function createHandler({ env = {}, database, adapter, fetcher = fetch } =
             throw new ApiError(503, "OPERATION_RECORDING_INCOMPLETE", "Rubika confirmed this operation, but the server could not finish recording it. Do not resend; check the destination first.", { outcome: "confirmed_unrecorded", operation_id });
           }
           result = { result: upstream, operation_id, replayed: false }; break;
+        }
+        case "engine_toggle": {
+          assert(typeof body.enabled==='boolean','enabled must be boolean.');
+          store ??= createRuntimeStore({url:env.SUPABASE_URL,key:env.SUPABASE_SERVICE_ROLE_KEY,fetcher});
+          await store.setEnabled(scope,body.enabled);
+          await audit({action:'engine_toggle',status:'success',enabled:body.enabled});
+          result={enabled:body.enabled};break;
+        }
+        case "sessions_list": {
+          store ??= createRuntimeStore({url:env.SUPABASE_URL,key:env.SUPABASE_SERVICE_ROLE_KEY,fetcher});
+          result={sessions:await store.listSessions(scope)};break;
+        }
+        case "engine_status": {
+          store ??= createRuntimeStore({url:env.SUPABASE_URL,key:env.SUPABASE_SERVICE_ROLE_KEY,fetcher});
+          const runtime=await store.getRuntime(scope);
+          const worker_running=runtime?.status==='running'&&Date.parse(runtime.heartbeat_at)>clock()-120000&&Date.parse(runtime.lease_until)>clock();
+          result={runtime:runtime?{...runtime,last_heartbeat_at:runtime.heartbeat_at}:null,worker_running,capabilities:{...CAPABILITIES,background:worker_running}};break;
+        }
+        case "engine_run":
+        case "schedule_run": {
+          assert(body.authorized===true,"Confirm permission before executing the engine.","PERMISSION_REQUIRED");
+          store ??= createRuntimeStore({url:env.SUPABASE_URL,key:env.SUPABASE_SERVICE_ROLE_KEY,fetcher});
+          if((await store.getRuntime(scope))?.enabled===false)throw new ApiError(409,'ENGINE_PAUSED','Enable this bot engine before processing events.');
+          const owner='manual:'+crypto.randomUUID();
+          const lease=await store.acquireLease(scope,owner,300);
+          if(!lease?.acquired)throw new ApiError(409,'ENGINE_BUSY','Another worker owns this bot. Wait before trying again.');
+          const guard={...rubika,call:async(...args)=>{if((await store.getRuntime(scope))?.enabled===false)throw new ApiError(409,'ENGINE_PAUSED','Engine was paused.');const renewed=await store.acquireLease(scope,owner,300);if(!renewed?.acquired)throw new ApiError(409,'ENGINE_LEASE_LOST','Engine lease is no longer valid.');return rubika.call(...args);}};
+          try {
+            await store.saveRuntime(scope,{status:'idle',last_error_code:null},owner);
+            if(body.action==='schedule_run') {
+              const summary=await runDueSchedules({scope,token,db,store,adapter:guard,now:clock(),dispatchOperation,maxJobs:5});
+              result={...summary,processed:summary.attempted,results:summary.jobs};
+            } else {
+              const runtime=await store.getRuntime(scope);
+              const limit=integer(body.limit,'limit',1,10,5);
+              const params=rubika.pollingParams({...body,limit,...(runtime?.offset_id?{offset_id:runtime.offset_id}:{})});
+              const batch=await guard.call(token,'getUpdates',params);
+              if(!Array.isArray(batch.updates)||batch.updates.length>limit)throw new ApiError(502,'INVALID_RUBIKA_RESPONSE','The updates batch exceeds the engine limit.');
+              const summary=await processBatch({scope,token,bot,updates:batch.updates,db,store,adapter:guard,now:clock()});
+              if(!summary.complete)throw new ApiError(503,'ENGINE_INCOMPLETE','Not every event was accounted for.');
+              const renewed=await store.acquireLease(scope,owner,300);if(!renewed?.acquired)throw new ApiError(409,'ENGINE_LEASE_LOST','Engine lease was lost before cursor commit.');
+              await store.saveRuntime(scope,{status:'idle',offset_id:batch.next_offset_id??runtime?.offset_id??null,last_error_code:null},owner);
+              result={...summary,next_offset_id:batch.next_offset_id??null};
+            }
+            await audit({action:body.action,status:'success',processed:result.processed});
+          } finally {await store.releaseLease(scope,owner);}
+          break;
+        }
+        case "reports": {
+          store ??= createRuntimeStore({url:env.SUPABASE_URL,key:env.SUPABASE_SERVICE_ROLE_KEY,fetcher});
+          const range=reportRange({from:body.from,to:body.to,now:new Date(clock())});
+          const events=await store.listMetrics(scope,body.compare===true?range.previous_from:range.from,range.to);
+          const logs=await db.listResources(scope,'logs',{limit:500,offset:0});
+          result={report:buildReport({events,audit:logs,from:range.from,to:range.to,previous:body.compare===true,now:new Date(clock())}),truncated:events.length>=5000,audit_limit:500};break;
         }
         case "poll": {
           const params = rubika.pollingParams(body);

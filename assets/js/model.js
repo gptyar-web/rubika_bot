@@ -4,9 +4,9 @@ export const LOCKS = {
   voice: 'ویس', gif: 'GIF', sticker: 'استیکر', location: 'موقعیت مکانی', contact: 'مخاطب', mention: 'منشن', poll: 'نظرسنجی', story: 'استوری',
 };
 export function defaults() {
-  return { active: false, anti_spam: true, warn_limit: 3, flood_count: 6, flood_seconds: 8, quiet_enabled: false,
+  return { active: false, moderation_enabled: false, moderation_authorized: false, automation_enabled: false, automation_authorized: false, anti_spam: true, warn_limit: 3, flood_count: 6, flood_seconds: 8, quiet_enabled: false,
     quiet_start: '23:00', quiet_end: '07:00', rules: '', welcome: '', goodbye: '', allowed_domains: '', blocked_words: '',
-    admin_exceptions: '', locks: Object.fromEntries(Object.keys(LOCKS).map(key => [key, false])) };
+    admin_exceptions: '', blocked_patterns: '', warning_enabled: false, warning_message: 'کاربر {name}، پیام شما با قوانین این گفتگو سازگار نیست.', subscriptions: false, locks: Object.fromEntries(Object.keys(LOCKS).map(key => [key, false])) };
 }
 export function settingsFor(group) {
   const base = defaults();
@@ -64,6 +64,9 @@ export function validateBackup(value) {
       } else { const text = supplied ?? base[key]; if (typeof text !== 'string' || text.length > 2000) throw new Error('متن پشتیبان نامعتبر است.'); settings[key] = text; }
     }
     if (![settings.quiet_start, settings.quiet_end].every(time => /^([01]\d|2[0-3]):[0-5]\d$/.test(time))) throw new Error('ساعت پشتیبان نامعتبر است.');
+    // Restoring a file cannot silently authorize real moderation or outgoing replies.
+    settings.moderation_authorized=false;settings.automation_authorized=false;
+    settings.moderation_enabled=false;settings.automation_enabled=false;
     return { chat_id: group.chat_id.trim(), title: group.title, type: group.type === 'channel' ? 'channel' : 'group', settings };
   });
 }

@@ -11,7 +11,7 @@ try {
  assert.equal(worker.state,'activated');assert.equal(worker.scope,base.href);
  const manifest=await page.evaluate(async()=>{const link=document.querySelector('link[rel=manifest]');return (await fetch(link.href)).json();});assert.equal(manifest.start_url,'./');assert.equal(manifest.scope,'./');assert.deepEqual(manifest.icons.map(icon=>icon.sizes),['192x192','512x512']);
  const cache=await page.evaluate(async()=>{const result={};for(const key of await caches.keys()){result[key]=(await(await caches.open(key)).keys()).map(req=>({url:req.url,method:req.method}));}return result;});
- const entries=Object.values(cache).flat();assert.equal(entries.length,11);assert.ok(entries.every(entry=>entry.method==='GET'&&entry.url.startsWith(worker.scope)));assert.ok(entries.every(entry=>!entry.url.includes('/functions/')&&!entry.url.includes('/server/')&&!entry.url.includes('token=')));
- await context.setOffline(true);await page.reload();await page.locator('#pageTitle').filter({hasText:'داشبورد مدیریت'}).waitFor();assert.equal(await page.locator('html').getAttribute('lang'),'fa');assert.equal(errors.length,0,errors.join('\n'));
+ const entries=Object.values(cache).flat();assert.equal(entries.length,14);assert.ok(entries.every(entry=>entry.method==='GET'&&entry.url.startsWith(worker.scope)));assert.ok(entries.every(entry=>!entry.url.includes('/functions/')&&!entry.url.includes('/server/')&&!entry.url.includes('token=')));
+ await context.setOffline(true);await page.reload();await page.locator('#navigation [data-route="bots"]').waitFor();await page.locator('#pageTitle').filter({hasText:'داشبورد مدیریت'}).waitFor();assert.equal(await page.locator('html').getAttribute('lang'),'fa');assert.equal(errors.length,0,errors.join('\n'));
  console.log(JSON.stringify({passed:true,serviceWorker:worker,publicCachedAssets:entries.length,offlineShell:true,apiCache:false,browserErrors:errors.length},null,2));
 } finally {await browser.close();}

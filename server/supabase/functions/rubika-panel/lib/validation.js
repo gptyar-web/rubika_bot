@@ -67,7 +67,7 @@ export function safeData(value, token, maxBytes = 24000) {
   return JSON.parse(json);
 }
 
-export const COLLECTIONS = Object.freeze(["drafts", "templates", "automations", "schedules", "tickets", "users", "logs", "violations", "consents"]);
+export const COLLECTIONS = Object.freeze(["drafts", "templates", "automations", "schedules", "tickets", "users", "logs", "violations", "consents", "commands", "faq", "flows", "menus", "subscribers"]);
 
 export function collectionName(value) {
   assert(COLLECTIONS.includes(value), "Unknown resource collection.");

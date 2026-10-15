@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "language": "fa",
-  "phase": "final-local-validation",
+  "phase": "version-3.1-local-validation",
   "scope": "mozdbaranarshiya/rubika_bot؛ وضعیت نهایی پیاده‌سازی و آزمون محلی، همراه snapshot اولیه",
   "snapshot": {
     "selectedFiles": [
@@ -111,13 +111,15 @@
       "id": 4,
       "title": "فعال و غیرفعال کردن مستقل هر ربات",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "انتخاب و خروج مستقل ربات در نشست وجود دارد؛ فعال/غیرفعال‌کردن موتور دریافت رویداد برای هر ربات پیاده‌سازی نشده است.",
+      "evidence": "Worker خصوصی JavaScript با lease، توقف مستقل، cursor پایدار، retry خواندن و نتیجه مبهم غیرقابل ارسال مجدد ساخته و با آزمون محلی بررسی شده است.",
       "files": [
-        "assets/js/app.js"
+        "server/runtime/worker.js",
+        "server/supabase/functions/rubika-panel/lib/runtime-store.js",
+        "server/tests/runtime.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -125,7 +127,7 @@
       ],
       "api": "وضعیت داخلی برنامه؛ کنترل چرخه دریافت رویداد",
       "priority": 1,
-      "test": "خروج مستقل در UI fixture آزموده شد؛ کنترل چرخه موتور وجود ندارد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -140,7 +142,7 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "اتصال و آخرین بررسی پس از login/list یا تازه‌سازی دستی نمایش داده می‌شوند؛ پایش لحظه‌ای یا heartbeat خودکار وجود ندارد.",
+      "evidence": "آخرین بررسی اتصال و دکمه دریافت وضعیت Worker وجود دارد؛ به‌روزرسانی لحظه‌ای خودکار صفحه هنوز تکمیل نشده است.",
       "files": [
         "assets/js/app.js"
       ],
@@ -165,7 +167,7 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "آخرین بررسی اتصال و زمان received_at یک Polling دستی نمایش داده می‌شود؛ آخرین فعالیت ماندگار موتور موجود نیست.",
+      "evidence": "ضربان Worker و زمان رویدادها ذخیره می‌شوند؛ نمای کامل لحظه‌ای آخرین فعالیت هر ربات نیازمند تکمیل است.",
       "files": [
         "assets/js/app.js",
         "server/supabase/functions/rubika-panel/lib/handler.js"
@@ -186,13 +188,15 @@
       "id": 7,
       "title": "راه‌اندازی خودکار ربات پس از اجرای سرور",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "Edge Function تنها در پاسخ به درخواست اجرا می‌شود؛ worker و راه‌اندازی خودکار ربات وجود ندارند.",
+      "evidence": "Worker خصوصی JavaScript با lease، توقف مستقل، cursor پایدار، retry خواندن و نتیجه مبهم غیرقابل ارسال مجدد ساخته و با آزمون محلی بررسی شده است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/runtime/worker.js",
+        "server/supabase/functions/rubika-panel/lib/runtime-store.js",
+        "server/tests/runtime.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -200,7 +204,7 @@
       ],
       "api": "سرور ماندگار/worker یا webhook مستقر؛ GitHub Pages سرور اجرا نمی‌کند",
       "priority": 1,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -210,16 +214,15 @@
       "id": 8,
       "title": "دریافت و پردازش رویدادهای پیام‌رسان",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "Polling درخواستی رویدادها را نمایش و فقط فراداده را ثبت می‌کند؛ پردازش فرمان، callback، قفل و اتوماسیون اجرا نمی‌شود.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -227,7 +230,7 @@
       ],
       "api": "getUpdates و Update؛ ReceiveUpdate",
       "priority": 1,
-      "test": "UI دریافت و پیشروی offset با fixture؛ handler ثبت hash بدون متن خصوصی با mock؛ SQL یکتایی رویداد در PostgreSQL محلی.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -267,11 +270,11 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "getUpdates فقط به درخواست کاربر با limit و offset اجرا می‌شود؛ حلقه خودکار پس‌زمینه ندارد.",
+      "evidence": "Worker خصوصی JavaScript با lease، توقف مستقل، cursor پایدار، retry خواندن و نتیجه مبهم غیرقابل ارسال مجدد ساخته و با آزمون محلی بررسی شده است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js"
+        "server/runtime/worker.js",
+        "server/supabase/functions/rubika-panel/lib/runtime-store.js",
+        "server/tests/runtime.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -279,7 +282,7 @@
       ],
       "api": "getUpdates(offset_id,limit)",
       "priority": 1,
-      "test": "دو Polling UI fixture و offset بعدی؛ handler metadata با mock؛ رفتار Rubika واقعی آزموده نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -290,14 +293,15 @@
       "id": 11,
       "title": "تلاش مجدد برای اتصال هنگام خطا",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "دکمه تلاش دوباره و تازه‌سازی دستی موجود است؛ اتصال خودکار مجدد یا حلقه بازیابی وجود ندارد.",
+      "evidence": "Worker خصوصی JavaScript با lease، توقف مستقل، cursor پایدار، retry خواندن و نتیجه مبهم غیرقابل ارسال مجدد ساخته و با آزمون محلی بررسی شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/api.js"
+        "server/runtime/worker.js",
+        "server/supabase/functions/rubika-panel/lib/runtime-store.js",
+        "server/tests/runtime.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -305,7 +309,7 @@
       ],
       "api": "خطاهای شبکه/getMe/getUpdates",
       "priority": 1,
-      "test": "بازبینی مسیر خطا و دکمه retry؛ سناریوی reconnect خودکار وجود ندارد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -315,15 +319,15 @@
       "id": 12,
       "title": "مدیریت خطاهای شبکه با تأخیر افزایشی",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "Timeout، Abort و خطای عمومی شبکه پیاده‌سازی شده‌اند؛ backoff افزایشی پیاده‌سازی نشده و عملیات پیام خودکار تکرار نمی‌شود.",
+      "evidence": "Worker خصوصی JavaScript با lease، توقف مستقل، cursor پایدار، retry خواندن و نتیجه مبهم غیرقابل ارسال مجدد ساخته و با آزمون محلی بررسی شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/api.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js"
+        "server/runtime/worker.js",
+        "server/supabase/functions/rubika-panel/lib/runtime-store.js",
+        "server/tests/runtime.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -331,7 +335,7 @@
       ],
       "api": "HTTP timeouts، backoff و محدودیت نرخ",
       "priority": 1,
-      "test": "واحد adapter خطای شبکه را بدون افشای توکن بررسی می‌کند؛ UI نتیجه مبهم ارسال را مسدود می‌کند؛ backoff وجود ندارد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -342,15 +346,15 @@
       "id": 13,
       "title": "جلوگیری از پردازش چندباره رویدادهای تکراری",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "Hash یکتا از ثبت تکراری metadata و UUID اتمیک از تکرار mutation جلوگیری می‌کند؛ موتور پردازش رویداد مستقل هنوز وجود ندارد.",
+      "evidence": "Worker خصوصی JavaScript با lease، توقف مستقل، cursor پایدار، retry خواندن و نتیجه مبهم غیرقابل ارسال مجدد ساخته و با آزمون محلی بررسی شده است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/runtime/worker.js",
+        "server/supabase/functions/rubika-panel/lib/runtime-store.js",
+        "server/tests/runtime.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -358,7 +362,7 @@
       ],
       "api": "شناسه پایدار رویداد و unique constraint پایگاه داده",
       "priority": 1,
-      "test": "واحد ۲ درخواست همزمان فقط یک send جعلی؛ PostgreSQL محلی ۱۰ claim همزمان و unique event؛ UI نتایج مبهم.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -370,13 +374,15 @@
       "id": 14,
       "title": "موتور مدیریت دستورات ربات با قابلیت توسعه",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "موتور فرمان، registry دستورات و dispatch رویدادها پیاده‌سازی نشده است.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -386,7 +392,7 @@
       ],
       "api": "sendMessage؛ ثبت فرمان داخلی؛ setCommands",
       "priority": 1,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -396,19 +402,15 @@
       "id": 15,
       "title": "معماری ماژولار برای افزودن افزونه‌های جدید",
       "category": "اتصال و مدیریت ربات‌ها",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "ماژول‌های مستقل UI، مدل، API، adapter، handler، validation و database موجودند؛ قرارداد ثبت افزونه یا plugin loader وجود ندارد.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "assets/js/api.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -416,7 +418,7 @@
       ],
       "api": "Adapter مستقل JavaScript؛ نیازی به API خاص نیست",
       "priority": 1,
-      "test": "ماژول‌های سرور در تست‌های Node وارد و اجرا شدند؛ توسعه افزونه سناریوی آزمون‌شده ندارد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -815,13 +817,15 @@
       "id": 31,
       "title": "ساخت کیبورد معمولی برای ربات",
       "category": "دکمه‌ها و تعاملات",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "API سرور پارامتر keypad و دکمه Simple را می‌پذیرد؛ سازنده کیبورد در پنل و مدیریت رویداد دکمه ساخته نشده‌اند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/adapter.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -829,7 +833,7 @@
       ],
       "api": "sendMessage(chat_keypad)، editChatKeypad",
       "priority": 2,
-      "test": "واحد نوع غیرمستند Link را رد می‌کند؛ ارسال کیبورد Simple موفق/واقعی آزموده نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit"
@@ -839,13 +843,15 @@
       "id": 32,
       "title": "ساخت کیبورد شیشه‌ای یا Inline",
       "category": "دکمه‌ها و تعاملات",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "API سرور پارامتر keypad و دکمه Simple را می‌پذیرد؛ سازنده کیبورد در پنل و مدیریت رویداد دکمه ساخته نشده‌اند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/adapter.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -853,7 +859,7 @@
       ],
       "api": "sendMessage(inline_keypad)، editMessageKeypad",
       "priority": 2,
-      "test": "واحد نوع غیرمستند Link را رد می‌کند؛ ارسال کیبورد Simple موفق/واقعی آزموده نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit"
@@ -863,15 +869,15 @@
       "id": 33,
       "title": "ساخت منوهای چندسطحی",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -879,7 +885,7 @@
       ],
       "api": "Keypad، aux_data.button_id؛ منطق برنامه",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -889,15 +895,15 @@
       "id": 34,
       "title": "مدیریت رویداد کلیک روی دکمه‌ها",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -905,7 +911,7 @@
       ],
       "api": "ReceiveUpdate/ReceiveInlineMessage/ReceiveQuery؛ aux_data.button_id",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -915,13 +921,15 @@
       "id": 35,
       "title": "تعریف شناسه یکتا برای دکمه‌ها",
       "category": "دکمه‌ها و تعاملات",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "Button.id در adapter اعتبارسنجی می‌شود؛ تولید/ثبت یکتای دکمه‌ها و registry کلیک‌ها ساخته نشده‌اند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/adapter.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -929,7 +937,7 @@
       ],
       "api": "Button.id؛ مدیریت شناسه داخلی",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -994,15 +1002,15 @@
       "id": 38,
       "title": "استفاده از متغیرهای پویا در متن پیام",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1010,7 +1018,7 @@
       ],
       "api": "sendMessage؛ جایگزینی امن متغیرها",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1020,15 +1028,14 @@
       "id": 39,
       "title": "ویرایشگر بصری دکمه‌ها و منوها",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "موجود و آزمایش‌شده (محلی)",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "ویرایشگر بصری دکمه‌های Simple، شناسه یکتا، منو چهارسطحی و گام‌های فرم در مرورگر واقعی آزمون شد.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "assets/js/interactions-ui.js",
+        "scripts/next-smoke.mjs"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1036,7 +1043,7 @@
       ],
       "api": "Keypad؛ ویرایشگر محلی و اعتبارسنجی سرور",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون محلی موفق؛ انتشار و اتصال Production تأیید نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1046,11 +1053,11 @@
       "id": 40,
       "title": "ثبت تعداد کلیک هر دکمه",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "جزئی؛ نیازمند توسعه",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "شناسه کلیک در فراداده موتور قابل ثبت است، اما داشبورد تجمیعی کلیک هر دکمه هنوز تکمیل نشده است.",
       "files": [
         "assets/js/app.js",
         "server/supabase/functions/rubika-panel/lib/adapter.js",
@@ -1072,15 +1079,15 @@
       "id": 41,
       "title": "ساخت فرم‌های تعاملی داخل ربات",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1088,7 +1095,7 @@
       ],
       "api": "Button Textbox/Selection/Calendar؛ پیام مجاز",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1098,15 +1105,15 @@
       "id": 42,
       "title": "طراحی مراحل متوالی دریافت اطلاعات کاربران",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1114,7 +1121,7 @@
       ],
       "api": "دریافت پیام/کلیک؛ state machine",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1124,15 +1131,15 @@
       "id": 43,
       "title": "ذخیره وضعیت موقت گفتگو برای ادامه مراحل",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1140,7 +1147,7 @@
       ],
       "api": "دیتابیس با TTL؛ جداسازی bot/chat/user",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1150,15 +1157,15 @@
       "id": 44,
       "title": "صفحه‌بندی منوهای دارای گزینه‌های زیاد",
       "category": "دکمه‌ها و تعاملات",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/adapter.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1166,7 +1173,7 @@
       ],
       "api": "Keypad/aux_data؛ منطق صفحه‌بندی",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1389,15 +1396,15 @@
       "id": 53,
       "title": "اعمال قوانین اختصاصی برای هر گروه",
       "category": "مدیریت گروه‌ها",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "تنظیمات مجزای گروه به سرور خارجی ارسال می‌شوند؛ اعمال قوانین وجود ندارد.",
-      "evidence": "تنظیمات مستقل هر گروه و active ذخیره می‌شود؛ موتور اعمال قواعد و حذف خودکار وجود ندارد.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1405,7 +1412,7 @@
       ],
       "api": "تنظیم داخلی؛ deleteMessage با مجوز برای اعمال قوانین",
       "priority": 2,
-      "test": "UI fixture استقلال تنظیمات دو ربات و حفظ فیلدهای توسعه سرور؛ اجرای قوانین آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture"
@@ -1442,15 +1449,15 @@
       "id": 55,
       "title": "تنظیم ساعات سکوت گروه",
       "category": "مدیریت گروه‌ها",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "quiet_start/quiet_end ذخیره می‌شوند؛ هیچ حذف پیام در ساعت سکوت اجرا نمی‌شود.",
-      "evidence": "quiet_enabled و ساعت شروع/پایان به وقت تهران ذخیره می‌شوند؛ اجرای ساعت سکوت وجود ندارد.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1458,7 +1465,7 @@
       ],
       "api": "deleteMessage؛ زمان سرور و منطقه زمانی گروه",
       "priority": 2,
-      "test": "اعتبارسنجی زمان نامعتبر در backup آزموده شد؛ اعمال سکوت در روبیکا آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit",
@@ -1545,14 +1552,15 @@
       "id": 59,
       "title": "نمایش وضعیت فعلی قفل‌ها و تنظیمات گروه",
       "category": "مدیریت گروه‌ها",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "وضعیت پیش‌نویس قفل‌ها در فرم دیده می‌شود؛ وضعیت واقعی گروه نیست.",
-      "evidence": "نمایش ۲۰ تنظیم قفل و وضعیت active ذخیره‌شده؛ این نمایش وضعیت اجرای واقعی گروه نیست.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "AliRn76/rubika_bot/requests.py",
@@ -1560,7 +1568,7 @@
       ],
       "api": "دیتابیس تنظیمات و وضعیت worker؛ API خاص ندارد",
       "priority": 2,
-      "test": "UI fixture فرم تنظیمات، ذخیره تغییر و حفظ locks.future_lock؛ هر قفل جدا و اعمال واقعی آزموده نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -1571,13 +1579,15 @@
       "id": 60,
       "title": "نمایش راهنمای دستورات مدیریتی داخل گروه",
       "category": "مدیریت گروه‌ها",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "دستور /help و موتور پاسخ داخل گروه ساخته نشده‌اند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1587,7 +1597,7 @@
       ],
       "api": "sendMessage؛ فرمان داخلی /help",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1597,15 +1607,15 @@
       "id": 61,
       "title": "قفل ارسال لینک",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.link؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.link در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1615,7 +1625,7 @@
       ],
       "api": "Message.text؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1653,15 +1663,15 @@
       "id": 63,
       "title": "قفل نام کاربری و آیدی",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "کلید locks.username در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1671,7 +1681,7 @@
       ],
       "api": "Message.text؛ تشخیص @username و deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1681,15 +1691,15 @@
       "id": 64,
       "title": "قفل هشتگ",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "کلید locks.hashtag در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1699,7 +1709,7 @@
       ],
       "api": "Message.text؛ تشخیص # و deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1709,15 +1719,15 @@
       "id": 65,
       "title": "قفل پیام متنی",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "کلید locks.text در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1727,7 +1737,7 @@
       ],
       "api": "Message.text؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1737,15 +1747,15 @@
       "id": 66,
       "title": "قفل کلمات توهین‌آمیز و نامناسب",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "کلید locks.profanity در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1755,7 +1765,7 @@
       ],
       "api": "Message.text؛ فهرست کلمات و deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1765,15 +1775,15 @@
       "id": 67,
       "title": "قفل پیام‌های فورواردشده",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.forward؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.forward در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1783,7 +1793,7 @@
       ],
       "api": "Message.forwarded_from/forwarded_no_link؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1821,11 +1831,11 @@
       "id": 69,
       "title": "قفل فعالیت کاربران تأییدنشده",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "نیازمند پشتیبانی API",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "کلید locks.unverified در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "وضعیت تأیید رسمی عضو در رویداد مستند نیست؛ کلید این نوع قفل در رابط غیرقابل اجرا مشخص شده است.",
       "files": [
         "assets/js/app.js",
         "assets/js/model.js",
@@ -1849,15 +1859,15 @@
       "id": 70,
       "title": "قفل ارسال فایل و سند",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.file؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.file در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -1867,7 +1877,7 @@
       ],
       "api": "Message.file؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -1989,15 +1999,15 @@
       "id": 75,
       "title": "قفل استیکر",
       "category": "قفل‌های پیشرفته",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.sticker؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.sticker در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2007,7 +2017,7 @@
       ],
       "api": "Message.sticker؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2017,15 +2027,15 @@
       "id": 76,
       "title": "قفل ارسال موقعیت مکانی",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.location؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.location در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2035,7 +2045,7 @@
       ],
       "api": "Message.location/live_location؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2045,15 +2055,15 @@
       "id": 77,
       "title": "قفل ارسال مخاطب",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.contact؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.contact در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2063,7 +2073,7 @@
       ],
       "api": "Message.contact_message؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2073,15 +2083,15 @@
       "id": 78,
       "title": "قفل منشن کاربران",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.mention؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.mention در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2091,7 +2101,7 @@
       ],
       "api": "Message.text برای @mentions؛ metadata hidden mention مستند نیست",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2101,15 +2111,15 @@
       "id": 79,
       "title": "قفل ارسال نظرسنجی",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط checkbox locks.poll؛ اعمال قفل وجود ندارد.",
-      "evidence": "کلید locks.poll در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2119,7 +2129,7 @@
       ],
       "api": "Message.poll؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2157,14 +2167,15 @@
       "id": 81,
       "title": "شناسایی ارسال پشت‌سرهم پیام یا Flood",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط تنظیم flood_count/flood_seconds؛ شمارنده و تشخیص اجرا نمی‌شود.",
-      "evidence": "flood_count و flood_seconds ذخیره می‌شوند؛ شمارنده پنجره زمانی و تشخیص Flood اجرا نمی‌شود.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2174,7 +2185,7 @@
       ],
       "api": "Message.sender_id,time؛ پنجره سرور؛ deleteMessage",
       "priority": 2,
-      "test": "UI fixture حد warn_limit و اعتبارسنجی اعداد مشترک؛ تشخیص flood آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -2185,14 +2196,15 @@
       "id": 82,
       "title": "شناسایی پیام‌های تکراری و اسپم",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "anti_spam ذخیره می‌شود؛ کش پیام، مقایسه تکرار و حذف خودکار spam ساخته نشده‌اند.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2202,7 +2214,7 @@
       ],
       "api": "Message.text؛ hash و پنجره زمانی؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2212,14 +2224,15 @@
       "id": 83,
       "title": "فیلتر کلمات ممنوع و الگوهای Regex",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "blocked_words در تنظیمات و Regex در پیش‌نویس قواعد پاسخ ذخیره می‌شوند؛ فیلتر محتوای Regex/کلمات اجرا نمی‌شود.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2229,7 +2242,7 @@
       ],
       "api": "Message.text؛ regex محدود و deleteMessage",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2239,14 +2252,15 @@
       "id": 84,
       "title": "فهرست دامنه‌ها و لینک‌های مجاز",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "allowed_domains قابل ذخیره است؛ موتور تطبیق URL و استثنا دامنه اجرا نمی‌شود.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2256,7 +2270,7 @@
       ],
       "api": "Message.text؛ URL parser، allowlist دامنه؛ deleteMessage",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2266,15 +2280,15 @@
       "id": 85,
       "title": "محدودیت تعداد پیام برای هر کاربر در بازه زمانی",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "تنظیم آستانه فلود وجود دارد؛ شمارش پیام هر کاربر اجرا نمی‌شود.",
-      "evidence": "تعداد/بازه ضدفلود تنظیم‌پذیر است؛ شمارنده پیام کاربر و اعمال سقف پیام ساخته نشده‌اند. Rate limit سرور مربوط به درخواست API پنل است.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2284,7 +2298,7 @@
       ],
       "api": "Message.sender_id,time؛ شمارنده اتمیک در DB",
       "priority": 2,
-      "test": "محدودیت نرخ API پنل در واحد و PostgreSQL آزموده شد؛ این آزمون سقف پیام کاربران گروه نیست.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -2296,14 +2310,15 @@
       "id": 86,
       "title": "سیستم اخطار با شمارنده اختصاصی کاربران",
       "category": "امنیت و تخلفات",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "جزئی و آزمایش‌نشده",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "فقط warn_limit قابل ذخیره است؛ اخطار و شمارنده کاربران وجود ندارند.",
-      "evidence": "warn_limit ذخیره می‌شود؛ شمارنده اخطار اختصاصی کاربر و ارسال اخطار ساخته نشده‌اند.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [
         "yamarg/group-manager/main.py",
@@ -2313,7 +2328,7 @@
       ],
       "api": "sender_id؛ ذخیره اخطار در DB و sendMessage",
       "priority": 2,
-      "test": "UI fixture تغییر warn_limit و رد عدد صفر؛ صدور/شمارش اخطار وجود ندارد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture"
@@ -2457,21 +2472,20 @@
       "id": 92,
       "title": "ساخت صف انتشار محتوا",
       "category": "کانال و انتشار",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "پیش‌نویس و برنامه انتشار قابل ذخیره‌اند؛ صف اجرایی، ترتیب dequeue و worker انتشار وجود ندارد.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "sendMessage/sendFile؛ صف پایدار",
       "priority": 3,
-      "test": "UI fixture schedule را با status=draft ذخیره کرد؛ صف انتشار اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture"
@@ -2481,20 +2495,20 @@
       "id": 93,
       "title": "زمان‌بندی دقیق ارسال پست",
       "category": "کانال و انتشار",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "scheduled_at با تبدیل ساعت تهران و status=draft ذخیره می‌شود؛ cron/worker ارسال دقیق وجود ندارد.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "sendMessage؛ worker/cron مستقل مرورگر",
       "priority": 3,
-      "test": "UI fixture زمان تهران روی مرورگر لس‌آنجلس و بازکردن مجدد فرم؛ واحد سرور executed=false؛ ارسال خودکار آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -2505,19 +2519,20 @@
       "id": 94,
       "title": "تقویم انتشار با پشتیبانی از تاریخ شمسی",
       "category": "کانال و انتشار",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "موجود و آزمایش‌شده (محلی)",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "برنامه‌ها با نمایش تاریخ شمسی و ساعت تهران هستند؛ ورودی datetime-local میلادی است و تقویم شمسی تعاملی/شبکه تقویم ساخته نشده.",
+      "evidence": "انتخاب‌گر واقعی تاریخ شمسی با حرکت صفحه‌کلید، تبدیل روز میلادی/شمسی و کبیسه پیاده‌سازی شد؛ ساعت انتشار تهران است.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "assets/js/calendar.js",
+        "scripts/calendar.test.mjs",
+        "scripts/next-smoke.mjs"
       ],
       "referenceFiles": [],
       "api": "Intl Persian calendar؛ زمان UTC در DB",
       "priority": 3,
-      "test": "تبدیل تهران در مدل و UI fixture مرورگر لس‌آنجلس آزموده شد؛ تقویم شمسی تعاملی وجود ندارد.",
+      "test": "آزمون محلی موفق؛ انتشار و اتصال Production تأیید نشده",
       "productionVerified": false,
       "testKinds": [
         "unit",
@@ -2554,18 +2569,20 @@
       "id": 96,
       "title": "پیش‌نمایش پست قبل از انتشار",
       "category": "کانال و انتشار",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "مرکز پیام، پیش‌نمایش امن متن پیش از ارسال دارد؛ پیش‌نمایش اختصاصی پیش‌نویس/پست چندرسانه‌ای وجود ندارد.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "پیش‌نمایش UI؛ API لازم نیست",
       "priority": 3,
-      "test": "UI fixture متن شامل HTML را به‌صورت متن نمایش می‌دهد؛ پیش‌نمایش پست چندرسانه‌ای آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture"
@@ -2600,19 +2617,20 @@
       "id": 98,
       "title": "تعریف انتشار دوره‌ای برای مطالب مجاز",
       "category": "کانال و انتشار",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "تکرار دوره‌ای، فاصله اجرا و worker انتشار پیاده‌سازی نشده‌اند.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "sendMessage؛ worker/cron و رضایت مقصد",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2622,19 +2640,20 @@
       "id": 99,
       "title": "تأیید پست توسط مدیر پیش از انتشار",
       "category": "کانال و انتشار",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "فرایند تأیید پست، نقش مدیر تأییدکننده و انتقال به صف اجرا پیاده‌سازی نشده‌اند.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "RBAC داخلی؛ وضعیت approved قبل sendMessage",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2673,7 +2692,7 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "پیش‌نویس‌ها status=draft دارند و نتیجه عملیات پیام جدا ثبت می‌شود؛ وضعیت انتشار متصل به هر پست ساخته نشده است.",
+      "evidence": "نتیجه واقعی هر اجرای درخواستی و تاریخچه خصوصی job وجود دارد؛ نمایش تاریخچه همه jobها کنار هر ردیف برنامه هنوز تکمیل نیست.",
       "files": [
         "assets/js/app.js",
         "server/supabase/functions/rubika-panel/lib/handler.js"
@@ -2691,11 +2710,11 @@
       "id": 102,
       "title": "تلاش مجدد برای ارسال پست ناموفق",
       "category": "کانال و انتشار",
-      "status": "نیازمند توسعه",
+      "status": "جزئی؛ نیازمند توسعه",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "retry job پست وجود ندارد؛ نتیجه مبهم پیام عمداً خودکار تکرار نمی‌شود.",
+      "evidence": "خواندن با backoff تکرار می‌شود؛ ارسال نامشخص عمداً تکرار نمی‌شود. گردش کامل تلاش مجدد پست مردود با تأیید جدید هنوز تکمیل نیست.",
       "files": [
         "assets/js/app.js",
         "server/supabase/functions/rubika-panel/lib/handler.js"
@@ -2714,21 +2733,20 @@
       "id": 103,
       "title": "جلوگیری از انتشار تصادفی پست‌های تکراری",
       "category": "کانال و انتشار",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "UUID mutation و مانع نشست ارسال دوباره را برای تلاش یکسان کنترل می‌کنند؛ dedup محتوایی پست‌ها و چرخه انتشار وجود ندارد.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "کلید تکراری unique و محتوا hash؛ API idempotency مستند نیست",
       "priority": 3,
-      "test": "واحد فقط یک send جعلی و PostgreSQL claim همزمان؛ UI نتیجه نامشخص؛ پیشگیری تکرار محتوای پست آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -2740,18 +2758,20 @@
       "id": 104,
       "title": "انتشار هماهنگ در چند کانال دارای مجوز",
       "category": "کانال و انتشار",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "مرکز پیام یک مقصد در هر عملیات می‌گیرد؛ fan-out هماهنگ چند کانال ساخته نشده است.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "sendMessage به کانال‌های مجاز؛ نتیجه مستقل مقصدها",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2782,21 +2802,20 @@
       "id": 106,
       "title": "پاسخ خودکار بر اساس کلمات کلیدی",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "قواعد keyword/regex با trigger و response به‌صورت draft ذخیره می‌شوند؛ موتور دریافت پیام و ارسال پاسخ اجرا نمی‌شود.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [],
       "api": "Message.text، sendMessage؛ rule engine",
       "priority": 2,
-      "test": "واحد ذخیره Resource مشترک؛ بازبینی اعتبارسنجی Regex؛ هیچ پاسخ خودکار در UI یا روبیکا اجرا نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -2807,21 +2826,20 @@
       "id": 107,
       "title": "پاسخ خودکار بر اساس Regex",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "قواعد keyword/regex با trigger و response به‌صورت draft ذخیره می‌شوند؛ موتور دریافت پیام و ارسال پاسخ اجرا نمی‌شود.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [],
       "api": "Message.text، sendMessage؛ regex محدود",
       "priority": 2,
-      "test": "واحد ذخیره Resource مشترک؛ بازبینی اعتبارسنجی Regex؛ هیچ پاسخ خودکار در UI یا روبیکا اجرا نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -2832,19 +2850,20 @@
       "id": 108,
       "title": "سیستم مدیریت سؤالات پرتکرار",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "می‌توان قالب و پیش‌نویس سؤال/پاسخ در قواعد keyword ذخیره کرد؛ ماژول FAQ و پاسخگویی خودکار ساخته نشده است.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [],
       "api": "DB FAQ و sendMessage",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2854,18 +2873,20 @@
       "id": 109,
       "title": "طراحی سناریوهای گفتگوی چندمرحله‌ای",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "سناریوی چندمرحله‌ای، session گفتگو و ماشین حالت اجرا نشده‌اند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [],
       "api": "رویداد پیام/کلیک؛ conversation state",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2875,18 +2896,20 @@
       "id": 110,
       "title": "پاسخگویی متفاوت در ساعات کاری و غیرکاری",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "ساعات پاسخگویی کاری/غیرکاری و انتخاب پاسخ زمان‌مند وجود ندارند؛ ساعت سکوت تنظیم گروه کاربرد متفاوت دارد.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [],
       "api": "زمان/منطقه زمانی سرور؛ sendMessage",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2896,19 +2919,20 @@
       "id": 111,
       "title": "ساخت دستورات سفارشی بدون ویرایش مستقیم کد",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "فرم قاعده trigger/response بدون ویرایش کد وجود دارد؛ registry دستور، setCommands و اجرای دستور ساخته نشده‌اند.",
+      "evidence": "برنامه‌ریز فرمان، قالب، دکمه Simple، منو یا فرم دارای رضایت و مقصد مجاز پیاده‌سازی و آزمون شده است؛ دریافت و ارسال واقعی نیازمند سرویس مستقر است.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/interactions.js",
+        "server/tests/interactions.test.js",
+        "assets/js/interactions-ui.js"
       ],
       "referenceFiles": [],
       "api": "DB commands؛ sendMessage/setCommands",
       "priority": 2,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -2918,21 +2942,20 @@
       "id": 112,
       "title": "ارسال یادآورهای زمان‌بندی‌شده",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "پیش‌نویس schedule با مقصد و زمان ذخیره می‌شود؛ یادآور واقعی یا worker مستقل مرورگر وجود ندارد.",
+      "evidence": "صف برنامه‌های دارای تأیید صریح، مقصد ثبت‌شده، claim اتمی، تکرار محدود و منع ارسال دوباره نتیجه مبهم پیاده‌سازی شد؛ اجرای دائمی به میزبان خصوصی نیاز دارد.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/scheduler.js",
+        "server/tests/scheduler.test.js",
+        "server/tests/runtime-sql.integration.mjs"
       ],
       "referenceFiles": [],
       "api": "worker/cron؛ sendMessage",
       "priority": 3,
-      "test": "UI fixture ثبت schedule draft و واحد executed=false؛ اجرای یادآور آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -3103,20 +3126,20 @@
       "id": 120,
       "title": "سیستم اشتراک و لغو اشتراک برای اعلان‌های مجاز کاربران",
       "category": "اتوماسیون و پشتیبانی",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "سرور collection=consents را می‌پذیرد؛ UI رضایت، دستور عضویت/لغو و موتور اعلان وجود ندارند.",
+      "evidence": "اجرای قواعد پشتیبانی‌شده با تأیید جداگانه مقصد، حذف از API مجاز، شمارنده و ثبت فراداده بدون متن پیام پیاده‌سازی و محلی آزمون شده است.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js",
-        "server/supabase/functions/rubika-panel/lib/database.js",
-        "server/supabase/migrations/202610140001_control_pro.sql"
+        "server/supabase/functions/rubika-panel/lib/engine.js",
+        "server/tests/engine.test.js",
+        "server/tests/engine-api.test.js"
       ],
       "referenceFiles": [],
       "api": "DB opt-in/opt-out؛ sendMessage به مشترک مجاز",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3130,7 +3153,7 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "UI شمارش عملیات بازگشتی logs دارد و سرور metadata رویداد می‌نویسد؛ مجموع کل پیام پردازش‌شده و موتور پردازش وجود ندارند.",
+      "evidence": "تعداد پیام‌های بازه از داده موتور اندازه‌گیری می‌شود؛ شمارش نامحدود کل تاریخ با صفحه‌بندی کامل هنوز تکمیل نیست.",
       "files": [
         "assets/js/app.js",
         "server/supabase/functions/rubika-panel/lib/handler.js",
@@ -3150,18 +3173,20 @@
       "id": 122,
       "title": "نمودار فعالیت روزانه، هفتگی و ماهانه",
       "category": "گزارش و تحلیل",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "نمودار ۷ روز عملیات logs موجود است؛ نمودار فعالیت پیام‌ها در بازه روزانه/هفتگی/ماهانه ساخته نشده است.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
         "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "event ledger؛ تجمیع زمانی",
       "priority": 3,
-      "test": "بازبینی گزارش؛ fixture logs خالی است و صحت نمودار با داده واقعی آزموده نشده.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3171,18 +3196,20 @@
       "id": 123,
       "title": "شمارش کاربران فعال",
       "category": "گزارش و تحلیل",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "تشخیص و شمارش کاربر فعال از رویدادهای پیام پیاده‌سازی نشده است.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "sender_id دریافت‌شده مجاز؛ distinct در DB",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3213,18 +3240,20 @@
       "id": 125,
       "title": "نمایش پرکاربردترین دستورات ربات",
       "category": "گزارش و تحلیل",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "موتور فرمان و شمارنده کاربرد دستورات وجود ندارند.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "command execution ledger؛ آمار DB",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3238,7 +3267,7 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "type رویداد در metadata سرور ثبت می‌شود؛ گزارش نوع پیام در UI و تشخیص معتبر نوع رسانه ساخته نشده است.",
+      "evidence": "نوع رویداد پشتیبانی‌شده گزارش می‌شود؛ تفکیک قطعی همه انواع رسانه به داده API نیاز دارد.",
       "files": [
         "server/supabase/functions/rubika-panel/lib/handler.js",
         "server/supabase/functions/rubika-panel/lib/database.js",
@@ -3257,18 +3286,20 @@
       "id": 127,
       "title": "گزارش تعداد و دسته‌بندی تخلفات",
       "category": "گزارش و تحلیل",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "فهرست دستی violations وجود دارد؛ جمع/دسته‌بندی خودکار تخلفات در گزارش ساخته نشده است.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
         "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "violation ledger؛ آمار DB",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3278,19 +3309,20 @@
       "id": 128,
       "title": "آمار اخطارهای ثبت‌شده",
       "category": "گزارش و تحلیل",
-      "status": "تنظیمات آماده؛ موتور اجرا نشده",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "warn_limit فقط تنظیم است؛ شمارنده و آمار اخطار ثبت‌شده ساخته نشده‌اند.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "warnings ledger؛ آمار DB",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3300,18 +3332,20 @@
       "id": 129,
       "title": "نمودار روند پیام‌های اسپم",
       "category": "گزارش و تحلیل",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "موتور تشخیص spam و نمودار روند آن وجود ندارند.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
         "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "spam event ledger؛ آمار DB",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3321,19 +3355,20 @@
       "id": 130,
       "title": "آمار انتشار موفق و ناموفق پست‌ها",
       "category": "گزارش و تحلیل",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "logs وضعیت موفق/خطا/مبهم عملیات پیام را ثبت می‌کند؛ آمار موفق/ناموفق انتشار پست به پست متصل نیست.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "job نتیجه sendMessage/sendFile؛ آمار DB",
       "priority": 3,
-      "test": "واحد audit نتیجه نامشخص و UI پاسخ موفق/خطا با fixture؛ آمار انتشار واقعی آزموده نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -3369,19 +3404,20 @@
       "id": 132,
       "title": "میانگین زمان پاسخگویی ربات",
       "category": "گزارش و تحلیل",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "اندازه‌گیری و گزارش اختصاصی این معیار پیاده‌سازی نشده؛ زمان اجرای موتور/وظیفه واقعی موجود نیست.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "timestamp دریافت تا پایان؛ داده واقعی سرور",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3391,19 +3427,20 @@
       "id": 133,
       "title": "نرخ موفقیت وظایف زمان‌بندی‌شده",
       "category": "گزارش و تحلیل",
-      "status": "نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "اندازه‌گیری و گزارش اختصاصی این معیار پیاده‌سازی نشده؛ زمان اجرای موتور/وظیفه واقعی موجود نیست.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "assets/js/app.js",
-        "server/supabase/functions/rubika-panel/lib/handler.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "job ledger؛ نسبت تعداد پایان موفق",
       "priority": 3,
-      "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3413,19 +3450,20 @@
       "id": 134,
       "title": "فیلتر تاریخ و مقایسه بازه‌های زمانی",
       "category": "گزارش و تحلیل",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "فیلتر تاریخ شروع/پایان logs به وقت تهران وجود دارد؛ مقایسه دو بازه و گزارش تجمیعی ساخته نشده‌اند.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "DB date filters؛ منطقه زمانی مشخص",
       "priority": 3,
-      "test": "بازبینی کد فیلتر؛ UI fixture این سناریو و مقایسه بازه را اجرا نکرده است.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3435,19 +3473,20 @@
       "id": 135,
       "title": "خروجی گرفتن گزارش‌ها به CSV، JSON و Excel",
       "category": "گزارش و تحلیل",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "موجود و آزمایش‌شده (محلی)",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "خروجی logs به CSV و JSON موجود است؛ CSV در Excel باز می‌شود اما خروجی بومی XLSX پیاده‌سازی نشده است.",
+      "evidence": "CSV، JSON و XLSX واقعی تولید و دانلود شدند؛ checksum آرشیو با unzip و XML با DOMParser مستقل بررسی شد. مقادیر شبیه فرمول در XLSX متن هستند.",
       "files": [
-        "assets/js/app.js",
-        "assets/js/model.js"
+        "assets/js/exporters.js",
+        "scripts/export.test.mjs",
+        "scripts/next-smoke.mjs"
       ],
       "referenceFiles": [],
       "api": "خروجی داده‌های مجاز DB؛ CSV/JSON/Excel معتبر",
       "priority": 3,
-      "test": "واحد model فرمول CSV را escape می‌کند؛ دانلود report CSV/JSON اختصاصی UI آزموده نشد.",
+      "test": "آزمون محلی موفق؛ انتشار و اتصال Production تأیید نشده",
       "productionVerified": false,
       "testKinds": [
         "unit",
@@ -3576,19 +3615,20 @@
       "id": 141,
       "title": "نمایش کارت‌های آماری و نمودارهای مدیریتی مدرن",
       "category": "رابط کاربری و زیرساخت",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "کارت‌های تعداد ربات/گروه/کانال از نشست و نمودار ۷ روز از logs ساخته می‌شوند؛ همه آمارهای پیام/اسپم/اعضا موجود نیستند.",
+      "evidence": "گزارش از فراداده واقعی ثبت‌شدهٔ موتور و سوابق اجرا ساخته می‌شود؛ بازه و مقایسه پیشین و سقف داده اعلام می‌شوند. نمودار بدون داده ساخته نمی‌شود.",
       "files": [
-        "assets/js/app.js",
-        "assets/style.css"
+        "server/supabase/functions/rubika-panel/lib/reports.js",
+        "server/tests/reports.test.js",
+        "assets/js/app.js"
       ],
       "referenceFiles": [],
       "api": "آمار واقعی سرور؛ SVG/Canvas chart دسترس‌پذیر",
       "priority": 1,
-      "test": "UI fixture کارت‌ها و screenshots؛ fixture logs خالی است و صحت نمودار پر داده آزموده نشد.",
+      "test": "آزمون‌های محلی مرتبط در npm test و مرورگر با API آزمون موفق؛ API زنده آزمایش نشده",
       "productionVerified": false,
       "testKinds": [
         "browser-fixture",
@@ -3769,19 +3809,19 @@
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "آزمون واحد Node، UI با API fixture، بررسی سرور static و integration PostgreSQL موقت وجود دارد؛ آزمون production و Rubika واقعی انجام نشده.",
+      "evidence": "پوشش واحد، یکپارچه محلی، رابط و Docker اضافه شد؛ workflow اجرای GitHub Actions نیز آماده است ولی نتیجه CI هنوز مشاهده نشده است.",
       "files": [
+        "server/tests/",
         "scripts/smoke.mjs",
-        "server/tests/adapter.test.js",
-        "server/tests/database.test.js",
-        "server/tests/handler.test.js",
-        "server/tests/sql.integration.mjs",
-        "scripts/pwa.mjs"
+        "scripts/next-smoke.mjs",
+        "scripts/calendar.test.mjs",
+        "scripts/export.test.mjs",
+        ".github/workflows/checks.yml"
       ],
       "referenceFiles": [],
       "api": "Node tests، integration با adapter mock، تست browser",
       "priority": 1,
-      "test": "۲۰ تست Node گذشت؛ ۲۲ گروه آزمون مرورگر/static با API fixture گذشت؛ integration PostgreSQL محلی (migration/RLS/rate/claim/dedup) و PWA عمومی/آفلاین گذشتند. Rubika و استقرار واقعی آزموده نشد.",
+      "test": "۸۶ تست سرور، ۸ تست تقویم/XLSX، ۲۲ بررسی مرورگر قبلی و ۱۳ بررسی جدید و PWA موفق؛ دو مجموعه SQL محلی موفق",
       "productionVerified": false,
       "testKinds": [
         "unit-mock",
@@ -3794,22 +3834,21 @@
       "id": 150,
       "title": "استقرار با Docker به همراه مستندات API و راهنمای نصب و نگهداری",
       "category": "رابط کاربری و زیرساخت",
-      "status": "جزئی؛ نیازمند توسعه",
+      "status": "موجود و آزمایش‌شده (محلی)",
       "initialStatus": "نیازمند توسعه",
       "initialCategory": "نیازمند توسعه",
       "initialEvidence": "در snapshot اولیه مخزن انتخاب‌شده پیاده‌سازی این قابلیت یافت نشد.",
-      "evidence": "مستندات API/نصب/نگهداری برای GitHub Pages و Supabase آماده است؛ Dockerfile/Compose استقرار برنامه ساخته نشده است. Docker تنها آزمون PostgreSQL است.",
+      "evidence": "دو image مجزای Node برای web و worker با digest رسمی ساخته شدند؛ web و بارگذاری آفلاین کد worker بررسی شدند. استقرار worker واقعی با اعتبارنامه کاربر انجام نشده است.",
       "files": [
-        "README.md",
-        "server/README.md",
-        "server/API.md",
-        "server/.env.example",
-        "server/tests/sql.integration.mjs"
+        "Dockerfile",
+        "compose.yaml",
+        "server/runtime/README.md",
+        "server/API.md"
       ],
       "referenceFiles": [],
       "api": "Docker برای سرور JS/local serve؛ GitHub Pages برای static؛ مستندات API",
       "priority": 1,
-      "test": "بازبینی مستندات و اجرای محلی؛ استقرار Docker برنامه، Pages و Supabase واقعی انجام نشده است.",
+      "test": "آزمون محلی موفق؛ انتشار و اتصال Production تأیید نشده",
       "productionVerified": false,
       "testKinds": [
         "code-review"
@@ -3854,5 +3893,1601 @@
     "نیازمند پشتیبانی API": 19,
     "تنظیمات آماده؛ موتور اجرا نشده": 27,
     "موجود و آزمایش‌شده (محلی)": 7
-  }
+  },
+  "previousValidation": {
+    "phase": "final-local-validation",
+    "statuses": [
+      {
+        "id": 1,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "آزمون واحد adapter/handler با getMe جعلی و UI با ورود موفق/ناموفق fixture؛ اتصال واقعی آزموده نشد.",
+        "evidence": "فرم اتصال، بررسی getMe در هر درخواست، HTTPS، جداسازی داده ربات و توکن در حافظه؛ استقرار و توکن واقعی آزمایش نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/api.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 2,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "adapter با پاسخ getMe جعلی؛ ورود موفق و ناموفق مرورگر fixture؛ توکن واقعی استفاده نشد.",
+        "evidence": "getMe نام و شناسه ربات را نرمال می‌کند؛ UI اطلاعات و آخرین بررسی را نمایش می‌دهد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 3,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "UI انتخاب دو ربات و حفظ مقصدهای جدا با fixture؛ تست واحد جداسازی Scope و PostgREST.",
+        "evidence": "چند ربات و مقصدهای جدا در حافظه نشست؛ Scope بر اساس شناسه تأییدشده ربات در سرور جدا می‌شود. اتصال با refresh پاک می‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 4,
+        "status": "نیازمند توسعه",
+        "test": "خروج مستقل در UI fixture آزموده شد؛ کنترل چرخه موتور وجود ندارد.",
+        "evidence": "انتخاب و خروج مستقل ربات در نشست وجود دارد؛ فعال/غیرفعال‌کردن موتور دریافت رویداد برای هر ربات پیاده‌سازی نشده است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 5,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بارگذاری موفق و health در fixture؛ پایش پیوسته آزموده نشده و پیاده‌سازی نشده است.",
+        "evidence": "اتصال و آخرین بررسی پس از login/list یا تازه‌سازی دستی نمایش داده می‌شوند؛ پایش لحظه‌ای یا heartbeat خودکار وجود ندارد.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 6,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "Polling دستی با received_at و offset جعلی در UI؛ موتور دائمی وجود ندارد.",
+        "evidence": "آخرین بررسی اتصال و زمان received_at یک Polling دستی نمایش داده می‌شود؛ آخرین فعالیت ماندگار موتور موجود نیست.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 7,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "Edge Function تنها در پاسخ به درخواست اجرا می‌شود؛ worker و راه‌اندازی خودکار ربات وجود ندارند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 8,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI دریافت و پیشروی offset با fixture؛ handler ثبت hash بدون متن خصوصی با mock؛ SQL یکتایی رویداد در PostgreSQL محلی.",
+        "evidence": "Polling درخواستی رویدادها را نمایش و فقط فراداده را ثبت می‌کند؛ پردازش فرمان، callback، قفل و اتوماسیون اجرا نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 9,
+        "status": "نیازمند توسعه",
+        "test": "health در تست واحد محدودیت webhook=false را تأیید می‌کند؛ Webhook واقعی وجود ندارد.",
+        "evidence": "مسیر دریافت Webhook و اعتبارسنجی امضای رویداد ساخته نشده؛ capabilities.webhook=false است.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 10,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "دو Polling UI fixture و offset بعدی؛ handler metadata با mock؛ رفتار Rubika واقعی آزموده نشد.",
+        "evidence": "getUpdates فقط به درخواست کاربر با limit و offset اجرا می‌شود؛ حلقه خودکار پس‌زمینه ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 11,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی مسیر خطا و دکمه retry؛ سناریوی reconnect خودکار وجود ندارد.",
+        "evidence": "دکمه تلاش دوباره و تازه‌سازی دستی موجود است؛ اتصال خودکار مجدد یا حلقه بازیابی وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/api.js"
+        ]
+      },
+      {
+        "id": 12,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد adapter خطای شبکه را بدون افشای توکن بررسی می‌کند؛ UI نتیجه مبهم ارسال را مسدود می‌کند؛ backoff وجود ندارد.",
+        "evidence": "Timeout، Abort و خطای عمومی شبکه پیاده‌سازی شده‌اند؛ backoff افزایشی پیاده‌سازی نشده و عملیات پیام خودکار تکرار نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/api.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 13,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد ۲ درخواست همزمان فقط یک send جعلی؛ PostgreSQL محلی ۱۰ claim همزمان و unique event؛ UI نتایج مبهم.",
+        "evidence": "Hash یکتا از ثبت تکراری metadata و UUID اتمیک از تکرار mutation جلوگیری می‌کند؛ موتور پردازش رویداد مستقل هنوز وجود ندارد.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 14,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "موتور فرمان، registry دستورات و dispatch رویدادها پیاده‌سازی نشده است.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 15,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "ماژول‌های سرور در تست‌های Node وارد و اجرا شدند؛ توسعه افزونه سناریوی آزمون‌شده ندارد.",
+        "evidence": "ماژول‌های مستقل UI، مدل، API، adapter، handler، validation و database موجودند؛ قرارداد ثبت افزونه یا plugin loader وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "assets/js/api.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 16,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "UI fixture ارسال متن و خطا، مقصد و توکن منتخب؛ واحد مجوز/Scope/idempotency؛ هیچ پیام واقعی ارسال نشد.",
+        "evidence": "sendMessage با مقصد ثبت‌شده، تأیید مجوز، UUID و مدیریت نتیجه مبهم از UI به adapter متصل است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 17,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد buildMessage حفظ reply_to_message_id را بررسی می‌کند؛ سناریوی UI پاسخ اختصاصی اجرا نشد.",
+        "evidence": "reply_to_message_id در فرم متن و whitelist adapter موجود است؛ پاسخ واقعی به کاربر آزموده نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 18,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی کد؛ آزمون اختصاصی ویرایش موفق در مرورگر یا Rubika اجرا نشد.",
+        "evidence": "فرم editMessageText و تأیید دوم در UI؛ اعتبارسنجی متن و شناسه پیام در سرور.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 19,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "UI fixture انصراف/تأیید حذف و شناسه پیام؛ adapter پاسخ OK بدون data برای حذف را با mock می‌پذیرد.",
+        "evidence": "deleteMessage با تأیید دوم، مقصد ثبت‌شده، UUID و کنترل پاسخ پیاده‌سازی شده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 20,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد پارامتر فوروارد و رد مقصد ثبت‌نشده؛ ارسال موفق فوروارد در UI/روبیکا آزموده نشد.",
+        "evidence": "فرم فوروارد و whitelist دو مقصد؛ سرور ثبت هر دو مبدأ/مقصد و تأیید مجوز را الزامی می‌کند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 21,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی adapter؛ آزمون ارسال تصویر یا کپشن واقعی انجام نشد.",
+        "evidence": "فقط sendFile با file_id موجود فراهم است؛ بارگذاری Image و کپشن مجزا پیاده‌سازی/تأیید API نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 22,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی مرجع API و کد؛ ویدئو/کپشن آزموده نشده است.",
+        "evidence": "ارسال ویدئوی نوع‌دار، upload و caption تأیید نشده‌اند؛ sendFile عمومی جای اثبات این قابلیت نیست.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 23,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی ارسال این رسانه انجام نشد.",
+        "evidence": "فرم عمومی sendFile فقط شناسه فایل موجود را می‌فرستد؛ بارگذاری و تشخیص نوع رسانه و ارسال اختصاصی این نوع پیاده‌سازی نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 24,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی ارسال این رسانه انجام نشد.",
+        "evidence": "فرم عمومی sendFile فقط شناسه فایل موجود را می‌فرستد؛ بارگذاری و تشخیص نوع رسانه و ارسال اختصاصی این نوع پیاده‌سازی نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 25,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی فرم و whitelist؛ آزمون اختصاصی ارسال فایل انجام نشد.",
+        "evidence": "sendFile با شناسه فایلِ از قبل بارگذاری‌شده و مقصد مجاز موجود است؛ upload مستقیم فایل وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 26,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی ارسال این رسانه انجام نشد.",
+        "evidence": "فرم عمومی sendFile فقط شناسه فایل موجود را می‌فرستد؛ بارگذاری و تشخیص نوع رسانه و ارسال اختصاصی این نوع پیاده‌سازی نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 27,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی کد؛ ارسال استیکر واقعی یا موفق fixture آزموده نشد.",
+        "evidence": "sendSticker با sticker_id موجود در فرم و whitelist سرور؛ ساخت یا upload استیکر وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 28,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد رد مختصات خارج از محدوده و رشته خالی؛ ارسال موقعیت واقعی آزموده نشد.",
+        "evidence": "sendLocation با فرم مختصات و اعتبارسنجی محدوده جغرافیایی در adapter.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 29,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی کد؛ ارسال مخاطب واقعی یا موفق fixture آزموده نشد.",
+        "evidence": "sendContact با نام، شماره و تأیید مجوز مقصد؛ اعتبارسنجی شماره در سرور.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 30,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد رد گزینه‌های تکراری؛ نظرسنجی واقعی یا سناریوی موفق UI اجرا نشد.",
+        "evidence": "sendPoll با سؤال و ۲ تا ۱۰ گزینه متمایز در فرم و adapter آماده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 31,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد نوع غیرمستند Link را رد می‌کند؛ ارسال کیبورد Simple موفق/واقعی آزموده نشد.",
+        "evidence": "API سرور پارامتر keypad و دکمه Simple را می‌پذیرد؛ سازنده کیبورد در پنل و مدیریت رویداد دکمه ساخته نشده‌اند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 32,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد نوع غیرمستند Link را رد می‌کند؛ ارسال کیبورد Simple موفق/واقعی آزموده نشد.",
+        "evidence": "API سرور پارامتر keypad و دکمه Simple را می‌پذیرد؛ سازنده کیبورد در پنل و مدیریت رویداد دکمه ساخته نشده‌اند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 33,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 34,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 35,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "Button.id در adapter اعتبارسنجی می‌شود؛ تولید/ثبت یکتای دکمه‌ها و registry کلیک‌ها ساخته نشده‌اند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 36,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 37,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی فرم templates؛ تست واحد Resource و Scope مشترک و SQL migration؛ گردش اختصاصی قالب UI اجرا نشد.",
+        "evidence": "CRUD پایدار templates و فرم عنوان/متن موجود است؛ استفاده و ارسال قالب هنوز دستی است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 38,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 39,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 40,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 41,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 42,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 43,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 44,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "منطق اختصاصی این قابلیت در پنل یا موتور گفتگو پیاده‌سازی نشده است. دکمه Simple و ذخیره JSON به‌تنهایی این قابلیت را ایجاد نمی‌کنند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 45,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture انصراف/تأیید حذف مقصد و پیام و رفع هشدار نتیجه نامشخص؛ تأیید داخل ربات آزموده نشده است.",
+        "evidence": "پنل برای حذف مقصد، حذف/ویرایش/فوروارد پیام، بازیابی و پاک‌کردن هشدار تأیید دوم دارد؛ تأیید از طریق دکمه داخل ربات پیاده‌سازی نشده است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 46,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "UI fixture ایجاد/حذف و تأیید مجوز؛ واحد CRUD و Scope؛ مجوز مقصد واقعی آزموده نشد.",
+        "evidence": "ثبت دستی گروه با chat_id، رضایت مجوز، CRUD و جداسازی مالکیت؛ ثبت مقصد، مجوز واقعی مدیر در Rubika ایجاد نمی‌کند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 47,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "UI fixture نمایش عنوان با escape و شناسه؛ metadata زنده گروه آزموده نشد.",
+        "evidence": "عنوان و شناسه ثبت‌شده مقصد نمایش می‌یابد؛ getChat فقط در قرارداد سرور موجود و در فرم گروه فراخوانی نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 48,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی مرجع API و فرم؛ شناسایی مدیر واقعی آزموده نشده است.",
+        "evidence": "getChat مرجع، فهرست مدیران و مجوزهای آنان را تأیید نمی‌کند؛ فیلد استثنا مدیران تنها تنظیم دستی است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 49,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "دفتر مخاطبان نقش مدیریتی ایجاد نمی‌کند؛ RBAC سرور و مدیریت اعضای پنل ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 50,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "UI fixture ویرایش rules و بازگشت آن پس از ذخیره؛ واحد CRUD؛ سرور واقعی آزموده نشد.",
+        "evidence": "rules در تنظیمات گروه ذخیره و نمایش داده می‌شود؛ دستور ارسال خودکار قوانین وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 51,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی فرم و مرجع؛ ارسال خودکار یا عضویت واقعی آزموده نشد.",
+        "evidence": "متن خوشامد/خداحافظ در تنظیمات ذخیره می‌شود؛ رویداد معتبر join/leave در مرجع تأیید نشده و موتور اجرا وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 52,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی فرم و مرجع؛ ارسال خودکار یا عضویت واقعی آزموده نشد.",
+        "evidence": "متن خوشامد/خداحافظ در تنظیمات ذخیره می‌شود؛ رویداد معتبر join/leave در مرجع تأیید نشده و موتور اجرا وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 53,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "UI fixture استقلال تنظیمات دو ربات و حفظ فیلدهای توسعه سرور؛ اجرای قوانین آزموده نشده است.",
+        "evidence": "تنظیمات مستقل هر گروه و active ذخیره می‌شود؛ موتور اعمال قواعد و حذف خودکار وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 54,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "کلید unverified فقط تنظیم است؛ تأیید عضویت، محدودسازی عضو و رویداد عضویت تأیید و اجرا نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 55,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "اعتبارسنجی زمان نامعتبر در backup آزموده شد؛ اعمال سکوت در روبیکا آزموده نشده است.",
+        "evidence": "quiet_enabled و ساعت شروع/پایان به وقت تهران ذخیره می‌شوند؛ اجرای ساعت سکوت وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 56,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "ارسال متن ممکن است؛ سنجاق پیام در whitelist و مرجع تأییدشده موجود نیست.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 57,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "تنظیمات محلی پنل ذخیره می‌شوند؛ متد تغییر تنظیمات واقعی گروه در API تأییدشده موجود نیست.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 58,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "مسیر مشترک sendMessage در UI fixture و مجوز مقصد در واحد؛ اطلاعیه واقعی ارسال نشد.",
+        "evidence": "ارسال دستی اطلاعیه از مرکز پیام‌ها به گروه ثبت‌شده با تأیید مجوز فراهم است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 59,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "UI fixture فرم تنظیمات، ذخیره تغییر و حفظ locks.future_lock؛ هر قفل جدا و اعمال واقعی آزموده نشد.",
+        "evidence": "نمایش ۲۰ تنظیم قفل و وضعیت active ذخیره‌شده؛ این نمایش وضعیت اجرای واقعی گروه نیست.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 60,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "دستور /help و موتور پاسخ داخل گروه ساخته نشده‌اند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 61,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.link در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 62,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.hyperlink در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 63,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.username در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 64,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.hashtag در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 65,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.text در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 66,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.profanity در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 67,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.forward در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 68,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.inline در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 69,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.unverified در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 70,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.file در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 71,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.photo در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 72,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.video در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 73,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.voice در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 74,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.gif در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 75,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.sticker در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 76,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.location در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 77,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.contact در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 78,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.mention در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 79,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.poll در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 80,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کلید و مسیر ذخیره مشترک؛ آزمون اختصاصی تشخیص یا حذف این نوع پیام انجام نشد.",
+        "evidence": "کلید locks.story در فرم و JSON تنظیمات وجود دارد؛ موتور تشخیص/حذف اجرا نشده است. داده تشخیص معتبر این نوع در مرجع API نیز تأیید نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 81,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "UI fixture حد warn_limit و اعتبارسنجی اعداد مشترک؛ تشخیص flood آزموده نشده است.",
+        "evidence": "flood_count و flood_seconds ذخیره می‌شوند؛ شمارنده پنجره زمانی و تشخیص Flood اجرا نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 82,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "anti_spam ذخیره می‌شود؛ کش پیام، مقایسه تکرار و حذف خودکار spam ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 83,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "blocked_words در تنظیمات و Regex در پیش‌نویس قواعد پاسخ ذخیره می‌شوند؛ فیلتر محتوای Regex/کلمات اجرا نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 84,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "allowed_domains قابل ذخیره است؛ موتور تطبیق URL و استثنا دامنه اجرا نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 85,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "محدودیت نرخ API پنل در واحد و PostgreSQL آزموده شد؛ این آزمون سقف پیام کاربران گروه نیست.",
+        "evidence": "تعداد/بازه ضدفلود تنظیم‌پذیر است؛ شمارنده پیام کاربر و اعمال سقف پیام ساخته نشده‌اند. Rate limit سرور مربوط به درخواست API پنل است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 86,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "UI fixture تغییر warn_limit و رد عدد صفر؛ صدور/شمارش اخطار وجود ندارد.",
+        "evidence": "warn_limit ذخیره می‌شود؛ شمارنده اخطار اختصاصی کاربر و ارسال اخطار ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 87,
+        "status": "نیازمند پشتیبانی API",
+        "test": "واحد banChatMember را با UNSUPPORTED_METHOD رد می‌کند؛ اقدام واقعی روی عضو انجام نشد.",
+        "evidence": "متد محدودسازی، اخراج یا ban/unban عضو در whitelist و مرجع Bot API تأیید نشده است؛ این عملیات فعال نیست.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 88,
+        "status": "نیازمند پشتیبانی API",
+        "test": "واحد banChatMember را با UNSUPPORTED_METHOD رد می‌کند؛ اقدام واقعی روی عضو انجام نشد.",
+        "evidence": "متد محدودسازی، اخراج یا ban/unban عضو در whitelist و مرجع Bot API تأیید نشده است؛ این عملیات فعال نیست.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 89,
+        "status": "نیازمند پشتیبانی API",
+        "test": "واحد banChatMember را با UNSUPPORTED_METHOD رد می‌کند؛ اقدام واقعی روی عضو انجام نشد.",
+        "evidence": "متد محدودسازی، اخراج یا ban/unban عضو در whitelist و مرجع Bot API تأیید نشده است؛ این عملیات فعال نیست.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 90,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی فرم؛ تست Resource/Scope مشترک؛ گردش اختصاصی ثبت تخلف UI و داده واقعی آزموده نشد.",
+        "evidence": "CRUD دستی violations، شرح، مسئولیت بررسی و وضعیت open/reviewed/closed؛ ثبت خودکار تخلف و تاریخچه نسخه‌های بازبینی وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 91,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد CRUD مشترک؛ UI fixture فقط گروه را ایجاد/حذف کرد، کانال اختصاصی آزموده نشد.",
+        "evidence": "ثبت مقصد type=channel و مدیریت مقصدهای مستقل در پنل و DB؛ مجوز کانال باید واقعی باشد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 92,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture schedule را با status=draft ذخیره کرد؛ صف انتشار اجرا نشده است.",
+        "evidence": "پیش‌نویس و برنامه انتشار قابل ذخیره‌اند؛ صف اجرایی، ترتیب dequeue و worker انتشار وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 93,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "UI fixture زمان تهران روی مرورگر لس‌آنجلس و بازکردن مجدد فرم؛ واحد سرور executed=false؛ ارسال خودکار آزموده نشده است.",
+        "evidence": "scheduled_at با تبدیل ساعت تهران و status=draft ذخیره می‌شود؛ cron/worker ارسال دقیق وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 94,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "تبدیل تهران در مدل و UI fixture مرورگر لس‌آنجلس آزموده شد؛ تقویم شمسی تعاملی وجود ندارد.",
+        "evidence": "برنامه‌ها با نمایش تاریخ شمسی و ساعت تهران هستند؛ ورودی datetime-local میلادی است و تقویم شمسی تعاملی/شبکه تقویم ساخته نشده.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 95,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی فرم drafts؛ آزمون Resource/Scope مشترک و migration؛ گردش اختصاصی draft UI آزموده نشد.",
+        "evidence": "مجموعه drafts با عنوان، دسته و متن و CRUD پایدار در سرور آماده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 96,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture متن شامل HTML را به‌صورت متن نمایش می‌دهد؛ پیش‌نمایش پست چندرسانه‌ای آزموده نشده است.",
+        "evidence": "مرکز پیام، پیش‌نمایش امن متن پیش از ارسال دارد؛ پیش‌نمایش اختصاصی پیش‌نویس/پست چندرسانه‌ای وجود ندارد.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 97,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "sendFile تنها file_id موجود را می‌فرستد؛ کتابخانه رسانه، upload و caption ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 98,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "تکرار دوره‌ای، فاصله اجرا و worker انتشار پیاده‌سازی نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 99,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "فرایند تأیید پست، نقش مدیر تأییدکننده و انتقال به صف اجرا پیاده‌سازی نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 100,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی فرم؛ تست Resource مشترک؛ ذخیره دسته اختصاصی UI آزموده نشد.",
+        "evidence": "فیلد category در drafts ذخیره و در فهرست نمایش می‌یابد؛ دسته‌بندی به‌صورت متن آزاد است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 101,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture draft و موفق/ناموفق پیام مستقل؛ چرخه انتشار هر پست آزموده نشده است.",
+        "evidence": "پیش‌نویس‌ها status=draft دارند و نتیجه عملیات پیام جدا ثبت می‌شود؛ وضعیت انتشار متصل به هر پست ساخته نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 102,
+        "status": "نیازمند توسعه",
+        "test": "UI و واحد عدم تکرار پیام مبهم آزموده‌اند؛ این نتیجه، retry پست نیست.",
+        "evidence": "retry job پست وجود ندارد؛ نتیجه مبهم پیام عمداً خودکار تکرار نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 103,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد فقط یک send جعلی و PostgreSQL claim همزمان؛ UI نتیجه نامشخص؛ پیشگیری تکرار محتوای پست آزموده نشده است.",
+        "evidence": "UUID mutation و مانع نشست ارسال دوباره را برای تلاش یکسان کنترل می‌کنند؛ dedup محتوایی پست‌ها و چرخه انتشار وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 104,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "مرکز پیام یک مقصد در هر عملیات می‌گیرد؛ fan-out هماهنگ چند کانال ساخته نشده است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 105,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی فهرست و جستجو؛ آرشیو پست واقعی آزموده نشده است.",
+        "evidence": "جستجوی متن در drafts موجود است؛ آرشیو پست منتشرشده با شناسه پیام و وضعیت انتشار ساخته نشده است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 106,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "واحد ذخیره Resource مشترک؛ بازبینی اعتبارسنجی Regex؛ هیچ پاسخ خودکار در UI یا روبیکا اجرا نشد.",
+        "evidence": "قواعد keyword/regex با trigger و response به‌صورت draft ذخیره می‌شوند؛ موتور دریافت پیام و ارسال پاسخ اجرا نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 107,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "واحد ذخیره Resource مشترک؛ بازبینی اعتبارسنجی Regex؛ هیچ پاسخ خودکار در UI یا روبیکا اجرا نشد.",
+        "evidence": "قواعد keyword/regex با trigger و response به‌صورت draft ذخیره می‌شوند؛ موتور دریافت پیام و ارسال پاسخ اجرا نمی‌شود.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 108,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "می‌توان قالب و پیش‌نویس سؤال/پاسخ در قواعد keyword ذخیره کرد؛ ماژول FAQ و پاسخگویی خودکار ساخته نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 109,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "سناریوی چندمرحله‌ای، session گفتگو و ماشین حالت اجرا نشده‌اند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 110,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "ساعات پاسخگویی کاری/غیرکاری و انتخاب پاسخ زمان‌مند وجود ندارند؛ ساعت سکوت تنظیم گروه کاربرد متفاوت دارد.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 111,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "فرم قاعده trigger/response بدون ویرایش کد وجود دارد؛ registry دستور، setCommands و اجرای دستور ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 112,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "UI fixture ثبت schedule draft و واحد executed=false؛ اجرای یادآور آزموده نشده است.",
+        "evidence": "پیش‌نویس schedule با مقصد و زمان ذخیره می‌شود؛ یادآور واقعی یا worker مستقل مرورگر وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 113,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد رد نظرسنجی نامعتبر؛ کمپین واقعی یا UI کمپین وجود ندارد.",
+        "evidence": "ارسال دستی یک sendPoll آماده است؛ کمپین، مخاطبان داوطلب و گردش رضایت/ارسال گروهی ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 114,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "بازبینی فرم؛ تست Resource/Scope مشترک؛ گردش اختصاصی تیکت UI آزموده نشده است.",
+        "evidence": "tickets با موضوع، شناسه درخواست‌کننده، وضعیت، assigned_to و متن به‌صورت CRUD دستی ذخیره می‌شود؛ دریافت خودکار از ربات وجود ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 115,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "فیلد assigned_to به‌صورت متن در تیکت وجود دارد؛ اتصال به مدیر تأییدشده، مجوز و اعلان ارجاع ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 116,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "قالب‌های متن قابل ذخیره‌اند؛ انتخاب/درج پاسخ آماده در تیکت و ارسال به درخواست‌کننده وجود ندارد.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 117,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "وضعیت جاری و زمان updated_at تیکت نمایش می‌یابد؛ تاریخچه تغییر وضعیت/پاسخ‌های مستقل ساخته نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 118,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "اتصال Webhook به سرویس خارجی، secret signature و dispatcher ساخته نشده‌اند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 119,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "دستیار AI، تنظیم API آن و کلید محرمانه آن پیاده‌سازی نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 120,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "سرور collection=consents را می‌پذیرد؛ UI رضایت، دستور عضویت/لغو و موتور اعلان وجود ندارند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 121,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "UI شمارش عملیات بازگشتی logs دارد و سرور metadata رویداد می‌نویسد؛ مجموع کل پیام پردازش‌شده و موتور پردازش وجود ندارند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 122,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی گزارش؛ fixture logs خالی است و صحت نمودار با داده واقعی آزموده نشده.",
+        "evidence": "نمودار ۷ روز عملیات logs موجود است؛ نمودار فعالیت پیام‌ها در بازه روزانه/هفتگی/ماهانه ساخته نشده است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 123,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "تشخیص و شمارش کاربر فعال از رویدادهای پیام پیاده‌سازی نشده است.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 124,
+        "status": "نیازمند پشتیبانی API",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "داده تعداد اعضای گروه در مرجع getChat تأیید نشده؛ نمودار تغییر اعضا پیاده‌سازی نشده است.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 125,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "موتور فرمان و شمارنده کاربرد دستورات وجود ندارند.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 126,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد ثبت نوع/hash بدون متن پیام با mock؛ UI گزارش انواع پیام آزموده نشده است.",
+        "evidence": "type رویداد در metadata سرور ثبت می‌شود؛ گزارش نوع پیام در UI و تشخیص معتبر نوع رسانه ساخته نشده است.",
+        "files": [
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 127,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "فهرست دستی violations وجود دارد؛ جمع/دسته‌بندی خودکار تخلفات در گزارش ساخته نشده است.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 128,
+        "status": "تنظیمات آماده؛ موتور اجرا نشده",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "warn_limit فقط تنظیم است؛ شمارنده و آمار اخطار ثبت‌شده ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 129,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "موتور تشخیص spam و نمودار روند آن وجود ندارند.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 130,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد audit نتیجه نامشخص و UI پاسخ موفق/خطا با fixture؛ آمار انتشار واقعی آزموده نشده است.",
+        "evidence": "logs وضعیت موفق/خطا/مبهم عملیات پیام را ثبت می‌کند؛ آمار موفق/ناموفق انتشار پست به پست متصل نیست.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 131,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد خطاهای Rubika/DB و audit با mock؛ UI خطای ارسال fixture؛ گزارش با logs واقعی آزموده نشده است.",
+        "evidence": "خطاهای سرویس و نتیجه API بدون افشای توکن نمایش و در سوابق سرور ثبت می‌شوند؛ گزارش از حداکثر ۵۰۰ log بازگشتی است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/api.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js"
+        ]
+      },
+      {
+        "id": 132,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "اندازه‌گیری و گزارش اختصاصی این معیار پیاده‌سازی نشده؛ زمان اجرای موتور/وظیفه واقعی موجود نیست.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 133,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "اندازه‌گیری و گزارش اختصاصی این معیار پیاده‌سازی نشده؛ زمان اجرای موتور/وظیفه واقعی موجود نیست.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 134,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی کد فیلتر؛ UI fixture این سناریو و مقایسه بازه را اجرا نکرده است.",
+        "evidence": "فیلتر تاریخ شروع/پایان logs به وقت تهران وجود دارد؛ مقایسه دو بازه و گزارش تجمیعی ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 135,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد model فرمول CSV را escape می‌کند؛ دانلود report CSV/JSON اختصاصی UI آزموده نشد.",
+        "evidence": "خروجی logs به CSV و JSON موجود است؛ CSV در Excel باز می‌شود اما خروجی بومی XLSX پیاده‌سازی نشده است.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 136,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "Chromium: دسکتاپ ۱۴۴۰×۱۰۰۰ و موبایل ۳۹۰×۸۴۴ بدون overflow صفحه؛ منوی موبایل باز/بسته شد. viewport تبلت و دستگاه واقعی جدا آزموده نشد.",
+        "evidence": "چیدمان CSS واکنش‌گرا، sidebar موبایل و جدول‌های اسکرولی موجودند؛ محدودیت نتیجه آزمون به viewportهای اجراشده است.",
+        "files": [
+          "index.html",
+          "assets/style.css",
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 137,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "Chromium fixture، lang=fa و dir=rtl را تأیید کرد؛ داشبورد/گروه در screenshot دسکتاپ و موبایل بررسی شدند. ممیزی کامل دسترس‌پذیری انجام نشد.",
+        "evidence": "پوسته فارسی با lang=fa و dir=rtl و جهت مناسب شناسه‌ها و ورودی‌های عددی/لاتین.",
+        "files": [
+          "index.html",
+          "assets/style.css",
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 138,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "فایل فونت محلی با HTTP موفق در ۱۱ asset عمومی PWA Cache شد و CSS آن را برای پنل تعریف می‌کند؛ snapshotهای مرورگر تهیه شدند.",
+        "evidence": "Vazirmatn WOFF2 محلی با مجوز OFL و @font-face برای کل پنل؛ وابستگی CDN ندارد.",
+        "files": [
+          "assets/style.css",
+          "assets/fonts/Vazirmatn.woff2",
+          "assets/fonts/OFL.txt"
+        ]
+      },
+      {
+        "id": 139,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "Chromium fixture تغییر data-theme به dark و برگشت روشن و screenshot را تأیید کرد؛ کد localStorage بازبینی شد، حفظ theme پس از reload assertion اختصاصی ندارد.",
+        "evidence": "حالت روشن/تاریک از CSS tokens و انتخاب rubika.theme در localStorage استفاده می‌کند.",
+        "files": [
+          "assets/style.css",
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 140,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "لوگو و icon-192/icon-512 با HTTP موفق در Cache PWA قرار گرفتند؛ اندازه آیکون‌های manifest و snapshot داشبورد محلی بررسی شدند. favicon/logo-dark جدا assertion ندارند.",
+        "evidence": "لوگوی اختصاصی SVG، favicon و PNGهای ۱۹۲/۵۱۲ برای manifest و سربرگ آماده‌اند.",
+        "files": [
+          "assets/icons/logo.svg",
+          "assets/icons/logo-dark.svg",
+          "assets/icons/favicon.png",
+          "assets/icons/icon-192.png",
+          "assets/icons/icon-512.png"
+        ]
+      },
+      {
+        "id": 141,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture کارت‌ها و screenshots؛ fixture logs خالی است و صحت نمودار پر داده آزموده نشد.",
+        "evidence": "کارت‌های تعداد ربات/گروه/کانال از نشست و نمودار ۷ روز از logs ساخته می‌شوند؛ همه آمارهای پیام/اسپم/اعضا موجود نیستند.",
+        "files": [
+          "assets/js/app.js",
+          "assets/style.css"
+        ]
+      },
+      {
+        "id": 142,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "scripts/pwa.mjs: worker activated در /rubika_bot/، ۱۱ GET عمومی، scope نسبی و iconهای ۱۹۲/۵۱۲، reload آفلاین فارسی و صفر خطای JS؛ نصب سیستم‌عامل/HTTPS production آزموده نشد.",
+        "evidence": "manifest با مسیر نسبی و service worker Cache فایل‌های عمومی؛ POST و داده خصوصی Cache نمی‌شوند. نصب به HTTPS/مرورگر سازگار نیاز دارد.",
+        "files": [
+          "manifest.webmanifest",
+          "sw.js",
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 143,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "واحد Scope/CORS و UI خروج/ورود fixture؛ PostgreSQL RLS و منع public grants؛ RBAC وجود ندارد.",
+        "evidence": "ورود توکنی مالک ربات، بررسی getMe، Scope، RLS و CORS فراهم است؛ مدیران چندنفره، role و RBAC وجود ندارند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 144,
+        "status": "نیازمند توسعه",
+        "test": "بازبینی کد؛ آزمون اختصاصی این سناریو اجرا نشده است.",
+        "evidence": "MFA/TOTP، ثبت عامل دوم و مدیریت بازیابی حساب ساخته نشده‌اند.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js"
+        ]
+      },
+      {
+        "id": 145,
+        "status": "آماده؛ نیازمند استقرار و آزمون واقعی",
+        "test": "واحد رد ویرایش/حذف logs، ثبت نتیجه مبهم و حذف توکن؛ گزارش با سرور واقعی آزموده نشده است.",
+        "evidence": "سوابق خودکار سرور برای عملیات حساس و read-only logs موجود است؛ هویت مدیریتی چندنفره و diff قبل/بعد هنوز ندارد.",
+        "files": [
+          "assets/js/app.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/database.js",
+          "server/supabase/migrations/202610140001_control_pro.sql"
+        ]
+      },
+      {
+        "id": 146,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture نبود توکن در local/session storage و backup، خروج/reload؛ واحد جلوگیری از افشای توکن و فیلد credential؛ رمزگذاری پایدار آزموده نشده/وجود ندارد.",
+        "evidence": "توکن فقط حافظه تب است؛ HTTPS، حذف از خطا، جلوگیری از ذخیره در Resource/تنظیمات و جداسازی Scope فراهم است. رمزگذاری پایدار توکن یا vault ساخته نشده.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/api.js",
+          "server/supabase/functions/rubika-panel/lib/handler.js",
+          "server/supabase/functions/rubika-panel/lib/adapter.js",
+          "server/supabase/functions/rubika-panel/lib/validation.js"
+        ]
+      },
+      {
+        "id": 147,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture دانلود بدون توکن و رد backup تکراری بدون mutation؛ model اعداد/زمان نامعتبر را رد می‌کند؛ restore موفق کامل/DB آزموده نشد.",
+        "evidence": "JSON backup/restore فقط مقصدها و تنظیمات همین ربات است؛ DB کامل، مخاطبان، تیکت‌ها و توکن را شامل نمی‌شود؛ restore چند مقصد اتمیک نیست.",
+        "files": [
+          "assets/js/app.js",
+          "assets/js/model.js"
+        ]
+      },
+      {
+        "id": 148,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "UI fixture جستجوی ۱۵۰ قابلیت و بازگشت فهرست؛ گردش همه جستجوهای مدیریتی و فیلتر ترکیبی آزموده نشد.",
+        "evidence": "جستجوی متن مقصدها، collections، سوابق و فهرست ۱۵۰ قابلیت و فیلتر وضعیت قابلیت وجود دارد؛ جستجوی ترکیبی پیشرفته/فیلتر سرور کامل نیست.",
+        "files": [
+          "assets/js/app.js"
+        ]
+      },
+      {
+        "id": 149,
+        "status": "موجود و آزمایش‌شده (محلی)",
+        "test": "۲۰ تست Node گذشت؛ ۲۲ گروه آزمون مرورگر/static با API fixture گذشت؛ integration PostgreSQL محلی (migration/RLS/rate/claim/dedup) و PWA عمومی/آفلاین گذشتند. Rubika و استقرار واقعی آزموده نشد.",
+        "evidence": "آزمون واحد Node، UI با API fixture، بررسی سرور static و integration PostgreSQL موقت وجود دارد؛ آزمون production و Rubika واقعی انجام نشده.",
+        "files": [
+          "scripts/smoke.mjs",
+          "server/tests/adapter.test.js",
+          "server/tests/database.test.js",
+          "server/tests/handler.test.js",
+          "server/tests/sql.integration.mjs",
+          "scripts/pwa.mjs"
+        ]
+      },
+      {
+        "id": 150,
+        "status": "جزئی؛ نیازمند توسعه",
+        "test": "بازبینی مستندات و اجرای محلی؛ استقرار Docker برنامه، Pages و Supabase واقعی انجام نشده است.",
+        "evidence": "مستندات API/نصب/نگهداری برای GitHub Pages و Supabase آماده است؛ Dockerfile/Compose استقرار برنامه ساخته نشده است. Docker تنها آزمون PostgreSQL است.",
+        "files": [
+          "README.md",
+          "server/README.md",
+          "server/API.md",
+          "server/.env.example",
+          "server/tests/sql.integration.mjs"
+        ]
+      }
+    ]
+  },
+  "version": "3.1.0",
+  "validatedAt": "2026-10-15",
+  "currentLimitations": [
+    "هیچ قابلیت با Rubika یا Supabase واقعی در این کار تأیید نشده است.",
+    "Webhook، RBAC، MFA، دستیار AI، Upload کامل، backup کامل DB و قابلیت‌های نامستند API تکمیل نشده‌اند.",
+    "Worker باید با اعتبارنامه خصوصی روی میزبان دائمی مستقر شود؛ GitHub Pages فقط پنل را میزبانی می‌کند.",
+    "پردازش فعلی فقط NewMessage مستند را اجرا می‌کند؛ وضعیت نامشخص به صورت خودکار دوباره ارسال نمی‌شود."
+  ]
 }

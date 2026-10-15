@@ -1,0 +1,31 @@
+# Allowlist the build context. Credentials, Git data, uploads and local outputs
+# remain outside it, even if they have unexpected names at repository root.
+**
+!Dockerfile
+!package.json
+!index.html
+!manifest.webmanifest
+!sw.js
+!README.md
+!assets/
+!assets/**
+!docs/
+!docs/FEATURES.md
+!docs/feature-status.json
+!scripts/
+!scripts/serve.mjs
+!server/
+!server/package.json
+!server/runtime/
+!server/runtime/worker.js
+!server/supabase/
+!server/supabase/functions/
+!server/supabase/functions/rubika-panel/
+!server/supabase/functions/rubika-panel/lib/
+!server/supabase/functions/rubika-panel/lib/**
+# Defense in depth for accidentally placed secrets in allowed directories.
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/node_modules
