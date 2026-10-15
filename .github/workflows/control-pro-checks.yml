@@ -35,3 +35,12 @@ jobs:
           chromium_path=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           test -n "$chromium_path"
           BROWSER_EXECUTABLE="$chromium_path" node tests/browser.mjs
+
+      - name: Browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: encrypted-panel-browser
+          path: control-pro/test-results
+          if-no-files-found: ignore
+          retention-days: 3

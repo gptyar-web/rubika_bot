@@ -168,7 +168,7 @@ try {
       .then((t) => t.includes("۱۲٬۴۵۰"))),
   );
   await nav("bots");
-  await page.getByRole("button", { name: "افزودن ربات", exact: true }).click();
+  await page.locator('.page-header').getByRole("button", { name: "افزودن ربات", exact: true }).click();
   await fill("name", "بات آزمایشی");
   await fill("token", "SYNTHETIC_TEST_TOKEN_ONLY");
   await submit();
@@ -177,7 +177,7 @@ try {
     .getByRole("heading", { name: "بات آزمایشی", exact: true })
     .waitFor();
   ok("bot getMe validation and encrypted save");
-  await page.getByRole("button", { name: "افزودن ربات", exact: true }).click();
+  await page.locator('.page-header').getByRole("button", { name: "افزودن ربات", exact: true }).click();
   await fill("name", "تکراری");
   await fill("token", "SYNTHETIC_TEST_TOKEN_ONLY");
   await submit();
@@ -286,7 +286,7 @@ try {
   await modal().locator("[name=approved]").check();
   await submit();
   await closed();
-  await page.getByText("زمان‌بندی‌شده", { exact: true }).waitFor();
+  await page.locator(".pill").filter({hasText:"زمان‌بندی‌شده"}).first().waitFor();
   ok("draft approval and Tehran schedule");
   await nav("bots");
   await page.getByRole("button", { name: "شروع پردازش", exact: true }).click();
