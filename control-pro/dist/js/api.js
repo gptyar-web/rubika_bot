@@ -29,7 +29,7 @@ export class ApiError extends Error {
 }
 export class RubikaAPI {
   constructor({
-    fetchImpl = globalThis.fetch,
+    fetchImpl = globalThis.fetch.bind(globalThis),
     sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
     settings = () => ({}),
   } = {}) {

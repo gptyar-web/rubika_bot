@@ -129,6 +129,8 @@ await context.route("https://botapi.rubika.ir/v3/**", async (route) => {
 });
 const page = await context.newPage();
 page.on("pageerror", (e) => errors.push(e.message));
+page.on("requestfailed", r=>console.error("REQUEST_FAILED "+new URL(r.url()).origin+" "+r.failure()?.errorText));
+page.on("console", m=>{if(m.type()==="error")console.error("BROWSER_CONSOLE "+m.text().replaceAll("SYNTHETIC_TEST_TOKEN_ONLY","[TEST]"));});
 const base = "http://localhost:4180/rubika_bot/";
 const nav = async (route) => {
   await page.locator(`nav a[href="#/${route}"]`).click();

@@ -391,3 +391,12 @@ test("interactive flow state persists between steps; ticket created from explici
   await send("m4", "/ticket کمک");
   assert.equal(state.tickets.length, 1);
 });
+
+test("default browser fetch keeps its global receiver", async () => {
+  const original=globalThis.fetch;
+  try {
+    globalThis.fetch=function(){assert.equal(this,globalThis);return Promise.resolve(response({bot:{bot_id:"bound"}}));};
+    const api=new RubikaAPI();
+    assert.equal((await api.call(token,"getMe")).bot.bot_id,"bound");
+  } finally {globalThis.fetch=original;}
+});
