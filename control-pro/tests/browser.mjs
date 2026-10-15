@@ -237,7 +237,7 @@ try {
   await fill("text", "یک پیام آزمایشی");
   await submit();
   await closed();
-  await page.getByText("یک پیام آزمایشی", { exact: true }).first().waitFor();
+  await page.locator("table").getByText("یک پیام آزمایشی", { exact: false }).first().waitFor();
   ok("sendMessage requires valid API message ID");
   await page.locator("[data-action=edit-message]").first().click();
   await fill("text", "پیام ویرایش‌شده");
