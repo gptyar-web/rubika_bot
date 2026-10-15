@@ -1652,12 +1652,10 @@ dialog::backdrop {
     --sidebar: 248px;
   }
   .sidebar {
-    display: none;
-    transform: none;
+    transform: translateX(100%);
   }
   .shell.mobile-open .sidebar {
-    display: flex;
-    transform: none;
+    transform: translateX(0);
   }
   .shell.mobile-open .mobile-backdrop {
     display: block;

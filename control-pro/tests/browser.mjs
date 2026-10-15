@@ -237,7 +237,7 @@ try {
   await fill("text", "یک پیام آزمایشی");
   await submit();
   await closed();
-  await page.locator("table").getByText("یک پیام آزمایشی", { exact: false }).first().waitFor();
+  await page.getByText("یک پیام آزمایشی", { exact: true }).first().waitFor();
   ok("sendMessage requires valid API message ID");
   await page.locator("[data-action=edit-message]").first().click();
   await fill("text", "پیام ویرایش‌شده");
@@ -298,7 +298,7 @@ try {
       ?.textContent.includes("فعال است"),
   );
   await nav("messages");
-  await page.locator("table").getByText("درود user-test", { exact: false }).first().waitFor();
+  await page.getByText("درود user-test", { exact: true }).first().waitFor();
   await nav("violations");
   await page.getByText("لینک غیرمجاز", { exact: true }).waitFor();
   await nav("tickets");
