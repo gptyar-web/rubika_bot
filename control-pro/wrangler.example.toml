@@ -1,0 +1,6 @@
+name = "rubika-control-relay"
+main = "scripts/relay-worker.js"
+compatibility_date = "2026-10-01"
+[vars]
+ALLOWED_ORIGIN = "https://mozdbaranarshiya.github.io"
+# Set ACCESS_KEY through the provider's secret manager, never here.

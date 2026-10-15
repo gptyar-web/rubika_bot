@@ -1,0 +1,37 @@
+name: Encrypted control panel validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'control-pro/**'
+      - '.github/workflows/control-pro-checks.yml'
+  pull_request:
+    paths:
+      - 'control-pro/**'
+      - '.github/workflows/control-pro-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: control-pro
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+      - run: npm run build
+      - name: Browser workflows
+        run: |
+          chromium_path=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          test -n "$chromium_path"
+          BROWSER_EXECUTABLE="$chromium_path" node tests/browser.mjs

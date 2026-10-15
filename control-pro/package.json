@@ -1,0 +1,22 @@
+{
+  "name": "rubika-control-pro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "پنل فارسی مدیریت بات روبیکا برای GitHub Pages",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "test:browser": "npm run build && node tests/browser.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "6.2.5",
+    "happy-dom": "21.0.1",
+    "playwright": "1.56.1"
+  }
+}

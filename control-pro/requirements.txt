@@ -1,0 +1,8 @@
+# Legacy account-client only; the GitHub Pages app has no Python dependencies.
+# The mixed sync/async legacy rubpy code needs a separate migration before running.
+APScheduler>=3.10,<4
+SQLAlchemy>=2.0,<3
+rubpy
+requests>=2.32,<3
+Pillow>=10.1
+pydantic>=2,<3
