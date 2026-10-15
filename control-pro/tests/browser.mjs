@@ -298,7 +298,7 @@ try {
       ?.textContent.includes("فعال است"),
   );
   await nav("messages");
-  await page.getByText("درود user-test", { exact: true }).first().waitFor();
+  await page.locator("table").getByText("درود user-test", { exact: false }).first().waitFor();
   await nav("violations");
   await page.getByText("لینک غیرمجاز", { exact: true }).waitFor();
   await nav("tickets");
