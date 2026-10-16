@@ -362,6 +362,14 @@ try {
   // All route layouts must fit the viewport; tables may scroll inside their own wrapper.
   for (const width of [390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
+    // Desktop sidebar padding animates at a responsive breakpoint. Inspect the
+    // completed layout rather than a transient frame during that transition.
+    await page.locator(".shell").evaluate(async (shell) => {
+      getComputedStyle(shell).paddingRight;
+      await Promise.all(
+        shell.getAnimations().map((animation) => animation.finished.catch(() => {})),
+      );
+    });
     for (const route of [
       "dashboard",
       "bots",
@@ -384,10 +392,27 @@ try {
       }, route);
       await page.getByRole("heading", { level: 1 }).waitFor();
       await page.waitForTimeout(40);
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth > innerWidth + 2,
+      const layout = await page.evaluate(() => ({
+        width: innerWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+        sidebarPadding: getComputedStyle(document.querySelector(".shell")).paddingRight,
+        outside: [...document.querySelectorAll("body *")]
+          .filter((element) => {
+            const rect = element.getBoundingClientRect();
+            return rect.width > 0 && (rect.left < -2 || rect.right > innerWidth + 2);
+          })
+          .slice(0, 12)
+          .map((element) => ({
+            tag: element.tagName,
+            class: element.className?.baseVal ?? element.className,
+            left: element.getBoundingClientRect().left,
+            right: element.getBoundingClientRect().right,
+          })),
+      }));
+      assert(
+        layout.scrollWidth <= layout.width + 2,
+        `Horizontal page overflow: ${route} at ${width}: ${JSON.stringify(layout)}`,
       );
-      assert(!overflow, `Horizontal page overflow: ${route} at ${width}`);
     }
     ok(`all 15 layouts at ${width}px`);
   }
